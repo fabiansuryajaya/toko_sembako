@@ -21,6 +21,26 @@
             <form id="createProductForm">
                 <label for="name">Nama Barang:</label>
                 <input type="text" id="product_name" name="name" required>
+
+                <label for="supplier_id">Nama Supplier:</label>
+                <select id="supplier_id" name="supplier_id" required>
+                    <option value="">Pilih Supplier</option>
+                </select>
+
+                <label for="satuan_id">Nama Satuan:</label>
+                <select id="satuan_id" name="satuan_id" required>
+                    <option value="">Pilih Satuan</option>
+                </select>
+
+                <label for="harga_beli">Harga Beli:</label>
+                <input type="number" id="harga_beli" name="harga_beli" required>
+
+                <label for="harga_jual">Harga Jual:</label>
+                <input type="number" id="harga_jual" name="harga_jual" required>
+                
+                <label for="stok">Stok:</label>
+                <input type="number" id="stok" name="stok" required>
+                
                 <button type="submit">Simpan</button>
                 <button type="button" id="closeModalBtn">Batal</button>
             </form>
@@ -86,7 +106,12 @@ async function submitProduct() {
     try {
         const method = action === "create" ? 'POST' : 'PUT';
         const body = {
-            nama: document.getElementById('product_name').value
+            nama: document.getElementById('product_name').value,
+            supplier_id: document.getElementById('supplier_id').value,
+            satuan_id: document.getElementById('satuan_id').value,
+            harga_beli: document.getElementById('harga_beli').value,
+            harga_jual: document.getElementById('harga_jual').value,
+            stok: document.getElementById('stok').value
         };
         if (action === "edit" && editProductId) {
             body.id = editProductId;
@@ -112,6 +137,11 @@ async function getEditData(id) {
         if (data.length > 0) {
             openModal("edit", id);
             document.getElementById('product_name').value = data[0].nama;
+            document.getElementById('supplier_id').value = data[0].supplier_id;
+            document.getElementById('satuan_id').value = data[0].satuan_id;
+            document.getElementById('harga_beli').value = data[0].harga_beli;
+            document.getElementById('harga_jual').value = data[0].harga_jual;
+            document.getElementById('stok').value = data[0].stok;
         } else {
             console.error('Barang tidak ditemukan');
         }
@@ -119,4 +149,38 @@ async function getEditData(id) {
         console.error('Gagal mendapatkan data barang:', error);
     }
 }
+
+async function fetchSuppliers() {
+    try {
+        const data = await callAPI({ url: '../api/supplier.php', method: 'GET' });
+        const supplierSelect = document.getElementById('supplier_id');
+        supplierSelect.innerHTML = '<option value="">Pilih Supplier</option>';
+        data.forEach(supplier => {
+            const option = document.createElement('option');
+            option.value = supplier.id;
+            option.textContent = supplier.nama;
+            supplierSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Gagal memuat pemasok:', error);
+    }
+}
+fetchSuppliers();   
+
+async function fetchSatuan() {
+    try {
+        const data = await callAPI({ url: '../api/unit.php', method: 'GET' });
+        const satuanSelect = document.getElementById('satuan_id');
+        satuanSelect.innerHTML = '<option value="">Pilih Satuan</option>';
+        data.forEach(satuan => {
+            const option = document.createElement('option');
+            option.value = satuan.id;
+            option.textContent = satuan.nama;
+            satuanSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Gagal memuat satuan:', error);
+    }
+}
+fetchSatuan();
 </script>
