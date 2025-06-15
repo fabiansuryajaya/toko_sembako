@@ -7,6 +7,11 @@
             <tr>
                 <th>ID</th>
                 <th>Nama Barang</th>
+                <th>Nama Supplier</th>
+                <th>Nama Satuan</th>
+                <th>Harga Jual</th>
+                <th>Harga Beli</th>
+                <th>Stok</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -75,8 +80,13 @@ async function fetchProduct() {
         data.forEach(product => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${product.id}</td>
-                <td>${product.nama}</td>
+                <td>${product.id_product}</td>
+                <td>${product.nama_product}</td>
+                <td>${product.nama_supplier}</td>
+                <td>${product.nama_unit}</td>
+                <td>${product.harga_beli_product}</td>
+                <td>${product.harga_jual_product}</td>
+                <td>${product.stok_product}</td>
                 <td>
                     <button data-id="${product.id}" class="edit-btn">Edit</button>
                     <button data-id="${product.id}" class="delete-btn">Hapus</button>
