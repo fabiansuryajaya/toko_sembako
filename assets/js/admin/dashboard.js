@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Agar variabel JS bisa diakses antar file, gunakan window sebagai global scope
     function loadPage(page) {
         fetch(page + '.php')
             .then(response => {
@@ -29,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (oldScript.src) {
                         newScript.src = oldScript.src;
                     } else {
-                        newScript.textContent = oldScript.textContent;
+                        // Eksekusi script di global scope agar variabelnya global
+                        newScript.textContent = `(function(){ ${oldScript.textContent} }).call(window);`;
                     }
                     document.body.appendChild(newScript);
                 });
@@ -43,4 +45,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load default page
     loadPage('product');
 });
-    
