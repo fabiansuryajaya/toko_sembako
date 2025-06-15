@@ -4,11 +4,14 @@
  * @param {FormData} formData - Data form (FormData)
  * @returns {Promise<object>} - Response JSON
  */
-async function callAPI(url, formData) {
+async function callAPI({url, body, method = 'POST'}) {
   try {
     const response = await fetch(url, {
-      method: 'POST',
-      body: formData
+      method,
+      body : JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {

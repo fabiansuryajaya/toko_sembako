@@ -20,6 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(html => {
                 screenContent.innerHTML = html;
+
+                // Jalankan ulang script JS yang ada di halaman yang dimuat
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                tempDiv.querySelectorAll('script').forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    if (oldScript.src) {
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+                    document.body.appendChild(newScript);
+                });
             })
             .catch(err => {
                 screenContent.innerHTML = '<p>Gagal memuat halaman.</p>';
@@ -28,5 +41,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Load default page
-    loadPage('home');
+    loadPage('products');
 });

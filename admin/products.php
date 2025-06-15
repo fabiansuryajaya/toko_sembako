@@ -1,6 +1,6 @@
 <div class="page">
     <h1>Daftar Produk</h1>
-    <button class="createBtn">Create Product</button>
+    <button class="createBtn" id="createProductBtn">Create Product</button>
 
     <table border="1" cellspacing="0" cellpadding="8">
         <thead>
@@ -36,3 +36,60 @@
         </div>
     </div>
 </div>
+<script>
+    const btn = document.getElementById('createProductBtn');
+    btn.addEventListener('click', () => {
+        const modal = document.getElementById('createProductModal');
+        modal.style.display = 'flex';
+    }); 
+
+    // assets/js/admin/product.js
+    const tableBody = document.querySelector('.Products-page tbody');
+
+    async function fetchProducts() {
+        try {
+            const data = await callAPI('../api/product.php');
+            // Bersihkan tabel
+            tableBody.innerHTML = '';
+
+            data.forEach(product => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${product.id}</td>
+                    <td>${product.nama}</td>
+                    <td>${product.deskripsi}</td>
+                    <td>${product.harga}</td>
+                    <td>
+                        <button data-id="${product.id}" class="edit-btn">Edit</button>
+                        <button data-id="${product.id}" class="delete-btn">Hapus</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        } catch (error) {
+            console.error('Gagal memuat product:', error);
+        }
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    fetchProducts();
+
+    async function addProducts() {
+        try {
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+
+            const data = await callAPI('../api/product.php', formData);
+            fetchProducts();
+        } catch (error) {
+            console.error('Gagal menambahkan pemasok:', error);
+        }
+    }
+
+    document.getElementById('createProductForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await addProducts();
+        document.getElementById('createProductModal').style.display = 'none';
+    }); 
+
+</script>

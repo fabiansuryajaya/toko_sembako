@@ -9,7 +9,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case 'GET':
         // Ambil semua supplier
-        $sql = "SELECT id, nama FROM suppliers";
+        $sql = "SELECT id_supplier as id, nama_supplier as nama FROM supplier";
         $result = $conn->query($sql);
 
         $suppliers = [];
@@ -32,7 +32,7 @@ switch ($method) {
 
         $nama = $conn->real_escape_string($data['nama']);
 
-        $sql = "INSERT INTO suppliers (nama) VALUES ('$nama')";
+        $sql = "INSERT INTO supplier (nama_supplier) VALUES ('$nama')";
         if ($conn->query($sql) === TRUE) {
             echo json_encode(['success' => true, 'id' => $conn->insert_id]);
         } else {

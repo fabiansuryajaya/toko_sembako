@@ -15,7 +15,6 @@
             <h2>Menu</h2>
             <nav>
                 <ul>
-                    <li><a href="#" data-page="home">Home</a></li>
                     <li><a href="#" data-page="products">Products</a></li> 
                     <li><a href="#" data-page="suppliers">Suppliers</a></li> 
                     <li><a href="#" data-page="units">Units</a></li> 
