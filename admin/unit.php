@@ -1,14 +1,12 @@
-<div class="page">
-    <h1>Daftar Produk</h1>
-    <button class="createBtn">Buat Produk</button>
+<div class="page unit-page">
+    <h1>Daftar Unit</h1>
+    <button class="createBtn" id="createUnitBtn">Buat Unit</button>
 
     <table border="1" cellspacing="0" cellpadding="8">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Nama Produk</th>
-                <th>Deskripsi</th>
-                <th>Harga</th>
+                <th>Nama Unit</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -17,27 +15,108 @@
     </table>
 
     <!-- Popup modal -->
-    <div id="createUnitModal" class="modal" style="display: none;">
+    <div id="UnitModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <h2>Buat Produk</h2>
-            <form id="createProductForm">
-                <label for="name">Nama Produk:</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="satuan">Satuan:</label>
-                <select id="satuan" name="satuan">
-                </select>
-
-                <label for="supplier">Supplier:</label>
-                <select id="supplier" name="supplier">
-                </select>
-
-                <label for="price">Harga:</label>
-                <input type="number" id="price" name="price" required>
-
+            <h2>Buat Unit</h2>
+            <form id="createUnitForm">
+                <label for="name">Nama Unit:</label>
+                <input type="text" id="unit_name" name="name" required>
                 <button type="submit">Simpan</button>
                 <button type="button" id="closeModalBtn">Batal</button>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+let action = "create";
+let editUnitId = null;
+
+function openModal(act = "create", id = null) {
+    action = act;
+    editUnitId = id;
+    document.getElementById('UnitModal').style.display = 'flex';
+}
+
+document.getElementById('createUnitBtn').addEventListener('click', () => openModal("create"));
+
+document.getElementById('closeModalBtn').addEventListener('click', () => {
+    document.getElementById('UnitModal').style.display = 'none';
+    document.getElementById('createUnitForm').reset();
+    editUnitId = null;
+});
+
+const unitTable = document.querySelector('.unit-page tbody');
+
+async function fetchUnit() {
+    try {
+        const data = await callAPI({ url: '../api/unit.php', method: 'GET' });
+        unitTable.innerHTML = '';
+        data.forEach(unit => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${unit.id}</td>
+                <td>${unit.nama}</td>
+                <td>
+                    <button data-id="${unit.id}" class="edit-btn">Edit</button>
+                    <button data-id="${unit.id}" class="delete-btn">Hapus</button>
+                </td>
+            `;
+            unitTable.appendChild(tr);
+        });
+        addTableEventListeners();
+    } catch (error) {
+        console.error('Gagal memuat unit:', error);
+    }
+}
+
+function addTableEventListeners() {
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', async function () {
+            const id = this.getAttribute('data-id');
+            await getEditData(id);
+        });
+    });
+    // Tambahkan event listener untuk tombol hapus jika diperlukan
+}
+
+fetchUnit();
+
+async function submitUnit() {
+    try {
+        const method = action === "create" ? 'POST' : 'PUT';
+        const body = {
+            nama: document.getElementById('unit_name').value
+        };
+        if (action === "edit" && editUnitId) {
+            body.id = editUnitId;
+        }
+        await callAPI({ url: '../api/unit.php', method, body });
+        fetchUnit();
+    } catch (error) {
+        console.error('Gagal menyimpan unit:', error);
+    }
+}
+
+document.getElementById('createUnitForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await submitUnit();
+    document.getElementById('UnitModal').style.display = 'none';
+    document.getElementById('createUnitForm').reset();
+    editUnitId = null;
+});
+
+async function getEditData(id) {
+    try {
+        const data = await callAPI({ url: `../api/unit.php?id=${id}`, method: 'GET' });
+        if (data.length > 0) {
+            openModal("edit", id);
+            document.getElementById('unit_name').value = data[0].nama;
+        } else {
+            console.error('Unit tidak ditemukan');
+        }
+    } catch (error) {
+        console.error('Gagal mendapatkan data unit:', error);
+    }
+}
+</script>

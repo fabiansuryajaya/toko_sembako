@@ -41,5 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Load default page
-    loadPage('products');
+    loadPage('product');
 });
+    

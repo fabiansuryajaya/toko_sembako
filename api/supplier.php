@@ -8,8 +8,15 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
+        $query_data = $_GET;
+
         // Ambil semua supplier
-        $sql = "SELECT id_supplier as id, nama_supplier as nama FROM supplier";
+        $sql = "SELECT id_supplier as id, nama_supplier as nama FROM supplier WHERE status = 'Y'";
+        if (isset($query_data['id'])) {
+            // Jika ada ID, ambil supplier berdasarkan ID
+            $id = (int)$query_data['id'];
+            $sql .= " AND id_supplier = $id";
+        }
         $result = $conn->query($sql);
 
         $suppliers = [];
@@ -54,7 +61,7 @@ switch ($method) {
         $id = (int)$data['id'];
         $nama = $conn->real_escape_string($data['nama']);
 
-        $sql = "UPDATE suppliers SET nama='$nama' WHERE id=$id";
+        $sql = "UPDATE supplier SET nama_supplier='$nama' WHERE id_supplier=$id";
         if ($conn->query($sql) === TRUE) {
             echo json_encode(['success' => true]);
         } else {
@@ -71,7 +78,7 @@ switch ($method) {
         }
 
         $id = (int)$_GET['id'];
-        $sql = "DELETE FROM suppliers WHERE id=$id";
+        $sql = "UPDATE supplier SET status = 'N' WHERE id_supplier=$id";
         if ($conn->query($sql) === TRUE) {
             echo json_encode(['success' => true]);
         } else {
