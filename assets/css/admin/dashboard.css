@@ -45,6 +45,7 @@
 .sidebar nav ul li a:hover,
 .sidebar nav ul li a.active {
   background-color: #555;
+  font-weight: bold;
 }
 
 /* Screen page */
@@ -209,4 +210,9 @@ select {
   /* fixed height */
   height: 80%;
   overflow-y: auto;
+}
+
+.create-container {
+  display: flex;
+  justify-content: flex-end;
 }

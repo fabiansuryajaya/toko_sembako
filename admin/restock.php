@@ -1,13 +1,15 @@
 <div class="page product-page">
     <h1>Restock Barang</h1>
-    <button class="createBtn" id="createProductBtn">Form Restock Barang</button>
+    <div class="create-container">
+        <button class="createBtn" id="createProductBtn">Form Restock Barang</button>
+    </div>
 
     <div class="filter-container">
         <div class="filter">
-            <label for="from_date">Dari Tanggal:</label>
+            <label for="from_date">Dari :</label>
             <input type="date" id="from_date" name="from_date">
 
-            <label for="to_date">Sampai Tanggal:</label>
+            <label for="to_date">Sampai :</label>
             <input type="date" id="to_date" name="to_date">
         </div>
         <button id="filter_btn">Filter</button>
@@ -17,6 +19,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Tanggal Pembelian</th>
                 <th>Jumlah Pembelian</th>
                 <th>Nama User</th>
                 <th>Aksi</th>
@@ -122,6 +125,7 @@
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${item.id_pembelian}</td>
+                        <td>${item.created_at}</td>
                         <td>${item.jumlah_pembelian}</td>
                         <td>${item.nama_user}</td>
                         <td><button class="detailBtn" data-id="${item.id_pembelian}">Detail</button></td>
