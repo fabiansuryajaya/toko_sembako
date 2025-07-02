@@ -89,9 +89,9 @@
             try {
                 const status = document.getElementById('status').checked ? 'Y' : 'N';
                 let url = '../api/product.php?status=' + status;
-                const data = await callAPI({ url, method: 'GET' });
+                const result = await callAPI({ url, method: 'GET' });
                 productTable.innerHTML = '';
-                data.forEach(product => {
+                result.data.forEach(product => {
                     const tr = document.createElement('tr');
                     let status = product.status === 'Y' ? 'Aktif' : 'Tidak Aktif';
 
@@ -155,7 +155,11 @@
                 if (action === "edit" && editProductId) {
                     body.id = editProductId;
                 }
-                await callAPI({ url: '../api/product.php', method, body });
+                const result = await callAPI({ url: '../api/product.php', method, body });
+                if (result.status !== 0) {
+                    alert(result.message);
+                    return;
+                }
                 getData();
             } catch (error) {
                 console.error('Gagal menyimpan barang:', error);
@@ -172,15 +176,15 @@
 
         async function getEditData(id) {
             try {
-                const data = await callAPI({ url: `../api/product.php?id=${id}`, method: 'GET' });
-                if (data.length > 0) {
+                const result = await callAPI({ url: `../api/product.php?id=${id}`, method: 'GET' });
+                if (result.data.length > 0) {
                     openModal("edit", id);
-                    document.getElementById('product_name').value = data[0].nama;
-                    document.getElementById('supplier_id').value = data[0].supplier_id;
-                    document.getElementById('satuan_id').value = data[0].satuan_id;
-                    document.getElementById('harga_beli').value = data[0].harga_beli;
-                    document.getElementById('harga_jual').value = data[0].harga_jual;
-                    document.getElementById('stok').value = data[0].stok;
+                    document.getElementById('product_name').value = result.data[0].nama;
+                    document.getElementById('supplier_id').value  = result.data[0].supplier_id;
+                    document.getElementById('satuan_id').value    = result.data[0].satuan_id;
+                    document.getElementById('harga_beli').value   = result.data[0].harga_beli;
+                    document.getElementById('harga_jual').value   = result.data[0].harga_jual;
+                    document.getElementById('stok').value         = result.data[0].stok;
                 } else {
                     console.error('Barang tidak ditemukan');
                 }
@@ -200,10 +204,10 @@
 
         async function fetchSuppliers() {
             try {
-                const data = await callAPI({ url: '../api/supplier.php', method: 'GET' });
+                const result = await callAPI({ url: '../api/supplier.php', method: 'GET' });
                 const supplierSelect = document.getElementById('supplier_id');
                 supplierSelect.innerHTML = '<option value="">Pilih Supplier</option>';
-                data.forEach(supplier => {
+                result.data.forEach(supplier => {
                     const option = document.createElement('option');
                     option.value = supplier.id;
                     option.textContent = supplier.nama;
@@ -217,10 +221,10 @@
 
         async function fetchSatuan() {
             try {
-                const data = await callAPI({ url: '../api/unit.php', method: 'GET' });
+                const result = await callAPI({ url: '../api/unit.php', method: 'GET' });
                 const satuanSelect = document.getElementById('satuan_id');
                 satuanSelect.innerHTML = '<option value="">Pilih Satuan</option>';
-                data.forEach(satuan => {
+                result.data.forEach(satuan => {
                     const option = document.createElement('option');
                     option.value = satuan.id;
                     option.textContent = satuan.nama;

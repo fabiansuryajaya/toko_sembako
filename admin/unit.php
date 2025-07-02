@@ -1,12 +1,12 @@
 <div class="page unit-page">
-    <h1>Daftar Unit</h1>
-    <button class="createBtn" id="createUnitBtn">Buat Unit</button>
+    <h1>Daftar Satuan</h1>
+    <button class="createBtn" id="createUnitBtn">Buat Satuan</button>
 
     <table border="1" cellspacing="0" cellpadding="8">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Nama Unit</th>
+                <th>Nama Satuan</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -17,9 +17,9 @@
     <!-- Popup modal -->
     <div id="UnitModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <h2>Buat Unit</h2>
+            <h2>Buat Satuan</h2>
             <form id="createUnitForm">
-                <label for="name">Nama Unit:</label>
+                <label for="name">Nama Satuan:</label>
                 <input type="text" id="unit_name" name="name" required>
                 <button type="submit">Simpan</button>
                 <button type="button" id="closeModalBtn">Batal</button>
@@ -50,9 +50,9 @@ const unitTable = document.querySelector('.unit-page tbody');
 
 async function fetchUnit() {
     try {
-        const data = await callAPI({ url: '../api/unit.php', method: 'GET' });
+        const result = await callAPI({ url: '../api/unit.php', method: 'GET' });
         unitTable.innerHTML = '';
-        data.forEach(unit => {
+        result.data.forEach(unit => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${unit.id}</td>
@@ -108,10 +108,10 @@ document.getElementById('createUnitForm').addEventListener('submit', async (e) =
 
 async function getEditData(id) {
     try {
-        const data = await callAPI({ url: `../api/unit.php?id=${id}`, method: 'GET' });
-        if (data.length > 0) {
+        const result = await callAPI({ url: `../api/unit.php?id=${id}`, method: 'GET' });
+        if (result.data.length > 0) {
             openModal("edit", id);
-            document.getElementById('unit_name').value = data[0].nama;
+            document.getElementById('unit_name').value = result.data[0].nama;
         } else {
             console.error('Unit tidak ditemukan');
         }

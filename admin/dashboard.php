@@ -17,9 +17,10 @@
                 <ul>
                     <li><a href="#" data-page="product" >Product</a></li> 
                     <li><a href="#" data-page="supplier">Supplier</a></li> 
-                    <li><a href="#" data-page="unit"    >Unit</a></li> 
+                    <li><a href="#" data-page="unit"    >Satuan</a></li> 
                     <li><a href="#" data-page="user"    >User</a></li>
                     <li><a href="#" data-page="restock" >Restock</a></li>
+                    <li><a href="#" data-page="penjualan" >Penjualan</a></li>
                     <li><a href="#" data-page="setting" >Setting </a></li>
                     <!-- logout -->
                     <li><a href="#" data-page="logout"  >Logout </a></li>

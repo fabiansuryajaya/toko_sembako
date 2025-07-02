@@ -1,6 +1,6 @@
 <div class="page product-page">
-    <h1>Restock Barang</h1>
-    <button class="createBtn" id="createProductBtn">Form Restock Barang</button>
+    <h1>Penjualan Barang</h1>
+    <button class="createBtn" id="createProductBtn">Form Penjualan Barang</button>
 
     <div class="filter-container">
         <div class="filter">
@@ -17,7 +17,7 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Jumlah Pembelian</th>
+                <th>Jumlah Penjualan</th>
                 <th>Nama User</th>
                 <th>Aksi</th>
             </tr>
@@ -27,7 +27,7 @@
     </table>
 
     <!-- Popup modal -->
-    <div id="RestockModal" class="modal" style="display: none;">
+    <div id="PenjualanModal" class="modal" style="display: none;">
         <div class="modal-content" style="position: relative; padding-bottom: 64px;">
             <h2>Buat Barang</h2>
             <div style="margin-bottom: 16px; border-bottom: 1px solid #ccc; padding-bottom: 8px;">
@@ -54,22 +54,22 @@
 
             <div style="position: absolute; right: 16px; bottom: 16px; text-align: right;">
                 <button type="button" id="closeModalBtn">Batal</button>
-                <button type="button" id="saveRestockBtn">Simpan</button>
+                <button type="button" id="savePenjualanBtn">Simpan</button>
             </div>
         </div>
     </div>
 
-    <!-- Popup modal detail pembelian -->
+    <!-- Popup modal detail penjualan -->
     <div id="DetailModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <h2>Detail Pembelian</h2>
+            <h2>Detail Penjualan</h2>
             <table border="1" cellspacing="0" cellpadding="8">
                 <thead>
                     <tr>
                         <th>ID Produk</th>
                         <th>Nama Produk</th>
-                        <th>Jumlah Pembelian</th>
-                        <th>Harga Pembelian</th>
+                        <th>Jumlah Penjualan</th>
+                        <th>Harga Penjualan</th>
                     </tr>
                 </thead>
                 <tbody id="detailTableBody"></tbody>
@@ -111,20 +111,20 @@
         }
         fetchProduct();
 
-        // get data pembelian
-        async function fetchPembelian() {
+        // get data penjualan
+        async function fetchPenjualan() {
             try {
-                const result = await callAPI({ url: '../api/restock.php', method: 'GET' });
+                const result = await callAPI({ url: '../api/penjualan.php', method: 'GET' });
                 const tbody = document.querySelector('table tbody');
                 tbody.innerHTML = ''; // Clear existing rows
 
                 result.data.forEach(item => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${item.id_pembelian}</td>
-                        <td>${item.jumlah_pembelian}</td>
+                        <td>${item.id_penjualan}</td>
+                        <td>${item.jumlah_penjualan}</td>
                         <td>${item.nama_user}</td>
-                        <td><button class="detailBtn" data-id="${item.id_pembelian}">Detail</button></td>
+                        <td><button class="detailBtn" data-id="${item.id_penjualan}">Detail</button></td>
                     `;
                     tbody.appendChild(row);
                 });
@@ -132,38 +132,38 @@
                 // Add event listener for detail buttons
                 document.querySelectorAll('.detailBtn').forEach(button => {
                     button.addEventListener('click', function () {
-                        const idPembelian = this.getAttribute('data-id');
+                        const idPenjualan = this.getAttribute('data-id');
                         const detailModal = document.getElementById('DetailModal');
                         const detailTableBody = document.getElementById('detailTableBody');
 
                         detailTableBody.innerHTML = ''; // Clear existing rows
                         detailModal.style.display = 'flex';
 
-                        callAPI({ url: `../api/restock.php?id_pembelian=${idPembelian}&action=detail`, method: 'GET' })
+                        callAPI({ url: `../api/penjualan.php?id_penjualan=${idPenjualan}&action=detail`, method: 'GET' })
                             .then(result => {
-                                const detailData = result.data;
+                                const detailData = result.data
                                 detailData.forEach(detail => {
                                     const detailRow = document.createElement('tr');
                                     detailRow.innerHTML = `
                                         <td>${detail.id_produk}</td>
                                         <td>${detail.nama_product}</td>
-                                        <td>${detail.jumlah_pembelian}</td>
-                                        <td>${formatCurrencyIDR(detail.harga_pembelian)}</td>
+                                        <td>${detail.jumlah_penjualan}</td>
+                                        <td>${formatCurrencyIDR(detail.harga_penjualan)}</td>
                                     `;
                                     detailTableBody.appendChild(detailRow);
                                 });
                             })
                             .catch(error => {
-                                console.error('Gagal memuat detail pembelian:', error);
+                                console.error('Gagal memuat detail penjualan:', error);
                             });
                     });
                 });
             } catch (error) {
-                console.error('Gagal memuat pembelian:', error);
+                console.error('Gagal memuat penjualan:', error);
             }
         }
 
-        fetchPembelian();
+        fetchPenjualan();
 
         // closeDetailModalBtn
         const closeDetailModalBtn = document.getElementById('closeDetailModalBtn');
@@ -219,15 +219,15 @@
         // closeModalBtn
         const closeModalBtn = document.getElementById('closeModalBtn');
         closeModalBtn.addEventListener('click', () => {
-            const modal = document.getElementById('RestockModal');
+            const modal = document.getElementById('PenjualanModal');
             modal.style.display = 'none';
         });
 
-        // saveRestockBtn
-        const saveRestockBtn = document.getElementById('saveRestockBtn');
-        saveRestockBtn.addEventListener('click', async () => {
+        // savePenjualanBtn
+        const savePenjualanBtn = document.getElementById('savePenjualanBtn');
+        savePenjualanBtn.addEventListener('click', async () => {
             const rows = table.querySelectorAll('tr');
-            const restockData = [];
+            const penjualanData = [];
 
             rows.forEach(row => {
                 const productId = row.getAttribute('data-id');
@@ -235,7 +235,7 @@
                 const quantityInput = row.querySelector('.quantity');
                 const quantity = parseInt(quantityInput.value);
                 if (quantity > 0) {
-                    restockData.push({
+                    penjualanData.push({
                         product_id: productId,
                         harga_beli: parseFloat(hargaBeliInput.value),
                         quantity: quantity
@@ -243,18 +243,18 @@
                 }
             });
 
-            if (restockData.length === 0) {
-                alert('Tidak ada barang yang direstock.');
+            if (penjualanData.length === 0) {
+                alert('Tidak ada barang yang dipenjualan.');
                 return;
             }
 
             const body = {
-                restock: restockData
+                penjualan: penjualanData
             }
 
             try {
                 const result = await callAPI({
-                    url: '../api/restock.php',
+                    url: '../api/penjualan.php',
                     method: 'POST',
                     body
                 });
@@ -262,20 +262,20 @@
                     alert(result.message);
                     return;
                 }
-                fetchPembelian(); // Refresh the pembelian data
-                alert('Restock berhasil!');
+                fetchPenjualan(); // Refresh the penjualan data
+                alert('Penjualan berhasil!');
                 table.innerHTML = ''; // Clear the table after saving
-                const modal = document.getElementById('RestockModal');
+                const modal = document.getElementById('PenjualanModal');
                 modal.style.display = 'none';
             } catch (error) {
-                console.error('Gagal menyimpan restock:', error);
+                console.error('Gagal menyimpan penjualan:', error);
             }
         });
 
         // createProductBtn
         const createProductBtn = document.getElementById('createProductBtn');
         createProductBtn.addEventListener('click', () => {
-            const modal = document.getElementById('RestockModal');
+            const modal = document.getElementById('PenjualanModal');
             modal.style.display = 'flex';
         });
 
@@ -290,7 +290,7 @@
         });
 
         window.addEventListener('click', function (event) {
-            const modal = document.getElementById('RestockModal');
+            const modal = document.getElementById('PenjualanModal');
             if (event.target === modal) {
                 modal.style.display = 'none';
             }
@@ -298,7 +298,7 @@
 
         // keyboard esc
         window.addEventListener('keydown', function (event) {
-            const modal = document.getElementById('RestockModal');
+            const modal = document.getElementById('PenjualanModal');
             if (event.key === 'Escape') {
                 modal.style.display = 'none';
             }

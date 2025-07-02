@@ -18,7 +18,8 @@ async function callAPI({url, body, method = 'POST'}) {
       throw new Error('Network response was not ok');
     }
 
-    return await response.json();
+    const result = await response.json();
+    return { status: 0, message: 'success', data: result };
   } catch (error) {
     console.error('API Error:', error);
     return { status: '500', message: 'Terjadi kesalahan, silakan coba lagi' };

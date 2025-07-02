@@ -184,7 +184,8 @@ select {
   border-radius: 5px;
 }
 
-#RestockModal {
+#RestockModal,
+#PenjualanModal{
   display: none; /* Hidden by default */
   position: fixed;
   z-index: 1000;
@@ -198,6 +199,7 @@ select {
 }
 
 #RestockModal .modal-content,
+#PenjualanModal .modal-content,
 #DetailModal .modal-content {
   background-color: #fefefe;
   margin: 15% auto;

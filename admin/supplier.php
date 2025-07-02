@@ -50,9 +50,9 @@ const supplierTable = document.querySelector('.supplier-page tbody');
 
 async function fetchSupplier() {
     try {
-        const data = await callAPI({ url: '../api/supplier.php', method: 'GET' });
+        const result = await callAPI({ url: '../api/supplier.php', method: 'GET' });
         supplierTable.innerHTML = '';
-        data.forEach(supplier => {
+        result.data.forEach(supplier => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${supplier.id}</td>
@@ -108,10 +108,10 @@ document.getElementById('createSupplierForm').addEventListener('submit', async (
 
 async function getEditData(id) {
     try {
-        const data = await callAPI({ url: `../api/supplier.php?id=${id}`, method: 'GET' });
-        if (data.length > 0) {
+        const result = await callAPI({ url: `../api/supplier.php?id=${id}`, method: 'GET' });
+        if (result.data.length > 0) {
             openModal("edit", id);
-            document.getElementById('supplier_name').value = data[0].nama;
+            document.getElementById('supplier_name').value = result.data[0].nama;
         } else {
             console.error('Pemasok tidak ditemukan');
         }
