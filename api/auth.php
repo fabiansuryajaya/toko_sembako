@@ -1,13 +1,16 @@
 <?php
 require_once("../connection.php");
 
+header('Content-Type: application/json');
+$data = json_decode(file_get_contents('php://input'), true);
+
 // Default response
 $return = array('status' => '0', 'message' => '', 'data' => array());
 
 // Login
-if (isset($_POST['login'])) {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+if (isset($data['login'])) {
+    $username = trim($data['username']);
+    $password = trim($data['password']);
 
     // Query user dengan prepared statement
     $stmt = $conn->prepare("SELECT * FROM user WHERE username = ?");
@@ -38,6 +41,17 @@ if (isset($_POST['login'])) {
         "role" => $user['role']
     );
 
+    echo json_encode($return);
+    exit;
+}
+
+if (isset($data['logout'])) {
+    // Hapus session atau token jika ada
+    session_start();
+    session_destroy();
+
+    $return['status'] = '200';
+    $return['message'] = 'Logout Berhasil';
     echo json_encode($return);
     exit;
 }

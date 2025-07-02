@@ -24,3 +24,12 @@ async function callAPI({url, body, method = 'POST'}) {
     return { status: '500', message: 'Terjadi kesalahan, silakan coba lagi' };
   }
 }
+
+// fungsi untuk format currency idr
+function formatCurrencyIDR(value) {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0
+  }).format(value);
+}

@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // check local_storage for user data
+    const user_role = localStorage.getItem('user_role');
+    if (!user_role || user_role !== 'admin') {
+        alert('Anda tidak memiliki akses ke halaman ini.');
+        window.location.href = '../index.php';
+        return;
+    }
+
     const links = document.querySelectorAll('.sidebar a');
     const screenContent = document.getElementById('screen-content');
 
@@ -14,6 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Agar variabel JS bisa diakses antar file, gunakan window sebagai global scope
     function loadPage(page) {
+        if (page == "logout"){
+            callAPI({
+                url: '../api/auth.php',
+                body: { logout: '1' },
+                method: 'POST'
+            }).then(response => {
+                if (response.status === '200') {
+                    window.location.href = '../index.php';
+                } else {
+                    alert('Gagal logout: ' + response.message);
+                }
+            });
+            return;
+        }
         fetch(page + '.php')
             .then(response => {
                 if (!response.ok) throw new Error('Gagal memuat halaman: ' + page);

@@ -31,10 +31,16 @@
         document.getElementById('login-form').addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            const formData = new FormData(this);
-            formData.append('login', '1');
+            const body = {
+                username : document.getElementById('username').value,
+                password : document.getElementById('password').value,
+                login    : 1
+            }
 
-            const data = await callAPI('api/auth.php', formData);
+            const data = await callAPI({
+                url : './api/auth.php',
+                body
+            });
             const feedback = document.querySelector('.feedback');
             feedback.textContent = data.message;
 
@@ -47,6 +53,8 @@
                     }else {
                         window.location.href = './user/dashboard.php';
                     }
+                    // save user role in localStorage
+                    localStorage.setItem('user_role', role);
                 }, 1500);
             } else {
                 feedback.style.color = 'red';

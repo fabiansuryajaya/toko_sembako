@@ -1,7 +1,6 @@
 <?php
 require_once("../connection.php");
 
-// Set header response JSON
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -10,8 +9,16 @@ switch ($method) {
     case 'GET':
         $query_data = $_GET;
 
+        $status = isset($query_data['status']) ? $query_data['status'] : 'Y';
+
         // Ambil semua product
-        $sql = "SELECT id_product, p.nama_product, s.nama_supplier, u.nama_satuan, p.harga_beli_product, harga_jual_product,stok_product, p.status FROM product p JOIN supplier s on (p.id_supplier = s.id_supplier) JOIN satuan u on (p.id_satuan = u.id_satuan) WHERE p.status = 'Y'";
+        $sql = "SELECT id_product, p.nama_product, s.nama_supplier, u.nama_satuan, p.harga_beli_product, harga_jual_product,stok_product, p.status
+                FROM product p
+                    JOIN supplier s on (p.id_supplier = s.id_supplier)
+                    JOIN satuan u   on (p.id_satuan   = u.id_satuan)";
+        if ($status === 'Y') {
+            $sql .= " WHERE p.status = '$status'";
+        }
         if (isset($query_data['id_product'])) {
             // Jika ada ID, ambil product berdasarkan ID
             $id = (int)$query_data['id_product'];

@@ -15,11 +15,14 @@
             <h2>Menu</h2>
             <nav>
                 <ul>
-                    <li><a href="#" data-page="product">Product</a></li> 
+                    <li><a href="#" data-page="product" >Product</a></li> 
                     <li><a href="#" data-page="supplier">Supplier</a></li> 
-                    <li><a href="#" data-page="unit">Unit</a></li> 
-                    <li><a href="#" data-page="user">User</a></li>
-                    <li><a href="#" data-page="setting  ">Setting </a></li>
+                    <li><a href="#" data-page="unit"    >Unit</a></li> 
+                    <li><a href="#" data-page="user"    >User</a></li>
+                    <li><a href="#" data-page="restock" >Restock</a></li>
+                    <li><a href="#" data-page="setting" >Setting </a></li>
+                    <!-- logout -->
+                    <li><a href="#" data-page="logout"  >Logout </a></li>
                 </ul>
             </nav>
         </aside>
@@ -31,6 +34,8 @@
         </main>
     </div>
 
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../assets/js/global.js"></script>
     <script src="../assets/js/admin/dashboard.js"></script>
 </body>
