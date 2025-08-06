@@ -38,12 +38,12 @@
                 <input type="text" id="product_name" name="name" required>
 
                 <label for="supplier_id">Nama Supplier:</label>
-                <select id="supplier_id" name="supplier_id" required>
+                <select id="supplier_id" name="supplier_id" style="width: 100%" required>
                     <option value="">Pilih Supplier</option>
                 </select>
 
                 <label for="satuan_id">Nama Satuan:</label>
-                <select id="satuan_id" name="satuan_id" required>
+                <select id="satuan_id" name="satuan_id" style="width: 100%" required>
                     <option value="">Pilih Satuan</option>
                 </select>
 
@@ -62,6 +62,10 @@
         </div>
     </div>
 </div>
+
+<!-- Tambahkan Select2 CSS dan JS -->
+<link href="../assets/css/library/select2.min.css" rel="stylesheet" />
+<script src="../assets/js/library/select2.min.js"></script>
 
 <script>
     // on document ready
@@ -213,6 +217,10 @@
                     option.textContent = supplier.nama;
                     supplierSelect.appendChild(option);
                 });
+                $("#supplier_id").select2({
+                    placeholder: "Pilih Supplier",
+                    allowClear: true
+                });
             } catch (error) {
                 console.error('Gagal memuat pemasok:', error);
             }
@@ -229,6 +237,10 @@
                     option.value = satuan.id;
                     option.textContent = satuan.nama;
                     satuanSelect.appendChild(option);
+                });
+                $("#satuan_id").select2({
+                    placeholder: "Pilih Satuan",
+                    allowClear: true
                 });
             } catch (error) {
                 console.error('Gagal memuat satuan:', error);

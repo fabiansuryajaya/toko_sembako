@@ -1,4 +1,3 @@
-
 <div class="page product-page">
     <h1>Penjualan Barang</h1>
     <div class="create-container">
@@ -36,9 +35,7 @@
             <h2>Buat Barang</h2>
             <div style="margin-bottom: 16px; border-bottom: 1px solid #ccc; padding-bottom: 8px;">
                 <label for="product_id">Nama Barang:</label>
-                <select id="product_id" name="product_id" required>
-                    <option value="">Pilih Barang</option>
-                </select>
+                <select id="product_id" name="product_id" required style="width: 100%;"></select>
 
                 <button type="button" id="addProductBtn">Add</button>
             </div>
@@ -85,9 +82,11 @@
     </div>
 </div>
 
+<!-- Tambahkan Select2 CSS dan JS -->
+<link href="../assets/css/library/select2.min.css" rel="stylesheet" />
+<script src="../assets/js/library/select2.min.js"></script>
+
 <script>
-
-
     // on document ready
     $(document).ready(function () {
         // init
@@ -97,34 +96,10 @@
         to_date.value    = new Date().toISOString().split('T')[0]; // Set to today
 
         const product_list = {};
-
-        // async function fetchProduct() {
-        //     try {
-        //         const result = await callAPI({ url: '../api/product.php', method: 'GET' });
-        //         const productSelect = document.getElementById('product_id');
-        //         productSelect.innerHTML = '<option value="">Pilih Barang</option>';
-        //         result.data.forEach(product => {
-        //             const option = document.createElement('option');
-        //             option.value = product.id_product;
-        //             option.textContent = product.nama_product + " - " + product.nama_supplier + " - " + product.nama_satuan;
-        //             productSelect.appendChild(option);
-
-        //             product_list[product.id_product] = product;
-        //         });
-        //     } catch (error) {
-        //         console.error('Gagal memuat barang:', error);
-        //     }
-        // }
-
-        async function init(){
-            await fetchProduct();
-        }
-        init();
-
         async function fetchProduct() {
             try {
                 const result = await callAPI({ url: '../api/product.php', method: 'GET' });
-                const productSelect = document.getElementById('product_id');
+                const productSelect = document.getElementById('product_id');;
                 productSelect.innerHTML = '<option value="">Pilih Barang</option>';
 
                 result.data.forEach(product => {
@@ -137,14 +112,16 @@
                 });
 
                 // Aktifkan Select2 setelah isi data
-               
-                
-                $('#product_id').select2();
-
+                $("#product_id").select2({
+                    placeholder: "Pilih Barang",
+                    allowClear: true
+                });
             } catch (error) {
                 console.error('Gagal memuat barang:', error);
             }
         }
+
+        fetchProduct();
 
         // get data penjualan
         async function fetchPenjualan() {

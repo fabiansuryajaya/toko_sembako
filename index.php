@@ -49,8 +49,6 @@
                 feedback.style.color = 'green';
                 const role = data.data.role;
                 setTimeout(() => {
-                    console.log(role);
-                    
                     if (role === 'admin') {
                         window.location.href = './admin/dashboard.php';
                     }else {

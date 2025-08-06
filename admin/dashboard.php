@@ -7,8 +7,12 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../assets/css/admin/dashboard.css" />
 
-
-
+    <!-- Select2 CSS -->
+    <link href="../assets/css/library/select2.min.css" rel="stylesheet" />
+    <!-- jQuery (required for Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="../assets/js/library/select2.min.js"></script>
 </head>
 
 <body>
@@ -18,36 +22,7 @@
        <aside class="sidebar"> 
             <h2>Menu</h2>
             <nav>
-                <ul>
-                    <!-- Master -->
-                    <li class="menu-group">
-                        <a href="#" class="menu-toggle">Master</a>
-                        <ul class="submenu">
-                            <li><a href="#" data-page="product">Product</a></li>
-                            <li><a href="#" data-page="supplier">Supplier</a></li>
-                            <li><a href="#" data-page="unit">Satuan</a></li>
-                            <li><a href="#" data-page="user">User</a></li>
-                        </ul>
-                    </li>
-
-                    <!-- Transaksi -->
-                    <li class="menu-group">
-                        <a href="#" class="menu-toggle">Transaksi</a>
-                        <ul class="submenu">
-                            <li><a href="#" data-page="restock">Restock</a></li>
-                            <li><a href="#" data-page="penjualan">Penjualan</a></li>
-                            <li><a href="#" data-page="hutang">Hutang</a></li>
-                        </ul>
-                    </li>
-
-                    <!-- Lainnya -->
-                    <li class="menu-group">
-                        <a href="#" class="menu-toggle">Lainnya</a>
-                        <ul class="submenu">
-                            <li><a href="#" data-page="setting">Setting</a></li>
-                            <li><a href="#" data-page="logout">Logout</a></li>
-                        </ul>
-                    </li>
+                <ul id="menu-bar">
                 </ul>
             </nav>
         </aside>
@@ -68,51 +43,54 @@
 
 </html>
 
-<style>
-    .sidebar {
-        width: 200px;
-        background-color: #2c2c2c;
-        color: white;
-        padding: 20px;
-        font-family: sans-serif;
-    }
-
-    .sidebar ul {
-        list-style: none;
-        padding-left: 0;
-    }
-
-    .sidebar a {
-        color: white;
-        text-decoration: none;
-        display: block;
-        padding: 8px;
-        border-radius: 4px;
-    }
-
-    .sidebar .menu-toggle {
-        font-weight: bold;
-        text-transform: uppercase;
-        cursor: pointer;
-    }
-
-    .sidebar .submenu {
-        display: none;
-        margin-left: 10px;
-        margin-top: 5px;
-    }
-
-    .sidebar .menu-group.open .submenu {
-        display: block;
-    }
-
-</style>
 <script>
-    document.querySelectorAll('.menu-toggle').forEach(function(toggle) {
-        toggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            const parent = this.parentElement;
-            parent.classList.toggle('open');
+    // document ready
+    $(document).ready(function() {
+        const menu = {
+            "Master" : {
+                "Product" : "product",
+                "Supplier" : "supplier",
+                "Unit" : "unit",
+                "User" : "user"
+            },
+            "Transaksi" : {
+                "Restock" : "restock",
+                "Penjualan" : "penjualan",
+                "Hutang" : "hutang"
+            },
+            "Setting" : "setting",
+            "Logout" : "logout"
+        }
+
+        const menu_bar = document.getElementById('menu-bar');
+        for (const [group, items] of Object.entries(menu)) {
+            const groupItem = document.createElement('li');
+            groupItem.classList.add('menu-group');
+            groupItem.innerHTML = `<a href="#" class="menu-toggle">${group}</a>`;
+            // Buat submenu hanya jika items adalah object (bukan string)
+            if (typeof items === 'object') {
+                const submenu = document.createElement('ul');
+                submenu.classList.add('submenu');
+                submenu.style.display = 'none'; // Sembunyikan default
+                for (const [label, page] of Object.entries(items)) {
+                    const item = document.createElement('li');
+                    item.innerHTML = `<a href="#" data-page="${page}">${label}</a>`;
+                    submenu.appendChild(item);
+                }
+                groupItem.appendChild(submenu);
+            }
+            menu_bar.appendChild(groupItem);
+        }
+
+        // Toggle submenu saat menu group diklik
+        document.querySelectorAll('.menu-toggle').forEach(function(toggle) {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const submenu = this.parentElement.querySelector('.submenu');
+                if (submenu) {
+                    submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+                }
+            });
         });
     });
 </script>

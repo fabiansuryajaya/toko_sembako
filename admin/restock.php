@@ -35,7 +35,7 @@
             <h2>Buat Barang</h2>
             <div style="margin-bottom: 16px; border-bottom: 1px solid #ccc; padding-bottom: 8px;">
                 <label for="product_id">Nama Barang:</label>
-                <select id="product_id" name="product_id" required>
+                <select id="product_id" name="product_id" required style="width: 100%;">
                     <option value="">Pilih Barang</option>
                 </select>
 
@@ -107,6 +107,12 @@
                     productSelect.appendChild(option);
 
                     product_list[product.id_product] = product;
+                });
+
+                // Initialize Select2 for product select
+                $("#product_id").select2({
+                    placeholder: "Pilih Barang",
+                    allowClear: true
                 });
             } catch (error) {
                 console.error('Gagal memuat barang:', error);
