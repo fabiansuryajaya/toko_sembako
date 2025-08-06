@@ -27,12 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const [group, items] of Object.entries(menu)) {
         const groupItem = document.createElement('li');
         groupItem.classList.add('menu-group');
-        groupItem.innerHTML = `<a href="#" class="menu-toggle">${group}</a>`;
-        // Buat submenu hanya jika items adalah object (bukan string)
+        // Tambahkan ikon Font Awesome di depan nama grup
+        groupItem.innerHTML = `<a href="#" class="menu-toggle">
+            <span class="menu-group-label">${group}</span>
+            <i class="fa fa-chevron-right"></i>
+        </a>`;
         if (typeof items === 'object') {
             const submenu = document.createElement('ul');
             submenu.classList.add('submenu');
-            submenu.style.display = 'none'; // Sembunyikan default
+            submenu.style.display = 'none';
             for (const [label, page] of Object.entries(items)) {
                 const item = document.createElement('li');
                 item.innerHTML = `<a href="#" data-page="${page}">${label}</a>`;
@@ -48,8 +51,26 @@ document.addEventListener('DOMContentLoaded', () => {
         toggle.addEventListener('click', function(e) {
             e.preventDefault();
             const submenu = this.parentElement.querySelector('.submenu');
+            const icon = this.querySelector('i.fa');
             if (submenu) {
-                submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+                // Tutup semua submenu & reset ikon
+                document.querySelectorAll('.menu-group .submenu').forEach(function(otherSubmenu) {
+                    if (otherSubmenu !== submenu) {
+                        otherSubmenu.style.display = 'none';
+                        const otherIcon = otherSubmenu.parentElement.querySelector('.menu-toggle i.fa');
+                        if (otherIcon) {
+                            otherIcon.classList.add('fa-chevron-right');
+                            otherIcon.classList.remove('fa-chevron-down');
+                        }
+                    }
+                });
+                // Toggle submenu yang diklik
+                const isOpen = submenu.style.display !== 'none';
+                submenu.style.display = isOpen ? 'none' : 'block';
+                if (icon) {
+                    icon.classList.toggle('fa-chevron-right', isOpen);
+                    icon.classList.toggle('fa-chevron-down', !isOpen);
+                }
             }
         });
     });
@@ -116,3 +137,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load default page
     loadPage('product');
 });
+

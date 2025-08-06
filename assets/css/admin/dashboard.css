@@ -216,3 +216,41 @@ select {
   display: flex;
   justify-content: flex-end;
 }
+
+
+/* untuk menu navbar */
+
+.menu-group>.submenu {
+  margin-left: 24px;
+  padding-left: 12px;
+  border-left: 2px solid #eee;
+}
+
+.menu-group>a .fa {
+  margin-right: 8px;
+  transition: transform 0.2s;
+}
+
+.submenu li a {
+  padding-left: 12px;
+}
+.menu-toggle {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+    padding: 8px 12px;
+    box-sizing: border-box;
+}
+
+.menu-group > .submenu {
+    margin-left: 24px;
+    padding-left: 12px;
+    border-left: 2px solid #eee;
+}
+
+.submenu li a {
+    padding-left: 12px;
+}

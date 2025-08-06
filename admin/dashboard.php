@@ -2,11 +2,13 @@
 <html lang="en">
 
 <head>
+    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../assets/css/admin/dashboard.css" />
-
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Select2 CSS -->
     <link href="../assets/css/library/select2.min.css" rel="stylesheet" />
     <!-- jQuery (required for Select2) -->
