@@ -217,15 +217,17 @@
                 return;
             }
 
-            table.innerHTML += `
-                <tr data-id="${product.id_product}">
-                    <td>${product.nama_product}</td>
-                    <td>${product.nama_satuan}</td>
-                    <td><input type="number" class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
-                    <td><input type="number" class="quantity" value="1" min="1"></td>
-                    <td class="total">${formatCurrencyIDR(product.harga_beli_product)}</td>
-                </tr>
+            // Gunakan createElement agar tidak overwrite innerHTML dan kehilangan event/input value
+            const tr = document.createElement('tr');
+            tr.setAttribute('data-id', product.id_product);
+            tr.innerHTML = `
+                <td>${product.nama_product}</td>
+                <td>${product.nama_satuan}</td>
+                <td><input type="number" class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
+                <td><input type="number" class="quantity" value="1" min="1"></td>
+                <td class="total">${formatCurrencyIDR(product.harga_beli_product)}</td>
             `;
+            table.appendChild(tr);
         });
 
         // closeModalBtn
