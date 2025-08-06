@@ -37,17 +37,20 @@
                 login    : 1
             }
 
-            const data = await callAPI({
+            let data = await callAPI({
                 url : './api/auth.php',
                 body
             });
             const feedback = document.querySelector('.feedback');
             feedback.textContent = data.message;
 
+            data = data.data;
             if (data.status === '200') {
                 feedback.style.color = 'green';
                 const role = data.data.role;
                 setTimeout(() => {
+                    console.log(role);
+                    
                     if (role === 'admin') {
                         window.location.href = './admin/dashboard.php';
                     }else {

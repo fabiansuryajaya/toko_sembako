@@ -1,3 +1,4 @@
+
 <div class="page product-page">
     <h1>Penjualan Barang</h1>
     <div class="create-container">
@@ -85,6 +86,8 @@
 </div>
 
 <script>
+
+
     // on document ready
     $(document).ready(function () {
         // init
@@ -95,11 +98,35 @@
 
         const product_list = {};
 
+        // async function fetchProduct() {
+        //     try {
+        //         const result = await callAPI({ url: '../api/product.php', method: 'GET' });
+        //         const productSelect = document.getElementById('product_id');
+        //         productSelect.innerHTML = '<option value="">Pilih Barang</option>';
+        //         result.data.forEach(product => {
+        //             const option = document.createElement('option');
+        //             option.value = product.id_product;
+        //             option.textContent = product.nama_product + " - " + product.nama_supplier + " - " + product.nama_satuan;
+        //             productSelect.appendChild(option);
+
+        //             product_list[product.id_product] = product;
+        //         });
+        //     } catch (error) {
+        //         console.error('Gagal memuat barang:', error);
+        //     }
+        // }
+
+        async function init(){
+            await fetchProduct();
+        }
+        init();
+
         async function fetchProduct() {
             try {
                 const result = await callAPI({ url: '../api/product.php', method: 'GET' });
                 const productSelect = document.getElementById('product_id');
                 productSelect.innerHTML = '<option value="">Pilih Barang</option>';
+
                 result.data.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product.id_product;
@@ -108,11 +135,16 @@
 
                     product_list[product.id_product] = product;
                 });
+
+                // Aktifkan Select2 setelah isi data
+                console.log("KONTOL");
+                
+                $('#product_id').select2();
+
             } catch (error) {
                 console.error('Gagal memuat barang:', error);
             }
         }
-        fetchProduct();
 
         // get data penjualan
         async function fetchPenjualan() {
@@ -309,3 +341,17 @@
         });
     });
 </script>
+<!-- 
+<style>
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-dropdown {
+    z-index: 9999;
+}
+
+.modal {
+    z-index: 9990;
+}
+</style> -->
