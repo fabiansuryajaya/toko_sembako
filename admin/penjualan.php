@@ -46,7 +46,7 @@
                 <thead>
                     <tr>
                         <td>Nama</td>
-                        <td>Supplier</td>
+                        <!-- <td>Supplier</td> -->
                         <td>Satuan</td>
                         <td>Harga Beli</td>
                         <td>Quantity</td>
@@ -130,7 +130,7 @@
                 result.data.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product.id_product;
-                    option.textContent = product.nama_product + " - " + product.nama_supplier + " - " + product.nama_satuan;
+                    option.textContent = product.nama_product + " - " + product.nama_satuan;
                     productSelect.appendChild(option);
 
                     product_list[product.id_product] = product;
@@ -243,7 +243,6 @@
             table.innerHTML += `
                 <tr data-id="${product.id_product}">
                     <td>${product.nama_product}</td>
-                    <td>${product.nama_supplier}</td>
                     <td>${product.nama_satuan}</td>
                     <td><input type="number" class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
                     <td><input type="number" class="quantity" value="1" min="1"></td>
