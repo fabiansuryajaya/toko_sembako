@@ -137,7 +137,7 @@
                 });
 
                 // Aktifkan Select2 setelah isi data
-                console.log("KONTOL");
+               
                 
                 $('#product_id').select2();
 
