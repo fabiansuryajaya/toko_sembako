@@ -1,6 +1,8 @@
 <div class="page product-page">
     <h1>Daftar Barang</h1>
-    <button class="createBtn" id="createProductBtn">Buat Barang</button>
+    <div class="create-container">
+        <button class="createBtn" id="createProductBtn">Buat Barang</button>
+    </div>
 
     <div class="filter-container">
         <div class="filter">

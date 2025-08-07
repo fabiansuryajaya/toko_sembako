@@ -1,6 +1,8 @@
 <div class="page unit-page">
     <h1>Daftar Satuan</h1>
-    <button class="createBtn" id="createUnitBtn">Buat Satuan</button>
+    <div class="create-container">
+        <button class="createBtn" id="createUnitBtn">Buat Satuan</button>
+    </div>
 
     <table border="1" cellspacing="0" cellpadding="8">
         <thead>

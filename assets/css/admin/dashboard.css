@@ -186,6 +186,7 @@ select {
 }
 
 #RestockModal,
+#HutangModal,
 #PenjualanModal{
   display: none; /* Hidden by default */
   position: fixed;
@@ -201,6 +202,7 @@ select {
 
 #RestockModal .modal-content,
 #PenjualanModal .modal-content,
+#HutangModal .modal-content,
 #DetailModal .modal-content {
   background-color: #fefefe;
   margin: 15% auto;

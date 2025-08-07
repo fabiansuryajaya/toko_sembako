@@ -1,6 +1,8 @@
 <div class="page supplier-page">
     <h1>Daftar Pemasok</h1>
-    <button class="createBtn" id="createSupplierBtn">Buat Pemasok</button>
+    <div class="create-container">
+        <button class="createBtn" id="createSupplierBtn">Buat Pemasok</button>
+    </div>
 
     <table border="1" cellspacing="0" cellpadding="8">
         <thead>

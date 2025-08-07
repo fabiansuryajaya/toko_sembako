@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
             "Product" : "product",
             "Supplier" : "supplier",
             "Unit" : "unit",
-            "User" : "user"
+            "User" : "user",
+            "Member" : "member"
         },
         "Transaksi" : {
             "Restock" : "restock",
