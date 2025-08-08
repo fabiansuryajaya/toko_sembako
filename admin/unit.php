@@ -23,8 +23,9 @@
             <form id="createUnitForm">
                 <label for="name">Nama Satuan:</label>
                 <input type="text" id="unit_name" name="name" required>
-                <button type="submit">Simpan</button>
                 <button type="button" id="closeModalBtn">Batal</button>
+                <button type="submit">Simpan</button>
+                
             </form>
         </div>
     </div>

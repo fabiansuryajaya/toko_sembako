@@ -57,9 +57,9 @@
                 
                 <label for="stok">Stok:</label>
                 <input type="number" id="stok" name="stok" required>
-                
-                <button type="submit">Simpan</button>
                 <button type="button" id="closeModalBtn">Batal</button>
+                <button type="submit">Simpan</button>
+               
             </form>
         </div>
     </div>

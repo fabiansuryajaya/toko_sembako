@@ -26,8 +26,9 @@
                 <input type="text" id="member_name" name="name" required>
                 <label for="name">No Hp:</label>
                 <input type="text" id="nomor_hp" name="nomor_hp" required>
-                <button type="submit">Simpan</button>
+               
                 <button type="button" id="closeModalBtn">Batal</button>
+                <button type="submit">Simpan</button>
             </form>
         </div>
     </div>

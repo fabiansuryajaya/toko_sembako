@@ -23,8 +23,9 @@
             <form id="createSupplierForm">
                 <label for="name">Nama Pemasok:</label>
                 <input type="text" id="supplier_name" name="name" required>
-                <button type="submit">Simpan</button>
                 <button type="button" id="closeModalBtn">Batal</button>
+                <button type="submit">Simpan</button>
+               
             </form>
         </div>
     </div>
