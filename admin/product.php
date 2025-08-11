@@ -182,7 +182,7 @@
 
         async function getEditData(id) {
             try {
-                const result = await callAPI({ url: `../api/product.php?id=${id}`, method: 'GET' });
+                const result = await callAPI({ url: `../api/product.php?id_product=${id}`, method: 'GET' });
                 if (result.data.length > 0) {
                     openModal("edit", id);
                     document.getElementById('product_name').value = result.data[0].nama;

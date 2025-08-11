@@ -8,7 +8,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case 'GET':
         $query_data = $_GET;
-
+        $where =[];
         $status = isset($query_data['status']) ? $query_data['status'] : 'Y';
 
         // Ambil semua product
@@ -17,12 +17,16 @@ switch ($method) {
                     JOIN supplier s on (p.id_supplier = s.id_supplier)
                     JOIN satuan u   on (p.id_satuan   = u.id_satuan)";
         if ($status === 'Y') {
-            $sql .= " WHERE p.status = '$status'";
+            $where[] = "p.status = '$status'";
         }
         if (isset($query_data['id_product'])) {
             // Jika ada ID, ambil product berdasarkan ID
             $id = (int)$query_data['id_product'];
-            $sql .= " AND id_product = $id";
+            $where[] = "id_product = $id";
+        }
+
+        if (count($where) > 0) {
+            $sql .= " WHERE " . implode(" AND ", $where);
         }
         $result = $conn->query($sql);
 

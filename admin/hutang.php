@@ -109,7 +109,7 @@
                 result.data.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product.id_product;
-                    option.textContent = product.nama_product + " - " + product.nama_satuan;
+                    option.textContent = product.nama_product + " - " + product.nama_satuan + " - " + formatCurrencyIDR(product.harga_beli_product);
                     productSelect.appendChild(option);
 
                     product_list[product.id_product] = product;

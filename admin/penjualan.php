@@ -38,6 +38,7 @@
                 <select id="product_id" name="product_id" required style="width: 100%;"></select>
 
                 <button type="button" id="addProductBtn">Add</button>
+                <button type="button" id="editPriceBtn">Ganti Harga</button>
             </div>
             <table border="1" cellspacing="0" cellpadding="8" id="productTable">
                 <thead>
@@ -105,7 +106,7 @@
                 result.data.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product.id_product;
-                    option.textContent = product.nama_product + " - " + product.nama_satuan;
+                    option.textContent = product.nama_product + " - " + product.nama_satuan + " - " + formatCurrencyIDR(product.harga_beli_product);
                     productSelect.appendChild(option);
 
                     product_list[product.id_product] = product;
@@ -223,11 +224,19 @@
             tr.innerHTML = `
                 <td>${product.nama_product}</td>
                 <td>${product.nama_satuan}</td>
-                <td><input type="number" class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
+                <td><input type="number"  disabled class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
                 <td><input type="number" class="quantity" value="1" min="1"></td>
                 <td class="total">${formatCurrencyIDR(product.harga_beli_product)}</td>
             `;
             table.appendChild(tr);
+        });
+        // editPriceBtn
+        const editPriceBtn = document.getElementById('editPriceBtn');
+        editPriceBtn.addEventListener('click', () => {
+            const hargaBeliInputs = table.querySelectorAll('.harga_beli');
+            hargaBeliInputs.forEach(input => {
+                input.disabled = !input.disabled; // Toggle disabled state
+            });
         });
 
         // closeModalBtn
