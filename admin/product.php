@@ -193,6 +193,9 @@
                     document.getElementById('harga_beli').value   = result.data[0].harga_beli_product;
                     document.getElementById('harga_jual').value   = result.data[0].harga_jual_product;
                     document.getElementById('stok').value         = result.data[0].stok_product;
+
+                    $("#supplier_id").change();
+                    $("#satuan_id").change();
                 } else {
                     console.error('Barang tidak ditemukan');
                 }
