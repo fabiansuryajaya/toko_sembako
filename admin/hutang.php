@@ -20,8 +20,9 @@
             <tr>
                 <th>ID</th>
                 <th>Tanggal Hutang</th>
+                <th>Nama Pembeli</th>
                 <th>Jumlah Hutang</th>
-                <th>Nama User</th>
+                <th>Status Hutang</th>
                 <th>Aksi</th>
             </tr>
         </thead>

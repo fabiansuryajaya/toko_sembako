@@ -11,9 +11,9 @@ switch ($method) {
         $action = isset($query_data['action']) ? $query_data['action'] : '';
 
         // data penjualan
-        $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.status, p.created_at, u.username as nama_user
+        $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.status, p.created_at, u.nama as nama_user
                 FROM penjualan p
-                JOIN user u ON p.created_by = u.id_user
+                JOIN member u ON p.id_member = u.id_member
                 WHERE p.status = 'Y' and p.id_member IS NOT NULL";
 
         if ($action === 'detail') {
