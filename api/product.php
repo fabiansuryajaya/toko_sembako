@@ -12,7 +12,7 @@ switch ($method) {
         $status = isset($query_data['status']) ? $query_data['status'] : 'Y';
 
         // Ambil semua product
-        $sql = "SELECT id_product, p.nama_product, s.nama_supplier, u.nama_satuan, p.harga_beli_product, harga_jual_product,stok_product, p.status
+        $sql = "SELECT id_product, p.nama_product, s.nama_supplier, u.nama_satuan, p.harga_beli_product, harga_jual_product, stok_product, p.status, p.id_supplier, p.id_satuan
                 FROM product p
                     JOIN supplier s on (p.id_supplier = s.id_supplier)
                     JOIN satuan u   on (p.id_satuan   = u.id_satuan)";

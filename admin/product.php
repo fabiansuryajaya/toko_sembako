@@ -185,12 +185,14 @@
                 const result = await callAPI({ url: `../api/product.php?id_product=${id}`, method: 'GET' });
                 if (result.data.length > 0) {
                     openModal("edit", id);
-                    document.getElementById('product_name').value = result.data[0].nama;
-                    document.getElementById('supplier_id').value  = result.data[0].supplier_id;
-                    document.getElementById('satuan_id').value    = result.data[0].satuan_id;
-                    document.getElementById('harga_beli').value   = result.data[0].harga_beli;
-                    document.getElementById('harga_jual').value   = result.data[0].harga_jual;
-                    document.getElementById('stok').value         = result.data[0].stok;
+                    console.log(result.data);
+                    
+                    document.getElementById('product_name').value = result.data[0].nama_product;
+                    document.getElementById('supplier_id').value  = result.data[0].id_supplier;
+                    document.getElementById('satuan_id').value    = result.data[0].id_satuan;
+                    document.getElementById('harga_beli').value   = result.data[0].harga_beli_product;
+                    document.getElementById('harga_jual').value   = result.data[0].harga_jual_product;
+                    document.getElementById('stok').value         = result.data[0].stok_product;
                 } else {
                     console.error('Barang tidak ditemukan');
                 }
