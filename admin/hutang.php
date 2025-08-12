@@ -171,8 +171,8 @@
                     row.innerHTML = `
                         <td>${item.id_hutang}</td>
                         <td>${item.created_at}</td>
-                        <td>${formatCurrencyIDR(item.jumlah_hutang)}</td>
                         <td>${item.nama_user}</td>
+                        <td>${formatCurrencyIDR(item.jumlah_hutang)}</td>
                         <td>${item.status == "Y" ? "Lunas" : "Belum Lunas"}</td>
                         <td><button class="detailBtn" data-id="${item.id_hutang}">Detail</button> ${btnLunas}</td>
                     `;
