@@ -14,7 +14,7 @@ switch ($method) {
         $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.status, p.created_at, u.nama as nama_user
                 FROM penjualan p
                 JOIN member u ON p.id_member = u.id_member
-                WHERE p.status = 'Y' and p.id_member IS NOT NULL";
+                WHERE p.id_member IS NOT NULL";
 
         if ($action === 'detail') {
             // Ambil detail penjualan berdasarkan ID penjualan
@@ -66,10 +66,11 @@ switch ($method) {
             echo json_encode(['error' => 'ID member tidak diberikan']);
             exit;
         }
-        $jumlah_penjualan = array_reduce($stock, function($carry, $item) {
-            return $carry + (int)$item['quantity'];
+
+        $harga_penjualan = array_reduce($stock, function($carry, $item) {
+            return $carry + ((int)$item['quantity'] * (float)$item['harga_beli']);
         }, 0);
-        $sql = "INSERT INTO penjualan (id_user, id_member, jumlah_penjualan, status, created_by, created_at) VALUES ($id_user, $id_member, $jumlah_penjualan, 'Y', $id_user, NOW())";
+        $sql = "INSERT INTO penjualan (id_user, id_member, jumlah_penjualan, status, created_by, created_at) VALUES ($id_user, $id_member, $harga_penjualan, 'N', $id_user, NOW())";
         if ($conn->query($sql) === FALSE) {
             http_response_code(500);
             echo json_encode(['error' => 'Gagal menambah penjualan']);
@@ -99,6 +100,23 @@ switch ($method) {
             }
         }
 
+        echo json_encode(['success' => true]);
+        break;
+    case 'PUT':
+        // Update status hutang menjadi lunas
+        $query_data = $_GET;
+        if (!isset($query_data['id_hutang'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'ID hutang tidak diberikan']);
+            exit;
+        }
+        $id_hutang = (int)$query_data['id_hutang'];
+        $sql = "UPDATE penjualan SET status = 'Y' WHERE id_penjualan = $id_hutang";
+        if ($conn->query($sql) === FALSE) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Gagal mengupdate status hutang']);
+            exit;
+        }
         echo json_encode(['success' => true]);
         break;
     default:

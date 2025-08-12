@@ -40,6 +40,7 @@
                 </select>
 
                 <button type="button" id="addProductBtn">Add</button>
+                <button type="button" id="editPriceBtn">Ganti Harga</button>
             </div>
             <table border="1" cellspacing="0" cellpadding="8" id="productTable">
                 <thead>
@@ -88,8 +89,9 @@
     // on document ready
     $(document).ready(function () {
         // init
-        const start_date =document.getElementById('from_date');
-        const to_date    =document.getElementById('to_date');
+        const start_date = document.getElementById('from_date');
+        const to_date    = document.getElementById('to_date');
+        let edit_price   = false; // Flag for edit price mode
         start_date.value = new Date().toISOString().split('T')[0]; // Set to today
         to_date.value    = new Date().toISOString().split('T')[0]; // Set to today
 
@@ -175,6 +177,17 @@
 
         fetchPembelian();
 
+
+        // editPriceBtn
+        const editPriceBtn = document.getElementById('editPriceBtn');
+        editPriceBtn.addEventListener('click', () => {
+            edit_price = !edit_price;
+            const hargaBeliInputs = table.querySelectorAll('.harga_beli');
+            hargaBeliInputs.forEach(input => {
+                input.disabled = !edit_price; // Toggle disabled state
+            });
+        });
+
         // closeDetailModalBtn
         const closeDetailModalBtn = document.getElementById('closeDetailModalBtn');
         closeDetailModalBtn.addEventListener('click', () => {
@@ -187,8 +200,6 @@
             const hargaBeli = parseFloat(row.querySelector('.harga_beli').value);
             const quantity = parseInt(row.querySelector('.quantity').value);
             const totalCell = row.querySelector('.total');
-            console.log(formatCurrencyIDR(hargaBeli * quantity));
-
             totalCell.textContent = formatCurrencyIDR(hargaBeli * quantity);
         }
 
@@ -221,7 +232,7 @@
                 <td>${product.nama_product}</td>
                 <td>${product.nama_supplier}</td>
                 <td>${product.nama_satuan}</td>
-                <td><input type="number" class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
+                <td><input type="number" ${edit_price ? '' : 'disabled'} class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
                 <td><input type="number" class="quantity" value="1" min="1"></td>
                 <td class="total">${formatCurrencyIDR(product.harga_beli_product)}</td>
             `;

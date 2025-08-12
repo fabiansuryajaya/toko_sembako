@@ -16,7 +16,7 @@ switch ($method) {
                 FROM product p
                     JOIN supplier s on (p.id_supplier = s.id_supplier)
                     JOIN satuan u   on (p.id_satuan   = u.id_satuan)";
-        if ($status === 'Y') {
+        if ($status == 'Y' && $status != 'ALL') {
             $where[] = "p.status = '$status'";
         }
         if (isset($query_data['id_product'])) {

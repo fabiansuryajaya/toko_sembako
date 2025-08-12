@@ -43,6 +43,7 @@
                 <select id="member_id" name="member_id" required style="width: 100%;"></select>
 
                 <button type="button" id="addProductBtn">Add</button>
+                <button type="button" id="editPriceBtn">Ganti Harga</button>
             </div>
             <table border="1" cellspacing="0" cellpadding="8" id="productTable">
                 <thead>
@@ -95,8 +96,9 @@
     // on document ready
     $(document).ready(function () {
         // init
-        const start_date =document.getElementById('from_date');
-        const to_date    =document.getElementById('to_date');
+        const start_date = document.getElementById('from_date');
+        const to_date    = document.getElementById('to_date');
+        edit_price       = false;
         start_date.value = new Date().toISOString().split('T')[0]; // Set to today
         to_date.value    = new Date().toISOString().split('T')[0]; // Set to today
 
@@ -165,12 +167,14 @@
 
                 result.data.forEach(item => {
                     const row = document.createElement('tr');
+                    const btnLunas = item.status == "Y" ? '' : `<button class="lunasBtn" data-id="${item.id_hutang}">Lunas</button>`;
                     row.innerHTML = `
                         <td>${item.id_hutang}</td>
                         <td>${item.created_at}</td>
-                        <td>${item.jumlah_hutang}</td>
+                        <td>${formatCurrencyIDR(item.jumlah_hutang)}</td>
                         <td>${item.nama_user}</td>
-                        <td><button class="detailBtn" data-id="${item.id_hutang}">Detail</button></td>
+                        <td>${item.status == "Y" ? "Lunas" : "Belum Lunas"}</td>
+                        <td><button class="detailBtn" data-id="${item.id_hutang}">Detail</button> ${btnLunas}</td>
                     `;
                     tbody.appendChild(row);
                 });
@@ -204,12 +208,39 @@
                             });
                     });
                 });
+
+                // Add event listener for lunas buttons
+                document.querySelectorAll('.lunasBtn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const idHutang = this.getAttribute('data-id');
+                        if (confirm('Apakah Anda yakin ingin menandai hutang ini sebagai lunas?')) {
+                            callAPI({ url: `../api/hutang.php?id_hutang=${idHutang}`, method: 'PUT' })
+                                .then(result => {
+                                    alert(result.message);
+                                    fetchHutang(); // Refresh the hutang data
+                                })
+                                .catch(error => {
+                                    console.error('Gagal menandai hutang sebagai lunas:', error);
+                                });
+                        }
+                    });
+                });
             } catch (error) {
                 console.error('Gagal memuat hutang:', error);
             }
         }
 
         fetchHutang();
+
+        // editPriceBtn
+        const editPriceBtn = document.getElementById('editPriceBtn');
+        editPriceBtn.addEventListener('click', () => {
+            edit_price = !edit_price;
+            const hargaBeliInputs = table.querySelectorAll('.harga_beli');
+            hargaBeliInputs.forEach(input => {
+                input.disabled = !edit_price; // Toggle disabled state
+            });
+        });
 
         // closeDetailModalBtn
         const closeDetailModalBtn = document.getElementById('closeDetailModalBtn');
@@ -223,8 +254,6 @@
             const hargaBeli = parseFloat(row.querySelector('.harga_beli').value);
             const quantity = parseInt(row.querySelector('.quantity').value);
             const totalCell = row.querySelector('.total');
-            console.log(formatCurrencyIDR(hargaBeli * quantity));
-
             totalCell.textContent = formatCurrencyIDR(hargaBeli * quantity);
         }
 
@@ -256,7 +285,7 @@
             tr.innerHTML = `
                 <td>${product.nama_product}</td>
                 <td>${product.nama_satuan}</td>
-                <td><input type="number" class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
+                <td><input type="number" ${edit_price ? '' : 'disabled'} class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
                 <td><input type="number" class="quantity" value="1" min="1"></td>
                 <td class="total">${formatCurrencyIDR(product.harga_beli_product)}</td>
             `;

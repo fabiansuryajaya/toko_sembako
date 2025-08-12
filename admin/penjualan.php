@@ -91,8 +91,9 @@
     // on document ready
     $(document).ready(function () {
         // init
-        const start_date =document.getElementById('from_date');
-        const to_date    =document.getElementById('to_date');
+        const start_date = document.getElementById('from_date');
+        const to_date    = document.getElementById('to_date');
+        edit_price       = false;
         start_date.value = new Date().toISOString().split('T')[0]; // Set to today
         to_date.value    = new Date().toISOString().split('T')[0]; // Set to today
 
@@ -191,8 +192,6 @@
             const hargaBeli = parseFloat(row.querySelector('.harga_beli').value);
             const quantity = parseInt(row.querySelector('.quantity').value);
             const totalCell = row.querySelector('.total');
-            console.log(formatCurrencyIDR(hargaBeli * quantity));
-
             totalCell.textContent = formatCurrencyIDR(hargaBeli * quantity);
         }
 
@@ -224,18 +223,20 @@
             tr.innerHTML = `
                 <td>${product.nama_product}</td>
                 <td>${product.nama_satuan}</td>
-                <td><input type="number"  disabled class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
+                <td><input type="number" ${edit_price ? '' : 'disabled'} class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
                 <td><input type="number" class="quantity" value="1" min="1"></td>
                 <td class="total">${formatCurrencyIDR(product.harga_beli_product)}</td>
             `;
             table.appendChild(tr);
         });
+
         // editPriceBtn
         const editPriceBtn = document.getElementById('editPriceBtn');
         editPriceBtn.addEventListener('click', () => {
+            edit_price = !edit_price;
             const hargaBeliInputs = table.querySelectorAll('.harga_beli');
             hargaBeliInputs.forEach(input => {
-                input.disabled = !input.disabled; // Toggle disabled state
+                input.disabled = !edit_price; // Toggle disabled state
             });
         });
 
@@ -328,17 +329,3 @@
         });
     });
 </script>
-<!-- 
-<style>
-.select2-container {
-    width: 100% !important;
-}
-
-.select2-dropdown {
-    z-index: 9999;
-}
-
-.modal {
-    z-index: 9990;
-}
-</style> -->
