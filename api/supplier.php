@@ -11,7 +11,7 @@ switch ($method) {
         $query_data = $_GET;
 
         // Ambil semua supplier
-        $sql = "SELECT id_supplier as id, nama_supplier as nama FROM supplier WHERE status = 'Y'";
+        $sql = "SELECT id_supplier as id, nama_supplier as nama, nomor_hp as no_hp FROM supplier WHERE status = 'Y'";
         if (isset($query_data['id'])) {
             // Jika ada ID, ambil supplier berdasarkan ID
             $id = (int)$query_data['id'];
@@ -38,8 +38,9 @@ switch ($method) {
         }
 
         $nama = $conn->real_escape_string($data['nama']);
+        $no_hp = $conn->real_escape_string($data['no_hp']);
 
-        $sql = "INSERT INTO supplier (nama_supplier) VALUES ('$nama')";
+        $sql = "INSERT INTO supplier (nama_supplier, nomor_hp) VALUES ('$nama', '$no_hp')";
         if ($conn->query($sql) === TRUE) {
             echo json_encode(['success' => true, 'id' => $conn->insert_id]);
         } else {
@@ -60,8 +61,9 @@ switch ($method) {
 
         $id = (int)$data['id'];
         $nama = $conn->real_escape_string($data['nama']);
+        $no_hp = $conn->real_escape_string($data['no_hp']);
 
-        $sql = "UPDATE supplier SET nama_supplier='$nama' WHERE id_supplier=$id";
+        $sql = "UPDATE supplier SET nama_supplier='$nama',nomor_hp='$data[no_hp]' WHERE id_supplier=$id";
         if ($conn->query($sql) === TRUE) {
             echo json_encode(['success' => true]);
         } else {

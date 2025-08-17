@@ -9,6 +9,7 @@
             <tr>
                 <th>ID</th>
                 <th>Nama Pemasok</th>
+                <th>No HP</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -23,6 +24,8 @@
             <form id="createSupplierForm">
                 <label for="name">Nama Pemasok:</label>
                 <input type="text" id="supplier_name" name="name" required>
+                <label for="no_hp">No HP:</label>
+                <input type="text" id="supplier_no_hp" name="no_hp">
                 <button type="button" id="closeModalBtn">Batal</button>
                 <button type="submit">Simpan</button>
                
@@ -60,6 +63,7 @@ async function fetchSupplier() {
             tr.innerHTML = `
                 <td>${supplier.id}</td>
                 <td>${supplier.nama}</td>
+                <td>${supplier.no_hp || '-'}</td>
                 <td>
                     <button data-id="${supplier.id}" class="edit-btn">Edit</button>
                     <button data-id="${supplier.id}" class="delete-btn">Hapus</button>

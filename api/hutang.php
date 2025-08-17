@@ -14,7 +14,8 @@ switch ($method) {
         $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.status, p.created_at, u.nama as nama_user
                 FROM penjualan p
                 JOIN member u ON p.id_member = u.id_member
-                WHERE p.id_member IS NOT NULL";
+                WHERE p.id_member IS NOT NULL
+                order by id_hutang desc";
 
         if ($action === 'detail') {
             // Ambil detail penjualan berdasarkan ID penjualan
