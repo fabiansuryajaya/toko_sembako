@@ -187,7 +187,8 @@ select {
 
 #RestockModal,
 #HutangModal,
-#PenjualanModal{
+#PenjualanModal,
+#DetailModal {
   display: none; /* Hidden by default */
   position: fixed;
   z-index: 1000;
@@ -203,7 +204,7 @@ select {
 #RestockModal .modal-content,
 #PenjualanModal .modal-content,
 #HutangModal .modal-content,
-#DetailModal .modal-content {
+#DetailModal .modal-content .detailContent {
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
@@ -213,6 +214,13 @@ select {
   height: 80%;
   max-height: 80%;
   overflow-y: scroll;
+}
+#DetailModal .modal-content {
+  width: 40%;
+}
+
+#DetailModal .modal-content .detailContent {
+  width: 100%;
 }
 
 /* untuk menu navbar */

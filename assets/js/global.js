@@ -35,6 +35,12 @@ function formatCurrencyIDR(value) {
   }).format(value);
 }
 
+function formatNumber(value) {
+  return new Intl.NumberFormat('id-ID', {
+    minimumFractionDigits: 0
+  }).format(value);
+}
+
 function getRole() {
   const role = localStorage.getItem('user_role');
   return role ? role : null;

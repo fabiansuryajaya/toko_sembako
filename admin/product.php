@@ -68,6 +68,14 @@
             </form>
         </div>
     </div>
+
+    <div id="DetailModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Detail Barang</h2>
+            <div id="detailContent"></div>
+            <button type="button" id="closeDetailModalBtn">Tutup</button>
+        </div>
+    </div>
 </div>
 
 <!-- Tambahkan Select2 CSS dan JS -->
@@ -121,6 +129,10 @@
             editProductId = null;
         });
 
+        document.getElementById('closeDetailModalBtn').addEventListener('click', () => {
+            document.getElementById('DetailModal').style.display = 'none';
+        });
+
         const productTable = document.querySelector('.product-page tbody');
 
         async function getData() {
@@ -140,9 +152,10 @@
                         <td class="body_nama_satuan">${product.nama_satuan}</td>
                         <td class="body_harga_beli">${formatCurrencyIDR(product.harga_beli_product)}</td>
                         <td class="body_harga_jual">${formatCurrencyIDR(product.harga_jual_product)}</td>
-                        <td class="body_stok">${product.stok_product}</td>
+                        <td class="body_stok">${formatNumber(product.stok_product)}</td>
                         <td class="body_status">${status}</td>
                         <td class="body_aksi">
+                            <button data-id="${product.id_product}" class="detail-btn">Detail</button>
                             <button data-id="${product.id_product}" class="edit-btn">Edit</button>
                             <button data-id="${product.id_product}" class="delete-btn">Hapus</button>
                         </td>
@@ -161,6 +174,64 @@
                 btn.addEventListener('click', async function () {
                     const id = this.getAttribute('data-id');
                     await getEditData(id);
+                });
+            });
+
+            // detail-btn
+            document.querySelectorAll('.detail-btn').forEach(btn => {
+                btn.addEventListener('click', async function () {
+                    const id = this.getAttribute('data-id');
+                    const result = await callAPI({ url: `../api/product.php?id_product=${id}&status=ALL`, method: 'GET' });
+                    if (result.data.length > 0) {
+                        const product = result.data[0];
+                        document.getElementById('detailContent').innerHTML = `
+                            <div style="padding: 10px;">
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight:bold; width:140px; display:inline-block;">ID</span>
+                                    <span>: ${product.id_product}</span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight:bold; width:140px; display:inline-block;">Nama Barang</span>
+                                    <span>: ${product.nama_product}</span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight:bold; width:140px; display:inline-block;">Supplier</span>
+                                    <span>: ${product.nama_supplier}</span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight:bold; width:140px; display:inline-block;">Satuan</span>
+                                    <span>: ${product.nama_satuan}</span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight:bold; width:140px; display:inline-block;">Harga Beli</span>
+                                    <span>: <span >${formatCurrencyIDR(product.harga_beli_product)}</span></span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight:bold; width:140px; display:inline-block;">Harga Jual</span>
+                                    <span>: <span>${formatCurrencyIDR(product.harga_jual_product)}</span></span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight:bold; width:140px; display:inline-block;">Stok</span>
+                                    <span>: <span>${formatNumber(product.stok_product)}</span></span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight:bold; width:140px; display:inline-block;">Status</span>
+                                    <span>: <span style="font-weight:bold; color:${product.status === 'Y' ? '#28a745' : '#dc3545'};">
+                                        ${product.status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
+                                    </span></span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight:bold; width:140px; display:inline-block; vertical-align:top;">Deskripsi</span>
+                                    <span>: <div style="background:#f8f9fa; border-radius:5px; padding:8px; margin-top:2px; display:inline-block;">
+                                        ${product.description ? product.description.replace(/\n/g, "<br>") : '<em>Tidak ada deskripsi</em>'}
+                                    </div></span>
+                                </div>
+                            </div>
+                        `;
+                        document.getElementById('DetailModal').style.display = 'flex';
+                    } else {
+                        console.error('Product tidak ditemukan');
+                    }
                 });
             });
 
@@ -189,7 +260,8 @@
                     satuan_id: document.getElementById('satuan_id').value,
                     harga_beli: document.getElementById('harga_beli').value,
                     harga_jual: document.getElementById('harga_jual').value,
-                    stok: document.getElementById('stok').value
+                    stok: document.getElementById('stok').value,
+                    deskripsi: document.getElementById('deskripsi').value
                 };
                 if (action === "edit" && editProductId) {
                     body.id = editProductId;

@@ -12,7 +12,7 @@ switch ($method) {
         $status = isset($query_data['status']) ? $query_data['status'] : 'Y';
 
         // Ambil semua product
-        $sql = "SELECT id_product, p.nama_product, s.nama_supplier, u.nama_satuan, p.harga_beli_product, harga_jual_product, stok_product, p.status, p.id_supplier, p.id_satuan
+        $sql = "SELECT id_product, p.nama_product, s.nama_supplier, u.nama_satuan, p.harga_beli_product, harga_jual_product, stok_product, p.status, p.id_supplier, p.id_satuan, p.description
                 FROM product p
                     JOIN supplier s on (p.id_supplier = s.id_supplier)
                     JOIN satuan u   on (p.id_satuan   = u.id_satuan)";
@@ -54,8 +54,9 @@ switch ($method) {
         $harga_beli  = $conn->real_escape_string($data['harga_beli']);
         $harga_jual  = $conn->real_escape_string($data['harga_jual']);
         $stok        = $conn->real_escape_string($data['stok']);
+        $deskripsi        = $conn->real_escape_string($data['deskripsi']);
 
-        $sql = "INSERT INTO product (nama_product,id_supplier,id_satuan,harga_beli_product, harga_jual_product,stok_product) VALUES ('$nama', '$supplier_id', '$satuan_id', '$harga_beli', '$harga_jual', '$stok')";
+        $sql = "INSERT INTO product (nama_product,id_supplier,id_satuan,harga_beli_product, harga_jual_product,stok_product, description) VALUES ('$nama', '$supplier_id', '$satuan_id', '$harga_beli', '$harga_jual', '$stok', '$deskripsi')";
         if ($conn->query($sql) === TRUE) {
             echo json_encode(['success' => true, 'id' => $conn->insert_id]);
         } else {
@@ -81,8 +82,9 @@ switch ($method) {
         $harga_beli  = $conn->real_escape_string($data['harga_beli']);
         $harga_jual  = $conn->real_escape_string($data['harga_jual']);
         $stok        = $conn->real_escape_string($data['stok']);
+        $deskripsi   = $conn->real_escape_string($data['deskripsi']);
 
-        $sql = "UPDATE product SET nama_product='$nama', id_supplier='$supplier_id', id_satuan='$satuan_id', harga_beli_product='$harga_beli', harga_jual_product='$harga_jual', stok_product='$stok' WHERE id_product=$id";
+        $sql = "UPDATE product SET nama_product='$nama', id_supplier='$supplier_id', id_satuan='$satuan_id', harga_beli_product='$harga_beli', harga_jual_product='$harga_jual', stok_product='$stok', description='$deskripsi' WHERE id_product=$id";
         if ($conn->query($sql) === TRUE) {
             echo json_encode(['success' => true]);
         } else {
