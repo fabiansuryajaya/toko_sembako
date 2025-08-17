@@ -21,9 +21,10 @@ switch ($method) {
             // Ambil detail penjualan berdasarkan ID penjualan
             if (isset($query_data['id_hutang'])) {
                 $id_penjualan = (int)$query_data['id_hutang'];
-                $sql = "SELECT dp.id_detail_penjualan as id_detail_hutang, dp.id_produk, p.nama_product, dp.jumlah_penjualan as jumlah_hutang, dp.harga_penjualan as harga_hutang
+                $sql = "SELECT dp.id_detail_penjualan as id_detail_hutang, dp.id_produk,pe.status, p.nama_product, dp.jumlah_penjualan as jumlah_hutang, dp.harga_penjualan as harga_hutang
                         FROM detail_penjualan dp
                         JOIN product p ON dp.id_produk = p.id_product
+                        join penjualan pe ON dp.id_penjualan = pe.id_penjualan
                         WHERE dp.id_penjualan = $id_penjualan";
             } else {
                 http_response_code(400);
@@ -112,7 +113,9 @@ switch ($method) {
             exit;
         }
         $id_hutang = (int)$query_data['id_hutang'];
-        $sql = "UPDATE penjualan SET status = 'Y' WHERE id_penjualan = $id_hutang";
+        $status = isset($query_data['status']) ? $query_data['status'] : 'Y';
+
+        $sql = "UPDATE penjualan SET status = '$status' WHERE id_penjualan = $id_hutang";
         if ($conn->query($sql) === FALSE) {
             http_response_code(500);
             echo json_encode(['error' => 'Gagal mengupdate status hutang']);

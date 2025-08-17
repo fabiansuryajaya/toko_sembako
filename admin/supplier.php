@@ -66,7 +66,6 @@ async function fetchSupplier() {
                 <td>${supplier.no_hp || '-'}</td>
                 <td>
                     <button data-id="${supplier.id}" class="edit-btn">Edit</button>
-                    <button data-id="${supplier.id}" class="delete-btn">Hapus</button>
                 </td>
             `;
             supplierTable.appendChild(tr);
@@ -93,7 +92,8 @@ async function submitSupplier() {
     try {
         const method = action === "create" ? 'POST' : 'PUT';
         const body = {
-            nama: document.getElementById('supplier_name').value
+            nama: document.getElementById('supplier_name').value,
+            no_hp: document.getElementById('supplier_no_hp').value
         };
         if (action === "edit" && editSupplierId) {
             body.id = editSupplierId;
@@ -119,6 +119,7 @@ async function getEditData(id) {
         if (result.data.length > 0) {
             openModal("edit", id);
             document.getElementById('supplier_name').value = result.data[0].nama;
+            document.getElementById('supplier_no_hp').value = result.data[0].no_hp;
         } else {
             console.error('Pemasok tidak ditemukan');
         }
