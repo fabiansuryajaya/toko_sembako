@@ -1,17 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // check local_storage for user data
-    const user_role = localStorage.getItem('user_role');
-    if (!user_role || user_role !== 'admin') {
-        alert('Anda tidak memiliki akses ke halaman ini.');
-        window.location.href = '../index.php';
-        return;
-    }
-
     $(document).on('select2:open', () => {
         setTimeout(() => {
             document.querySelector('.select2-container--open .select2-search__field')?.focus();
         }, 0);
     });
+
+    const role = getRole();
+    const role_permission = {
+        "pegawai": ["Master", "Product", "Transaksi", "Penjualan", "Hutang", "Logout"]
+    }
     
     const menu = {
         "Master" : {
@@ -32,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const menu_bar = document.getElementById('menu-bar');
     for (const [group, items] of Object.entries(menu)) {
+        if (role !== "admin" && !role_permission[role].includes(group)) continue;
         const groupItem = document.createElement('li');
         groupItem.classList.add('menu-group');
         // Tambahkan ikon Font Awesome di depan nama grup
@@ -44,8 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
             submenu.classList.add('submenu');
             submenu.style.display = 'none';
             for (const [label, page] of Object.entries(items)) {
+                if (role !== "admin" && !role_permission[role].includes(label)) continue;
                 const item = document.createElement('li');
-                item.innerHTML = `<a href="#" data-page="${page}">${label}</a>`;
+                item.innerHTML = `<a href="#" id="sidebar-${page}" data-page="${page}">${label}</a>`;
                 submenu.appendChild(item);
             }
             groupItem.appendChild(submenu);
@@ -92,10 +91,23 @@ document.addEventListener('DOMContentLoaded', () => {
             link.classList.add('active');
             const page = link.getAttribute('data-page');
             if (page) {
+                // Simpan halaman yang dimuat ke dalam localStorage
+                localStorage.setItem('lastPage', page);
                 loadPage(page);
             }
         });
     });
+
+    // last page
+    const lastPage = localStorage.getItem('lastPage');
+    if (lastPage !== null) {
+        const lastPageLink = document.getElementById('sidebar-' + lastPage);
+        if (lastPageLink) {
+            lastPageLink.click();
+        } else {
+            loadPage('product');
+        }
+    }
 
     // Agar variabel JS bisa diakses antar file, gunakan window sebagai global scope
     function loadPage(page) {
@@ -140,8 +152,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error(err);
             });
     }
-
-    // Load default page
-    loadPage('product');
 });
 

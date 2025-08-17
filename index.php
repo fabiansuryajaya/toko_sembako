@@ -49,13 +49,9 @@
                 feedback.style.color = 'green';
                 const role = data.data.role;
                 setTimeout(() => {
-                    if (role === 'admin') {
-                        window.location.href = './admin/dashboard.php';
-                    }else {
-                        window.location.href = './user/dashboard.php';
-                    }
                     // save user role in localStorage
                     localStorage.setItem('user_role', role);
+                    window.location.href = './admin/dashboard.php';
                 }, 1500);
             } else {
                 feedback.style.color = 'red';

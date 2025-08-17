@@ -389,17 +389,3 @@
         });
     });
 </script>
-<!-- 
-<style>
-.select2-container {
-    width: 100% !important;
-}
-
-.select2-dropdown {
-    z-index: 9999;
-}
-
-.modal {
-    z-index: 9990;
-}
-</style> -->

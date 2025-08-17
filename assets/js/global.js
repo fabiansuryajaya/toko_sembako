@@ -34,3 +34,8 @@ function formatCurrencyIDR(value) {
     minimumFractionDigits: 0
   }).format(value);
 }
+
+function getRole() {
+  const role = localStorage.getItem('user_role');
+  return role ? role : null;
+}

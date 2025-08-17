@@ -16,15 +16,15 @@
     <table border="1" cellspacing="0" cellpadding="8">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Nama Barang</th>
-                <th>Nama Supplier</th>
-                <th>Nama Satuan</th>
-                <th>Harga Jual</th>
-                <th>Harga Beli</th>
-                <th>Stok</th>
-                <th>Status</th>
-                <th>Aksi</th>
+                <th id="header_id">ID</th>
+                <th id="header_nama_barang">Nama Barang</th>
+                <th id="header_nama_supplier">Nama Supplier</th>
+                <th id="header_nama_satuan">Nama Satuan</th>
+                <th id="header_harga_jual">Harga Jual</th>
+                <th id="header_harga_beli">Harga Beli</th>
+                <th id="header_stok">Stok</th>
+                <th id="header_status">Status</th>
+                <th id="header_aksi">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -57,6 +57,11 @@
                 
                 <label for="stok">Stok:</label>
                 <input type="number" id="stok" name="stok" required>
+
+                <!-- add description textarea -->
+                <label for="deskripsi">Deskripsi:</label>
+                <textarea id="deskripsi" name="deskripsi" rows="4" required></textarea>
+
                 <button type="button" id="closeModalBtn">Batal</button>
                 <button type="submit">Simpan</button>
                
@@ -74,6 +79,33 @@
     $(document).ready(function() {
         let action = "create";
         let editProductId = null;
+        const role = getRole();
+
+        if (role !== 'admin') {
+            $('#createProductBtn').hide();
+        }
+
+        function hide_columns() {
+            if (role !== 'admin') {
+                document.getElementById('header_aksi').style.display = 'none';
+                document.getElementById('header_nama_supplier').style.display = 'none';
+                document.getElementById('header_harga_beli').style.display = 'none';
+
+                const body_aksi = document.querySelectorAll('.body_aksi');
+                body_aksi.forEach(td => {
+                    td.style.display = 'none';
+                });
+                const body_nama_supplier = document.querySelectorAll('.body_nama_supplier');
+                body_nama_supplier.forEach(td => {
+                    td.style.display = 'none';
+                });
+                const body_harga_beli = document.querySelectorAll('.body_harga_beli');
+                body_harga_beli.forEach(td => {
+                    td.style.display = 'none';
+                });
+            }
+        }
+        hide_columns();
 
         function openModal(act = "create", id = null) {
             action = act;
@@ -102,21 +134,22 @@
                     let status = product.status === 'Y' ? 'Aktif' : 'Tidak Aktif';
 
                     tr.innerHTML = `
-                        <td>${product.id_product}</td>
-                        <td>${product.nama_product}</td>
-                        <td>${product.nama_supplier}</td>
-                        <td>${product.nama_satuan}</td>
-                        <td>${product.harga_beli_product}</td>
-                        <td>${product.harga_jual_product}</td>
-                        <td>${product.stok_product}</td>
-                        <td>${status}</td>
-                        <td>
+                        <td class="body_id">${product.id_product}</td>
+                        <td class="body_nama_barang">${product.nama_product}</td>
+                        <td class="body_nama_supplier">${product.nama_supplier}</td>
+                        <td class="body_nama_satuan">${product.nama_satuan}</td>
+                        <td class="body_harga_beli">${formatCurrencyIDR(product.harga_beli_product)}</td>
+                        <td class="body_harga_jual">${formatCurrencyIDR(product.harga_jual_product)}</td>
+                        <td class="body_stok">${product.stok_product}</td>
+                        <td class="body_status">${status}</td>
+                        <td class="body_aksi">
                             <button data-id="${product.id_product}" class="edit-btn">Edit</button>
                             <button data-id="${product.id_product}" class="delete-btn">Hapus</button>
                         </td>
                     `;
                     productTable.appendChild(tr);
                 });
+                hide_columns();
                 addTableEventListeners();
             } catch (error) {
                 console.error('Gagal memuat product:', error);

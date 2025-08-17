@@ -211,17 +211,11 @@ select {
   width: 80%;
   /* fixed height */
   height: 80%;
-  overflow-y: auto;
+  max-height: 80%;
+  overflow-y: scroll;
 }
-
-.create-container {
-  display: flex;
-  justify-content: flex-end;
-}
-
 
 /* untuk menu navbar */
-
 .menu-group>.submenu {
   margin-left: 24px;
   padding-left: 12px;

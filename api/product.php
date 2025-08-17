@@ -75,9 +75,14 @@ switch ($method) {
         }
 
         $id = (int)$data['id'];
-        $nama = $conn->real_escape_string($data['nama']);
+        $nama        = $conn->real_escape_string($data['nama']);
+        $supplier_id = $conn->real_escape_string($data['supplier_id']);
+        $satuan_id   = $conn->real_escape_string($data['satuan_id']);
+        $harga_beli  = $conn->real_escape_string($data['harga_beli']);
+        $harga_jual  = $conn->real_escape_string($data['harga_jual']);
+        $stok        = $conn->real_escape_string($data['stok']);
 
-        $sql = "UPDATE product SET nama_product='$nama' WHERE id_product=$id";
+        $sql = "UPDATE product SET nama_product='$nama', id_supplier='$supplier_id', id_satuan='$satuan_id', harga_beli_product='$harga_beli', harga_jual_product='$harga_jual', stok_product='$stok' WHERE id_product=$id";
         if ($conn->query($sql) === TRUE) {
             echo json_encode(['success' => true]);
         } else {
