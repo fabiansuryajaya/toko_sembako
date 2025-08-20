@@ -83,6 +83,7 @@
             </table>
             <div style="text-align: right;">
                 <button type="button" id="closeDetailModalBtn">Tutup</button>
+                <button type="button" id="cancelLunasModalBtn">Cancel Lunas</button>
             </div>
         </div>
     </div>
@@ -101,6 +102,8 @@
         edit_price       = false;
         start_date.value = new Date().toISOString().split('T')[0]; // Set to today
         to_date.value    = new Date().toISOString().split('T')[0]; // Set to today
+
+        let id_hutang_modal = -1;
 
         const product_list = {};
         async function fetchProduct() {
@@ -186,6 +189,8 @@
                         const detailModal = document.getElementById('DetailModal');
                         const detailTableBody = document.getElementById('detailTableBody');
 
+                        id_hutang_modal=idHutang;
+
                         detailTableBody.innerHTML = ''; // Clear existing rows
                         detailModal.style.display = 'flex';
 
@@ -201,6 +206,14 @@
                                         <td>${formatCurrencyIDR(detail.harga_hutang)}</td>
                                     `;
                                     detailTableBody.appendChild(detailRow);
+
+                                    // hide btnbelum lunas
+                                    const cancelLunasModalBtn = document.getElementById('cancelLunasModalBtn');
+                                    if (detail.status === 'N') {
+                                        cancelLunasModalBtn.style.display = 'none';
+                                    } else {
+                                        cancelLunasModalBtn.style.display = 'inline';
+                                    }
                                 });
                             })
                             .catch(error => {
@@ -248,6 +261,25 @@
             const detailModal = document.getElementById('DetailModal');
             detailModal.style.display = 'none';
         });
+
+        // cancelLunasModalBtn
+        const cancelLunasModalBtn = document.getElementById('cancelLunasModalBtn');
+        cancelLunasModalBtn.addEventListener('click', () => {
+            const detailModal = document.getElementById('DetailModal');
+            detailModal.style.display = 'none';
+
+            if (confirm('Apakah Anda yakin ingin membatalkan pelunasan hutang ini?')) {
+                callAPI({ url: `../api/hutang.php?id_hutang=${id_hutang_modal}&status=N`, method: 'PUT' })
+                    .then(result => {
+                        alert(result.message);
+                        fetchHutang(); // Refresh the hutang data
+                    })
+                    .catch(error => {
+                        console.error('Gagal menandai hutang sebagai lunas:', error);
+                    });
+            }
+        });
+
 
         function updateTotal(input) {
             const row = input.closest('tr');
