@@ -81,6 +81,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Struk -->
+    <div id="StrukModal" class="modal" style="display:none;">
+        <div class="modal-content" style="width:58mm;min-width:58mm;max-width:58mm;padding:8px;">
+            <div id="strukContent" style="font-size:11px;"></div>
+            <div style="text-align:right;margin-top:8px;">
+                <button type="button" id="printStrukBtn">Cetak</button>
+                <button type="button" id="closeStrukModalBtn">Tutup</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Tambahkan Select2 CSS dan JS -->
@@ -139,10 +150,91 @@
                         <td>${item.created_at}</td>
                         <td>${item.jumlah_penjualan}</td>
                         <td>${item.nama_user}</td>
-                        <td><button class="detailBtn" data-id="${item.id_penjualan}">Detail</button></td>
+                        <td>
+                            <button class="detailBtn" data-id="${item.id_penjualan}">Detail</button>
+                            <button class="strukBtn" data-id="${item.id_penjualan}">Struk</button>
+                        </td>
                     `;
                     tbody.appendChild(row);
                 });
+
+                // Handle tombol Struk
+                document.addEventListener('click', async function(e) {
+                    if (e.target.classList.contains('strukBtn')) {
+                        const idPenjualan = e.target.getAttribute('data-id');
+                        const strukModal = document.getElementById('StrukModal');
+                        const strukContent = document.getElementById('strukContent');
+                        strukContent.innerHTML = 'Memuat...';
+
+                        // Ambil detail penjualan
+                        try {
+                            const result = await callAPI({ url: `../api/penjualan.php?id_penjualan=${idPenjualan}&action=detail`, method: 'GET' });
+                            const detail = result.data;
+                            let html = `
+                                <div style="text-align:center;font-weight:bold;">TK. SIDODADI KEDURUS</div>
+                                <div style="text-align:center;">Jl. Raya Mastrio No.31, Kedurus, Surabaya.</div>
+                                <div style="text-align:center;">Telp/WA: 0851-1746-6153</div>
+                                <div style="text-align:center;">Email: son27business@gmail.com</div>
+                                <hr>
+                                <div>Tanggal: ${new Date().toLocaleDateString()}</div>
+                                <hr>
+                                <table style="width:100%;">
+                                    <tbody>
+                                        ${detail.map(item => `
+                                            <tr>
+                                                <td colspan="2">${item.nama_product}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>${item.jumlah_penjualan} x ${formatCurrencyIDR(item.harga_penjualan)}</td>
+                                                <td style="text-align:right;">${formatCurrencyIDR(item.jumlah_penjualan * item.harga_penjualan)}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                                <hr>
+                                <div style="text-align:right;font-weight:bold;">
+                                    Total: ${formatCurrencyIDR(detail.reduce((a,b)=>a+b.jumlah_penjualan*b.harga_penjualan,0))}
+                                </div>
+                                <div style="text-align:center;margin-top:8px;">Barang yang dibeli tidak dapat dikembalikan</div>
+                                <div style="text-align:center;margin-top:8px;">Simpan nota ini sebagai bukti transakasi</div>
+                                <hr>
+                                <div style="text-align:center;margin-top:8px;">TERIMA KASIH ATAS KUNJUNGAN ANDA</div>
+                            `;
+                            strukContent.innerHTML = html;
+                            strukModal.style.display = 'flex';
+                        } catch (err) {
+                            strukContent.innerHTML = 'Gagal memuat struk';
+                        }
+                    }
+                });
+
+                // Tutup modal struk
+                document.getElementById('closeStrukModalBtn').onclick = function() {
+                    document.getElementById('StrukModal').style.display = 'none';
+                };
+
+                // Cetak struk
+                document.getElementById('printStrukBtn').onclick = function() {
+                    const printContents = document.getElementById('strukContent').innerHTML;
+                    const win = window.open('', '', 'width=300,height=400');
+                    win.document.write(`
+                        <html>
+                        <head>
+                            <title>Struk Penjualan</title>
+                            <style>
+                                @media print {
+                                    body { width:58mm; height:40mm; margin:0; font-size:11px; }
+                                }
+                            </style>
+                        </head>
+                        <body>${printContents}</body>
+                        </html>
+                    `);
+                    win.document.close();
+                    win.focus();
+                    win.print();
+                    win.close();
+                };
 
                 // Add event listener for detail buttons
                 document.querySelectorAll('.detailBtn').forEach(button => {

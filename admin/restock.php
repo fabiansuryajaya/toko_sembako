@@ -177,7 +177,6 @@
 
         fetchPembelian();
 
-
         // editPriceBtn
         const editPriceBtn = document.getElementById('editPriceBtn');
         editPriceBtn.addEventListener('click', () => {
