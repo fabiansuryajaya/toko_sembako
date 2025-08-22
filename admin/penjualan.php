@@ -43,6 +43,7 @@
             <table border="1" cellspacing="0" cellpadding="8" id="productTable">
                 <thead>
                     <tr>
+                        <td style="width: 5%;">Action</td>
                         <td>Nama</td>
                         <!-- <td>Supplier</td> -->
                         <td>Satuan</td>
@@ -54,6 +55,19 @@
                 <tbody></tbody>
             </table>
 
+            <!-- tambahkan input total bayar dan total kembalian -->
+            <div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 8px; align-items: center;">
+                <label for="grand_total" style="margin-bottom:0;font-weight:bold;">Grand Total:</label>
+                <input type="text" id="grand_total" name="grand_total" value="0" readonly style="width: 120px; padding: 4px; background: #f5f5f5; font-weight:bold;">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 8px; align-items: center;">
+                <label for="total_bayar" style="margin-bottom:0;">Total Bayar:</label>
+                <input type="number" id="total_bayar" name="total_bayar" value="0" style="width: 120px; padding: 4px;">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 8px; align-items: center;">
+                <label for="total_kembalian" style="margin-bottom:0;">Total Kembalian:</label>
+                <input type="text" id="total_kembalian" name="total_kembalian" value="0" readonly style="width: 120px; padding: 4px; background: #f5f5f5;">
+            </div>
             <div style="position: absolute; right: 16px; bottom: 16px; text-align: right;">
                 <button type="button" id="closeModalBtn">Batal</button>
                 <button type="button" id="savePenjualanBtn">Simpan</button>
@@ -107,6 +121,10 @@
         edit_price       = false;
         start_date.value = new Date().toISOString().split('T')[0]; // Set to today
         to_date.value    = new Date().toISOString().split('T')[0]; // Set to today
+
+        const grand_total = document.getElementById('grand_total');
+        const total_bayar = document.getElementById('total_bayar');
+        const total_kembalian = document.getElementById('total_kembalian');
 
         const product_list = {};
         async function fetchProduct() {
@@ -285,6 +303,7 @@
             const quantity = parseInt(row.querySelector('.quantity').value);
             const totalCell = row.querySelector('.total');
             totalCell.textContent = formatCurrencyIDR(hargaBeli * quantity);
+            updateGrandTotal(); // Update grand total after changing quantity or harga beli
         }
 
         // addProductButton
@@ -313,6 +332,11 @@
             const tr = document.createElement('tr');
             tr.setAttribute('data-id', product.id_product);
             tr.innerHTML = `
+                <td>
+                    <button type="button" class="removeBtn" onclick="deleteRow(this)" style="background: none; border: none; color: red; cursor: pointer;">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
                 <td>${product.nama_product}</td>
                 <td>${product.nama_satuan}</td>
                 <td><input type="number" ${edit_price ? '' : 'disabled'} class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
@@ -320,6 +344,9 @@
                 <td class="total">${formatCurrencyIDR(product.harga_beli_product)}</td>
             `;
             table.appendChild(tr);
+            updateGrandTotal(); // Update grand total after adding a new product
+            document.getElementById('product_id').value = ''; // Clear the select input after
+            document.getElementById('product_id').dispatchEvent(new Event('change')); // Trigger change event for Select2
         });
 
         // editPriceBtn
@@ -395,7 +422,33 @@
             modal.style.display = 'flex';
         });
 
-        // Delegate quantity input change event to update total
+        // Update grand total and total kembalian
+        updateGrandTotal = () => {
+            let grandTotal = 0;
+            const rows = table.querySelectorAll('tr');
+            rows.forEach(row => {
+                const totalCell = row.querySelector('.total');
+                if (totalCell) {
+                    const totalValue = parseFloat(totalCell.textContent.replace(/[Rp. ]+/g, ""));
+                    grandTotal += isNaN(totalValue) ? 0 : totalValue;
+                }
+            });
+            grand_total.value = formatCurrencyIDR(grandTotal);
+            updateKembalian();
+        };
+
+        updateKembalian = () => {
+            const totalBayar = parseFloat(total_bayar.value) || 0;
+            const grandTotal = parseFloat(grand_total.value.replace(/[Rp. ]+/g, "")) || 0;
+            const kembalian = totalBayar - grandTotal;
+            console.log("totalBayar ", totalBayar, " grandTotal ", grandTotal, " kembalian ", kembalian);
+            
+            total_kembalian.value = formatCurrencyIDR(kembalian);
+        };
+
+        // totalBayar change
+        total_bayar.addEventListener('input', updateKembalian);
+
         table.addEventListener('input', function (e) {
             if (e.target && e.target.classList.contains('quantity')) {
                 updateTotal(e.target);
@@ -404,6 +457,15 @@
                 updateTotal(e.target);
             }
         });
+
+        // removeBtn
+        deleteRow = (btn) => {
+            const row = btn.closest('tr');
+            if (row) {
+                row.remove();
+                updateGrandTotal();
+            }
+        };
 
         window.addEventListener('click', function (event) {
             const modal = document.getElementById('PenjualanModal');
