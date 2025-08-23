@@ -241,7 +241,7 @@
                             <title>Struk Penjualan</title>
                             <style>
                                 @media print {
-                                    body { width:58mm; height:40mm; margin:0; font-size:11px; }
+                                    body { max-width:58mm; max-height:40mm; margin:0; font-size:11px; }
                                 }
                             </style>
                         </head>

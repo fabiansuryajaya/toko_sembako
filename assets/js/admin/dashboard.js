@@ -103,6 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             links.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
+            if (page == "logout") return;    
+            screenContent.innerHTML = '';
             const page = link.getAttribute('data-page');
             if (page) {
                 // Simpan halaman yang dimuat ke dalam localStorage
