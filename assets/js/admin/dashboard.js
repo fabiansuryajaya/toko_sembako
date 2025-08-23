@@ -102,10 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             links.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-            if (page == "logout") return;    
+            link.classList.add('active'); 
             screenContent.innerHTML = '';
             const page = link.getAttribute('data-page');
+            if (page == "logout") return;   
             if (page) {
                 // Simpan halaman yang dimuat ke dalam localStorage
                 localStorage.setItem('lastPage', page);
