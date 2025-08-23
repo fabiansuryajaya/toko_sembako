@@ -21,7 +21,7 @@
                 <th id="header_nama_supplier">Nama Supplier</th>
                 <th id="header_nama_satuan">Nama Satuan</th>
                 <th id="header_harga_jual">Harga Jual</th>
-                <th id="header_harga_beli">Harga Beli</th>
+                <th id="header_harga_beli">Modal</th>
                 <th id="header_stok">Stok</th>
                 <th id="header_status">Status</th>
                 <th id="header_aksi">Aksi</th>
@@ -49,7 +49,7 @@
                     <option value="">Pilih Satuan</option>
                 </select>
 
-                <label for="harga_beli">Harga Beli:</label>
+                <label for="harga_beli">Modal:</label>
                 <input type="number" id="harga_beli" name="harga_beli" required>
 
                 <label for="harga_jual">Harga Jual:</label>
@@ -203,7 +203,7 @@
                                     <span>: ${product.nama_satuan}</span>
                                 </div>
                                 <div style="margin-bottom: 10px;">
-                                    <span style="font-weight:bold; width:140px; display:inline-block;">Harga Beli</span>
+                                    <span style="font-weight:bold; width:140px; display:inline-block;">Modal</span>
                                     <span>: <span >${formatCurrencyIDR(product.harga_beli_product)}</span></span>
                                 </div>
                                 <div style="margin-bottom: 10px;">
