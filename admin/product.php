@@ -20,8 +20,8 @@
                 <th id="header_nama_barang">Nama Barang</th>
                 <th id="header_nama_supplier">Nama Supplier</th>
                 <th id="header_nama_satuan">Nama Satuan</th>
-                <th id="header_harga_jual">Harga Jual</th>
                 <th id="header_harga_beli">Modal</th>
+                <th id="header_harga_jual">Harga Jual</th>
                 <th id="header_stok">Stok</th>
                 <th id="header_status">Status</th>
                 <th id="header_aksi">Aksi</th>

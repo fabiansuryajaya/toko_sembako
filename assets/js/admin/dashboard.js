@@ -31,13 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const [group, items] of Object.entries(menu)) {
         if (role !== "admin" && !role_permission[role].includes(group)) continue;
         const groupItem = document.createElement('li');
-        groupItem.classList.add('menu-group');
         // Tambahkan ikon Font Awesome di depan nama grup
-        groupItem.innerHTML = `<a href="#" class="menu-toggle">
-            <span class="menu-group-label">${group}</span>
-            <i class="fa fa-chevron-right"></i>
-        </a>`;
         if (typeof items === 'object') {
+            groupItem.classList.add('menu-group');
+                
+            groupItem.innerHTML = `<a href="#" class="menu-toggle">
+                <span class="menu-group-label">${group}</span>
+                <i class="fa fa-chevron-right"></i>
+            </a>`;
+
             const submenu = document.createElement('ul');
             submenu.classList.add('submenu');
             submenu.style.display = 'none';
@@ -48,6 +50,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 submenu.appendChild(item);
             }
             groupItem.appendChild(submenu);
+        }else {
+            const item = document.createElement('a');
+            item.href = "#";
+            item.id = `sidebar-${items}`;
+            item.setAttribute('data-page', items);
+            item.textContent = group;
+            // loadPage(items);
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                loadPage(items);
+            });
+            groupItem.appendChild(item);
         }
         menu_bar.appendChild(groupItem);
     }
@@ -117,11 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: { logout: '1' },
                 method: 'POST'
             }).then(response => {
-                if (response.status === '200') {
-                    window.location.href = '../index.php';
-                } else {
-                    alert('Gagal logout: ' + response.message);
-                }
+                window.location.href = '../index.php';
             });
             return;
         }
