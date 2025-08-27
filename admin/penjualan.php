@@ -187,36 +187,64 @@
                         // Ambil detail penjualan
                         try {
                             const result = await callAPI({ url: `../api/penjualan.php?id_penjualan=${idPenjualan}&action=detail`, method: 'GET' });
-                            const detail = result.data;
+                            const trx = result.data;
+                            const detail = trx.detail || [];
+
+                            const total_trx = detail.reduce((a,b)=>a+b.jumlah_penjualan*b.harga_penjualan,0);
+
                             let html = `
-                                <div style="text-align:center;font-weight:bold;">TK. SIDODADI KEDURUS</div>
-                                <div style="text-align:center;">Jl. Raya Mastrio No.31, Kedurus, Surabaya.</div>
-                                <div style="text-align:center;">Telp/WA: 0851-1746-6153</div>
-                                <div style="text-align:center;">Email: son27business@gmail.com</div>
-                                <hr>
-                                <div>Tanggal: ${new Date().toLocaleDateString()}</div>
-                                <hr>
-                                <table style="width:100%;">
-                                    <tbody>
+                                <div style="text-align:center;font-weight:bold;font-size:13px;letter-spacing:1px;margin-bottom:2mm;">
+                                    TK. SIDODADI KEDURUS
+                                </div>
+                                <div style="text-align:center;font-size:11px;margin-bottom:1mm;">
+                                    Jl. Raya Mastrio No.31, Kedurus, Surabaya.<br>
+                                    Telp/WA: 0851-1746-6153<br>
+                                    Email: son27business@gmail.com
+                                </div>
+                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                                <div style="font-size:11px;margin-bottom:1mm;">
+                                    Tanggal: ${new Date().toLocaleDateString()}<br>
+                                    Jam: ${new Date().toLocaleTimeString()}
+                                </div>
+                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                                <table style="width:100%;font-size:11px;margin-bottom:2mm;">
+                                    <tbody style ="border:0">
                                         ${detail.map(item => `
                                             <tr>
-                                                <td colspan="2">${item.nama_product}</td>
+                                                <td colspan="2" style="border:0;padding-bottom:0.5mm;">
+                                                    <span style="font-weight:bold;">${item.nama_product}</span>
+                                                </td>
                                             </tr>
                                             <tr>
-                                                <td>${item.jumlah_penjualan} x ${formatCurrencyIDR(item.harga_penjualan)}</td>
-                                                <td style="text-align:right;">${formatCurrencyIDR(item.jumlah_penjualan * item.harga_penjualan)}</td>
+                                                <td style="border:0;width:60%;">
+                                                    ${item.jumlah_penjualan} x ${formatCurrencyIDR(item.harga_penjualan)}
+                                                </td>
+                                                <td style="border:0;width:40%;text-align:right;padding-right:1mm;">
+                                                    ${formatCurrencyIDR(item.jumlah_penjualan * item.harga_penjualan)}
+                                                </td>
                                             </tr>
                                         `).join('')}
                                     </tbody>
                                 </table>
-                                <hr>
-                                <div style="text-align:right;font-weight:bold;">
-                                    Total: ${formatCurrencyIDR(detail.reduce((a,b)=>a+b.jumlah_penjualan*b.harga_penjualan,0))}
+                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                                <div style="font-size:12px;font-weight:bold;text-align:right;margin-bottom:2mm;">
+                                    Total Pembelian: ${formatCurrencyIDR(total_trx)}
                                 </div>
-                                <div style="text-align:center;margin-top:8px;">Barang yang dibeli tidak dapat dikembalikan</div>
-                                <div style="text-align:center;margin-top:8px;">Simpan nota ini sebagai bukti transakasi</div>
-                                <hr>
-                                <div style="text-align:center;margin-top:8px;">TERIMA KASIH ATAS KUNJUNGAN ANDA</div>
+                                <div style="font-size:12px;font-weight:bold;text-align:right;margin-bottom:2mm;">
+                                    Pembayaran: ${formatCurrencyIDR(trx.total_pembayaran)}
+                                </div>
+                                <div style="font-size:12px;font-weight:bold;text-align:right;margin-bottom:2mm;">
+                                    Kembalian: ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}
+                                </div>
+                                <div style="font-size:10px;text-align:center;margin-bottom:1mm;">
+                                    Barang yang dibeli tidak dapat dikembalikan<br>
+                                    Simpan nota ini sebagai bukti transaksi
+                                </div>
+                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                                <div style="text-align:center;font-size:12px;font-weight:bold;margin-top:2mm;">
+                                    TERIMA KASIH ATAS KUNJUNGAN ANDA
+                                </div>
+                                <div style="height:8mm;"></div>
                             `;
                             strukContent.innerHTML = html;
                             strukModal.style.display = 'flex';
@@ -234,6 +262,7 @@
                 // Cetak struk
                 document.getElementById('printStrukBtn').onclick = function() {
                     const printContents = document.getElementById('strukContent').innerHTML;
+                    const height_content = document.getElementById('strukContent').offsetHeight;
                     const win = window.open('', '', 'width=300,height=400');
                     win.document.write(`
                         <html>
@@ -241,7 +270,8 @@
                             <title>Struk Penjualan</title>
                             <style>
                                 @media print {
-                                    body { max-width:58mm; max-height:40mm; margin:0; font-size:11px; }
+                                    @page { size: 58mm ${height_content}px ; margin: 5mm; }
+                                    body { max-width:58mm; margin:0; font-size:11px; }
                                 }
                             </style>
                         </head>
@@ -266,7 +296,7 @@
 
                         callAPI({ url: `../api/penjualan.php?id_penjualan=${idPenjualan}&action=detail`, method: 'GET' })
                             .then(result => {
-                                const detailData = result.data
+                                const detailData = result.data.detail;
                                 detailData.forEach(detail => {
                                     const detailRow = document.createElement('tr');
                                     detailRow.innerHTML = `
@@ -391,8 +421,11 @@
                 return;
             }
 
+            const total_bayar = parseFloat(document.getElementById('total_bayar').value) || 0;
+
             const body = {
-                penjualan: penjualanData
+                penjualan: penjualanData,
+                total_bayar: total_bayar
             }
 
             try {
@@ -441,7 +474,6 @@
             const totalBayar = parseFloat(total_bayar.value) || 0;
             const grandTotal = parseFloat(grand_total.value.replace(/[Rp. ]+/g, "")) || 0;
             const kembalian = totalBayar - grandTotal;
-            console.log("totalBayar ", totalBayar, " grandTotal ", grandTotal, " kembalian ", kembalian);
             
             total_kembalian.value = formatCurrencyIDR(kembalian);
         };
