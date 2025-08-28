@@ -33,7 +33,7 @@ switch ($method) {
         }
 
         if ($action === 'detail') {
-            $data = isset($data[0]) ? $data[0] : null;
+            $data = isse    ($data[0]) ? $data[0] : null;
             // Ambil detail penjualan berdasarkan ID penjualan
             if (isset($query_data['id_penjualan'])) {
                 $id_penjualan = (int)$query_data['id_penjualan'];
@@ -80,7 +80,8 @@ switch ($method) {
         $jumlah_penjualan = array_reduce($stock, function($carry, $item) {
             return $carry + ((int)$item['harga_beli'] * (int)$item['quantity']);
         }, 0);
-        $total_bayar = isset($data['total_bayar']) ? (float)$data['total_bayar'] : 0;
+        $total_bayar  = isset($data['total_bayar'])  ? (float)$data['total_bayar'] : 0;
+
         $sql = "INSERT INTO penjualan (id_user, jumlah_penjualan, total_pembayaran, status, created_by, created_at) VALUES ($id_user, $jumlah_penjualan, $total_bayar, 'Y', $id_user, NOW())";
         if ($conn->query($sql) === FALSE) {
             http_response_code(500);

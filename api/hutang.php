@@ -9,39 +9,57 @@ switch ($method) {
     case 'GET':
         $query_data = $_GET;
         $action = isset($query_data['action']) ? $query_data['action'] : '';
+        $id_hutang = isset($query_data['id_hutang']) ? (int)$query_data['id_hutang'] : 0;
 
         // data penjualan
-        $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.status, p.created_at, u.nama as nama_user
+        $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.total_pembayaran, p.total_ongkir, p.status, p.created_at, m.nama as nama_member, u.username as nama_user
                 FROM penjualan p
-                JOIN member u ON p.id_member = u.id_member
-                WHERE p.id_member IS NOT NULL
-                order by id_hutang desc";
+                JOIN user u ON p.created_by = u.id_user
+                JOIN member m ON p.id_member = m.id_member
+                WHERE p.id_member IS NOT NULL";
 
-        if ($action === 'detail') {
-            // Ambil detail penjualan berdasarkan ID penjualan
-            if (isset($query_data['id_hutang'])) {
-                $id_penjualan = (int)$query_data['id_hutang'];
-                $sql = "SELECT dp.id_detail_penjualan as id_detail_hutang, dp.id_produk,pe.status, p.nama_product, dp.jumlah_penjualan as jumlah_hutang, dp.harga_penjualan as harga_hutang
-                        FROM detail_penjualan dp
-                        JOIN product p ON dp.id_produk = p.id_product
-                        join penjualan pe ON dp.id_penjualan = pe.id_penjualan
-                        WHERE dp.id_penjualan = $id_penjualan";
-            } else {
-                http_response_code(400);
-                echo json_encode(['error' => 'ID penjualan tidak diberikan']);
-                exit;
-            }
+        if ($id_hutang > 0) {
+            $sql .= " AND p.id_penjualan = $id_hutang";
         }
+        $sql .= " ORDER BY p.id_penjualan DESC";
+
         $result = $conn->query($sql);
         if (!$result) {
             http_response_code(500);
             echo json_encode(['error' => 'Gagal mengambil data']);
             exit;
         }
-
         $data = [];
         while ($row = $result->fetch_assoc()) {
             $data[] = $row;
+        }
+
+        if ($action === 'detail') {
+            $data = isset($data[0]) ? $data[0] : null;
+            // Ambil detail penjualan berdasarkan ID penjualan
+            if (isset($query_data['id_hutang'])) {
+                $sql = "SELECT dp.id_detail_penjualan as id_detail_hutang, dp.id_produk,pe.status, p.nama_product, dp.jumlah_penjualan as jumlah_hutang, dp.harga_penjualan as harga_hutang
+                        FROM detail_penjualan dp
+                        JOIN product p ON dp.id_produk = p.id_product
+                        JOIN penjualan pe ON dp.id_penjualan = pe.id_penjualan
+                        WHERE dp.id_penjualan = $id_hutang";
+                        
+                $result = $conn->query($sql);
+                if (!$result) {
+                    http_response_code(500);
+                    echo json_encode(['error' => 'Gagal mengambil data']);
+                    exit;
+                }
+
+                $data['detail'] = [];
+                while ($row = $result->fetch_assoc()) {
+                    $data['detail'][] = $row;
+                }
+            } else {
+                http_response_code(400);
+                echo json_encode(['error' => 'ID penjualan tidak diberikan']);
+                exit;
+            }
         }
 
         echo json_encode($data);
@@ -72,7 +90,10 @@ switch ($method) {
         $harga_penjualan = array_reduce($stock, function($carry, $item) {
             return $carry + ((int)$item['quantity'] * (float)$item['harga_beli']);
         }, 0);
-        $sql = "INSERT INTO penjualan (id_user, id_member, jumlah_penjualan, status, created_by, created_at) VALUES ($id_user, $id_member, $harga_penjualan, 'N', $id_user, NOW())";
+        $total_bayar  = isset($data['total_bayar'])  ? (float)$data['total_bayar'] : 0;
+        $total_ongkir  = isset($data['total_ongkir'])  ? (float)$data['total_ongkir'] : 0;
+
+        $sql = "INSERT INTO penjualan (id_user, id_member, jumlah_penjualan, total_pembayaran, total_ongkir, status, created_by, created_at) VALUES ($id_user, $id_member, $harga_penjualan, $total_bayar, $total_ongkir, 'N', $id_user, NOW())";
         if ($conn->query($sql) === FALSE) {
             http_response_code(500);
             echo json_encode(['error' => 'Gagal menambah penjualan']);

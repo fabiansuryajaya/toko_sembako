@@ -48,6 +48,7 @@
             <table border="1" cellspacing="0" cellpadding="8" id="productTable">
                 <thead>
                     <tr>
+                        <td style="width: 5%;">Action</td>
                         <td>Nama</td>
                         <!-- <td>Supplier</td> -->
                         <td>Satuan</td>
@@ -59,7 +60,25 @@
                 <tbody></tbody>
             </table>
 
-            <div style="position: absolute; right: 16px; bottom: 16px; text-align: right;">
+            <!-- tambahkan input total bayar dan total kembalian -->
+            <div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 8px; align-items: center;">
+                <label for="grand_total" style="margin-bottom:0;font-weight:bold;">Grand Total:</label>
+                <input type="text" id="grand_total" name="grand_total" value="0" readonly style="width: 120px; padding: 4px; background: #f5f5f5; font-weight:bold;">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 8px; align-items: center;">
+                <label for="total_bayar" style="margin-bottom:0;">Total Bayar:</label>
+                <input type="number" id="total_bayar" name="total_bayar" value="0" style="width: 120px; padding: 4px;">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 8px; align-items: center;">
+                <label for="harga_ongkir" style="margin-bottom:0;">Harga Ongkir:</label>
+                <input type="number" id="harga_ongkir" name="harga_ongkir" value="0" style="width: 120px; padding: 4px;">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 8px; align-items: center;">
+                <label for="total_kembalian" style="margin-bottom:0;">Total Kembalian:</label>
+                <input type="text" id="total_kembalian" name="total_kembalian" value="0" readonly style="width: 120px; padding: 4px; background: #f5f5f5;">
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px;"></div>
                 <button type="button" id="closeModalBtn">Batal</button>
                 <button type="button" id="saveHutangBtn">Simpan</button>
             </div>
@@ -87,6 +106,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Struk -->
+    <div id="StrukModal" class="modal" style="display:none;">
+        <div class="modal-content" style="width:58mm;min-width:58mm;max-width:58mm;padding:8px;">
+            <div id="strukContent" style="font-size:11px;font-family:Calibri;"></div>
+            <div style="text-align:right;margin-top:8px;">
+                <button type="button" id="printStrukBtn">Cetak</button>
+                <button type="button" id="closeStrukModalBtn">Tutup</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Tambahkan Select2 CSS dan JS -->
@@ -102,6 +132,11 @@
         edit_price       = false;
         start_date.value = new Date().toISOString().split('T')[0]; // Set to today
         to_date.value    = new Date().toISOString().split('T')[0]; // Set to today
+
+        const grand_total = document.getElementById('grand_total');
+        const total_bayar = document.getElementById('total_bayar');
+        const total_kembalian = document.getElementById('total_kembalian');
+        const harga_ongkir = document.getElementById('harga_ongkir');
 
         let id_hutang_modal = -1;
 
@@ -177,10 +212,121 @@
                         <td>${item.nama_user}</td>
                         <td>${formatCurrencyIDR(item.jumlah_hutang)}</td>
                         <td>${item.status == "Y" ? "Lunas" : "Belum Lunas"}</td>
-                        <td><button class="detailBtn" data-id="${item.id_hutang}">Detail</button> ${btnLunas}</td>
+                        <td>
+                            <button class="detailBtn" data-id="${item.id_hutang}">Detail</button>
+                            <button class="strukBtn" data-id="${item.id_hutang}">Struk</button>
+                            ${btnLunas}</td>
                     `;
                     tbody.appendChild(row);
                 });
+                
+                document.addEventListener('click', async function(e) {
+                    if (e.target.classList.contains('strukBtn')) {
+                        const idPenjualan = e.target.getAttribute('data-id');
+                        const strukModal = document.getElementById('StrukModal');
+                        const strukContent = document.getElementById('strukContent');
+                        strukContent.innerHTML = 'Memuat...';
+
+                        // Ambil detail penjualan
+                        try {
+                            const result = await callAPI({ url: `../api/hutang.php?id_hutang=${idPenjualan}&action=detail`, method: 'GET' });
+                            const trx = result.data;
+                            const detail = trx.detail || [];
+
+                            const total_trx = detail.reduce((a,b)=>a+b.jumlah_hutang*b.harga_hutang,0);
+
+                            let html = `
+                                <div style="text-align:center;font-weight:bold;font-size:12px;letter-spacing:1px;margin-bottom:2mm;">
+                                    TK. SIDODADI KEDURUS
+                                </div>
+                                <div style="text-align:center;font-size:11px;margin-bottom:1mm;">
+                                    Jl. Raya Mastrio No.31, Kedurus, Surabaya.<br>
+                                    Telp/WA: 0851-1746-6153<br>
+                                    Email: son27business@gmail.com
+                                </div>
+                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                                <div style="font-size:11px;margin-bottom:1mm;text-align:left;">
+                                    Tanggal Transaksi: ${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString().padStart(11, "0").substring(0,8)}<br>
+                                    Kasir: ${trx.nama_user}<br>
+                                    Member: ${trx.nama_member}
+                                </div>
+                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                                <table style="width:100%;font-size:11px;margin-bottom:2mm;text-align:center;">
+                                    <tbody style="border:0">
+                                        ${detail.map(item => `
+                                            <tr>
+                                                <td colspan="2" style="border:0;padding-bottom:0.5mm;text-align:left;">
+                                                    <span style="font-weight:bold;">${item.nama_product}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:0;width:60%;text-align:left;">
+                                                    ${item.jumlah_hutang} x ${formatCurrencyIDR(item.harga_hutang)}
+                                                </td>
+                                                <td style="border:0;width:40%;text-align:right;padding-right:1mm;">
+                                                    ${formatCurrencyIDR(item.jumlah_hutang * item.harga_hutang)}
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                                <div style="font-size:11px;font-weight:bold;text-align:right;margin-bottom:1mm;">
+                                    Total Pembelian: ${formatCurrencyIDR(total_trx)}
+                                </div>
+                                <div style="font-size:11px;font-weight:bold;text-align:right;margin-bottom:1mm;">
+                                    Total Ongkir: ${formatCurrencyIDR(trx.total_ongkir)}
+                                </div>
+                                <div style="font-size:11px;font-weight:bold;text-align:right;margin-bottom:1mm;">
+                                    Pembayaran: ${formatCurrencyIDR(trx.total_pembayaran)}
+                                </div>
+                                <div style="font-size:11px;font-weight:bold;text-align:right;margin-bottom:2mm;">
+                                    Kembalian: ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}
+                                </div>
+                                <div style="font-size:11px;text-align:center;margin-bottom:1mm;">
+                                    Barang yang dibeli tidak dapat dikembalikan<br>
+                                    Simpan nota ini sebagai bukti transaksi
+                                </div>
+                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                                <div style="text-align:center;font-size:11px;font-weight:bold;margin-top:2mm;">
+                                    TERIMA KASIH ATAS KUNJUNGAN ANDA
+                                </div>
+                                <div style="height:8mm;"></div>
+                            `;
+                            strukContent.innerHTML = html;
+                            strukModal.style.display = 'flex';
+                        } catch (err) {
+                            strukContent.innerHTML = 'Gagal memuat struk';
+                        }
+                    }
+                });
+
+                // Tutup modal struk
+                document.getElementById('closeStrukModalBtn').onclick = function() {
+                    document.getElementById('StrukModal').style.display = 'none';
+                };
+
+                // Cetak struk
+                document.getElementById('printStrukBtn').onclick = function() {
+                    const printContents = document.getElementById('strukContent').innerHTML;
+                    const height_content = document.getElementById('strukContent').offsetHeight;
+                    const win = window.open('', '', 'width=300,height=400');
+                    win.document.write(`
+                        <html>
+                        <head>
+                            <title>Struk Penjualan</title>
+                            <style>
+                                @media print {
+                                    @page { size: 58mm ${height_content}px ; margin: 0; }
+                                    body { max-width:58mm; margin:0; }
+                                }
+                            </style>
+                        </head>
+                        <body>${printContents}</body>
+                        </html>
+                    `);
+                    win.focus();
+                };
 
                 // Add event listener for detail buttons
                 document.querySelectorAll('.detailBtn').forEach(button => {
@@ -280,13 +426,13 @@
             }
         });
 
-
         function updateTotal(input) {
             const row = input.closest('tr');
             const hargaBeli = parseFloat(row.querySelector('.harga_beli').value);
             const quantity = parseInt(row.querySelector('.quantity').value);
             const totalCell = row.querySelector('.total');
             totalCell.textContent = formatCurrencyIDR(hargaBeli * quantity);
+            updateGrandTotal(); // Update grand total after changing quantity or harga beli
         }
 
         // addProductButton
@@ -315,6 +461,11 @@
             const tr = document.createElement('tr');
             tr.setAttribute('data-id', product.id_product);
             tr.innerHTML = `
+                <td>
+                    <button type="button" class="removeBtn" onclick="deleteRow(this)" style="background: none; border: none; color: red; cursor: pointer;">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
                 <td>${product.nama_product}</td>
                 <td>${product.nama_satuan}</td>
                 <td><input type="number" ${edit_price ? '' : 'disabled'} class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
@@ -322,6 +473,10 @@
                 <td class="total">${formatCurrencyIDR(product.harga_beli_product)}</td>
             `;
             table.appendChild(tr);
+
+            updateGrandTotal(); // Update grand total after adding a new product
+            document.getElementById('product_id').value = ''; // Clear the select input after
+            document.getElementById('product_id').dispatchEvent(new Event('change')); // Trigger change event for Select2
         });
 
         // closeModalBtn
@@ -363,9 +518,14 @@
                 return;
             }
 
+            const total_bayar_value = parseFloat(total_bayar.value) || 0;
+            const total_ongkir_value = parseFloat(harga_ongkir.value) || 0;
+
             const body = {
                 hutang: hutangData,
-                id_member: memberId
+                id_member: memberId,
+                total_bayar: total_bayar_value,
+                total_ongkir: total_ongkir_value
             }
 
             try {
@@ -394,6 +554,43 @@
             const modal = document.getElementById('HutangModal');
             modal.style.display = 'flex';
         });
+
+        // Update grand total and total kembalian
+        updateGrandTotal = () => {
+            let grandTotal = 0;
+            const rows = table.querySelectorAll('tr');
+            rows.forEach(row => {
+                const totalCell = row.querySelector('.total');
+                if (totalCell) {
+                    const totalValue = parseFloat(totalCell.textContent.replace(/[Rp. ]+/g, ""));
+                    grandTotal += isNaN(totalValue) ? 0 : totalValue;
+                }
+            });
+            grand_total.value = formatCurrencyIDR(grandTotal);
+            updateKembalian();
+        };
+
+        updateKembalian = () => {
+            const totalBayar = parseFloat(total_bayar.value) || 0;
+            const grandTotal = parseFloat(grand_total.value.replace(/[Rp. ]+/g, "")) || 0;
+            const hargaOngkir = parseFloat(harga_ongkir.value) || 0;
+            const kembalian = totalBayar - grandTotal - hargaOngkir;
+
+            total_kembalian.value = formatCurrencyIDR(kembalian);
+        };
+
+        // totalBayar change
+        total_bayar.addEventListener('input', updateKembalian);
+        harga_ongkir.addEventListener('input', updateKembalian);
+
+        // removeBtn
+        deleteRow = (btn) => {
+            const row = btn.closest('tr');
+            if (row) {
+                row.remove();
+                updateGrandTotal();
+            }
+        };
 
         // Delegate quantity input change event to update total
         table.addEventListener('input', function (e) {
