@@ -99,7 +99,7 @@
     <!-- Modal Struk -->
     <div id="StrukModal" class="modal" style="display:none;">
         <div class="modal-content" style="width:58mm;min-width:58mm;max-width:58mm;padding:8px;">
-            <div id="strukContent" style="font-size:11px;"></div>
+            <div id="strukContent" style="font-size:11px;font-family:Calibri;"></div>
             <div style="text-align:right;margin-top:8px;">
                 <button type="button" id="printStrukBtn">Cetak</button>
                 <button type="button" id="closeStrukModalBtn">Tutup</button>
@@ -204,22 +204,22 @@
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
                                 <div style="font-size:11px;margin-bottom:1mm;text-align:left;">
                                     Tanggal Transaksi: ${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString().padStart(11, "0").substring(0,8)}<br>
-                                    Kasir: ${trx.nama_user}<br>
+                                    Kasir: ${trx.nama_user}
                                 </div>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <table style="width:100%;font-size:11px;margin-bottom:2mm;text-align:center;">
-                                    <tbody style="border:0">
+                                <table style="width:100%;font-size:11px;margin-bottom:2mm;text-align:center;margin-top:0px">
+                                    <tbody style="border:0;">
                                         ${detail.map(item => `
                                             <tr>
-                                                <td colspan="2" style="border:0;padding-bottom:0.5mm;text-align:left;">
+                                                <td colspan="2" style="border:0;padding:0;padding-bottom:0.5mm;text-align:left;">
                                                     <span style="font-weight:bold;">${item.nama_product}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="border:0;width:60%;text-align:left;">
+                                                <td style="border:0;padding:0;width:60%;text-align:left;">
                                                     ${item.jumlah_penjualan} x ${formatCurrencyIDR(item.harga_penjualan)}
                                                 </td>
-                                                <td style="border:0;width:40%;text-align:right;padding-right:1mm;">
+                                                <td style="border:0;padding:0;width:40%;text-align:right;padding-right:1mm;">
                                                     ${formatCurrencyIDR(item.jumlah_penjualan * item.harga_penjualan)}
                                                 </td>
                                             </tr>
@@ -227,16 +227,16 @@
                                     </tbody>
                                 </table>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <div style="font-size:11px;font-weight:bold;text-align:center;margin-bottom:2mm;">
+                                <div style="font-size:11px;font-weight:bold;text-align:right;margin-bottom:1mm;">
                                     Total Pembelian: ${formatCurrencyIDR(total_trx)}
                                 </div>
-                                <div style="font-size:11px;font-weight:bold;text-align:center;margin-bottom:2mm;">
+                                <div style="font-size:11px;font-weight:bold;text-align:right;margin-bottom:1mm;">
                                     Pembayaran: ${formatCurrencyIDR(trx.total_pembayaran)}
                                 </div>
-                                <div style="font-size:11px;font-weight:bold;text-align:center;margin-bottom:2mm;">
+                                <div style="font-size:11px;font-weight:bold;text-align:right;margin-bottom:2mm;">
                                     Kembalian: ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}
                                 </div>
-                                <div style="font-size:10px;text-align:center;margin-bottom:1mm;">
+                                <div style="font-size:11px;text-align:center;margin-bottom:1mm;">
                                     Barang yang dibeli tidak dapat dikembalikan<br>
                                     Simpan nota ini sebagai bukti transaksi
                                 </div>

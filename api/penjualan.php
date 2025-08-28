@@ -33,7 +33,7 @@ switch ($method) {
         }
 
         if ($action === 'detail') {
-            $data = isse    ($data[0]) ? $data[0] : null;
+            $data = isset($data[0]) ? $data[0] : null;
             // Ambil detail penjualan berdasarkan ID penjualan
             if (isset($query_data['id_penjualan'])) {
                 $id_penjualan = (int)$query_data['id_penjualan'];
