@@ -95,7 +95,7 @@
 
         function hide_columns() {
             if (role !== 'admin') {
-                document.getElementById('header_aksi').style.display = 'none';
+                // document.getElementById('header_aksi').style.display = 'none';
                 document.getElementById('header_nama_supplier').style.display = 'none';
                 document.getElementById('header_harga_beli').style.display = 'none';
 
