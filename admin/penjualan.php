@@ -115,6 +115,12 @@
 <script>
     // on document ready
     $(document).ready(function () {
+        
+        const role = getRole();
+         if (role !== 'admin') {
+            $('#editPriceBtn').hide();
+        }
+
         // init
         const start_date = document.getElementById('from_date');
         const to_date    = document.getElementById('to_date');

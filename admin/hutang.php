@@ -125,6 +125,12 @@
 
 <script>
     // on document ready
+       const role = getRole();
+
+        if (role !== 'admin') {
+            $('#cancelLunasModalBtn').hide();
+        }
+
     $(document).ready(function () {
         // init
         const start_date = document.getElementById('from_date');
@@ -205,7 +211,7 @@
 
                 result.data.forEach(item => {
                     const row = document.createElement('tr');
-                    const btnLunas = item.status == "Y" ? '' : `<button class="lunasBtn" data-id="${item.id_hutang}">Lunas</button>`;
+                    const btnLunas = item.status == "Y"  || role !== 'admin' ? '' : `<button class="lunasBtn" data-id="${item.id_hutang}">Lunas</button>`;
                     row.innerHTML = `
                         <td>${item.id_hutang}</td>
                         <td>${item.created_at}</td>
@@ -342,7 +348,9 @@
 
                         callAPI({ url: `../api/hutang.php?id_hutang=${idHutang}&action=detail`, method: 'GET' })
                             .then(result => {
-                                const detailData = result.data
+                                const data = result.data;
+                                const detailData = data.detail;
+
                                 detailData.forEach(detail => {
                                     const detailRow = document.createElement('tr');
                                     detailRow.innerHTML = `
