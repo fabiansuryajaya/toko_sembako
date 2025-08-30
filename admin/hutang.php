@@ -240,7 +240,7 @@
                                     TK. SIDODADI KEDURUS
                                 </div>
                                 <div style="text-align:center;font-size:11px;margin-bottom:1mm;">
-                                    Jl. Raya Mastrio No.31, Kedurus, Surabaya.<br>
+                                    Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
                                     Telp/WA: 0851-1746-6153<br>
                                     Email: son27business@gmail.com
                                 </div>
