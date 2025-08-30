@@ -227,15 +227,23 @@
                                     </tbody>
                                 </table>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <div style="font-size:11px;font-weight:bold;text-align:right;margin-bottom:1mm;">
-                                    Total Pembelian: ${formatCurrencyIDR(total_trx)}
-                                </div>
-                                <div style="font-size:11px;font-weight:bold;text-align:right;margin-bottom:1mm;">
-                                    Pembayaran: ${formatCurrencyIDR(trx.total_pembayaran)}
-                                </div>
-                                <div style="font-size:11px;font-weight:bold;text-align:right;margin-bottom:2mm;">
-                                    Kembalian: ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}
-                                </div>
+                                <table style="width:100%;font-size:11px;margin-bottom:2mm;">
+                                    <tr>
+                                        <td style="width: 70%;text-align:right; border:0; padding:0;">Total Pembelian</td>
+                                        <td style="width: 5%;border:0;"> : </td>
+                                        <td style="width: 30%;text-align:right; border:0; padding:0;    "> ${formatCurrencyIDR(total_trx)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 70%;text-align:right; border:0; padding:0;">Pembayaran</td>
+                                        <td style="width: 5%;border:0;"> : </td>
+                                        <td style="width: 30%;text-align:right; border:0; padding:0;"> ${formatCurrencyIDR(trx.total_pembayaran)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 70%;text-align:right; border:0; padding:0;">Kembalian</td>
+                                        <td style="width: 5%;border:0;"> : </td>
+                                        <td style="width: 30%;text-align:right; border:0; padding:0;"> ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}</td>
+                                    </tr>
+                                </table>
                                 <div style="font-size:11px;text-align:center;margin-bottom:1mm;">
                                     Barang yang dibeli tidak dapat dikembalikan<br>
                                     Simpan nota ini sebagai bukti transaksi
