@@ -99,7 +99,7 @@
     <!-- Modal Struk -->
     <div id="StrukModal" class="modal" style="display:none;">
         <div class="modal-content" style="width:58mm;min-width:58mm;max-width:58mm;padding:8px;">
-            <div id="strukContent" style="font-size:11px;font-family:Calibri;"></div>
+            <div id="strukContent" style="font-size:14px;font-family:Calibri;"></div>
             <div style="text-align:right;margin-top:8px;">
                 <button type="button" id="printStrukBtn">Cetak</button>
                 <button type="button" id="closeStrukModalBtn">Tutup</button>
@@ -199,21 +199,21 @@
                             const total_trx = detail.reduce((a,b)=>a+b.jumlah_penjualan*b.harga_penjualan,0);
 
                             let html = `
-                                <div style="text-align:center;font-weight:bold;font-size:12px;letter-spacing:1px;margin-bottom:2mm;">
+                                <div style="text-align:center;font-weight:bold;font-size:16px;letter-spacing:1px;margin-bottom:2mm;">
                                     TK. SIDODADI KEDURUS
                                 </div>
-                                <div style="text-align:center;font-size:11px;margin-bottom:1mm;">
+                                <div style="text-align:center;font-size:13px;margin-bottom:1mm;">
                                     Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
                                     Telp/WA: 0851-1746-6153<br>
                                     Email: son27business@gmail.com
                                 </div>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <div style="font-size:11px;margin-bottom:1mm;text-align:left;">
+                                <div style="font-size:14px;margin-bottom:1mm;text-align:left;">
                                     Tanggal Transaksi: ${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString().padStart(11, "0").substring(0,8)}<br>
                                     Kasir: ${trx.nama_user}
                                 </div>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <table style="width:100%;font-size:11px;margin-bottom:2mm;text-align:center;margin-top:0px">
+                                <table style="width:100%;font-size:14px;margin-bottom:2mm;text-align:center;margin-top:0px">
                                     <tbody style="border:0;">
                                         ${detail.map(item => `
                                             <tr>
@@ -232,30 +232,22 @@
                                         `).join('')}
                                     </tbody>
                                 </table>
-                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <table style="width:100%;font-size:11px;margin-bottom:2mm;">
-                                    <tr>
-                                        <td style="width: 70%;text-align:right; border:0; padding:0;">Total Pembelian</td>
-                                        <td style="width: 5%;border:0;"> : </td>
-                                        <td style="width: 30%;text-align:right; border:0; padding:0;    "> ${formatCurrencyIDR(total_trx)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 70%;text-align:right; border:0; padding:0;">Pembayaran</td>
-                                        <td style="width: 5%;border:0;"> : </td>
-                                        <td style="width: 30%;text-align:right; border:0; padding:0;"> ${formatCurrencyIDR(trx.total_pembayaran)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 70%;text-align:right; border:0; padding:0;">Kembalian</td>
-                                        <td style="width: 5%;border:0;"> : </td>
-                                        <td style="width: 30%;text-align:right; border:0; padding:0;"> ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}</td>
-                                    </tr>
-                                </table>
-                                <div style="font-size:11px;text-align:center;margin-bottom:1mm;">
+                                <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
+                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;">
+                                    Total Pembelian: ${formatCurrencyIDR(total_trx)}
+                                </div>
+                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;">
+                                    Pembayaran: ${formatCurrencyIDR(trx.total_pembayaran)}
+                                </div>
+                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:2mm;">
+                                    Kembalian: ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}
+                                </div>
+                                <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
                                     Barang yang dibeli tidak dapat dikembalikan<br>
                                     Simpan nota ini sebagai bukti transaksi
                                 </div>
-                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <div style="text-align:center;font-size:11px;font-weight:bold;margin-top:2mm;">
+                                <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
+                                <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
                                     TERIMA KASIH ATAS KUNJUNGAN ANDA
                                 </div>
                                 <div style="height:8mm;"></div>
@@ -276,26 +268,64 @@
                 // Cetak struk
                 document.getElementById('printStrukBtn').onclick = function() {
                     const printContents = document.getElementById('strukContent').innerHTML;
-                    const height_content = document.getElementById('strukContent').offsetHeight;
-                    const win = window.open('', '', 'width=300,height=400');
+
+                    // Buka jendela baru dengan pengaturan yang lebih sesuai untuk printer
+                    // 'width' dan 'height' pada window.open adalah dalam pixel.
+                    // Atur ukuran jendela yang cukup lebar untuk menampilkan konten
+                    const win = window.open('', '_blank');
+
                     win.document.write(`
+                        <!DOCTYPE html>
                         <html>
                         <head>
                             <title>Struk Penjualan</title>
                             <style>
+                                /* Gaya untuk mode tampilan */
+                                body {
+                                    font-family: monospace;
+                                    font-size: 14px;
+                                    line-height: 1.2;
+                                }
+
+                                /* Pengaturan utama untuk cetak */
                                 @media print {
-                                    @page { size: 58mm ${height_content}px ; margin: 0; }
-                                    body { max-width:58mm; margin:0; }
+                                    /* Mengatur ukuran kertas menjadi 58mm dengan tinggi otomatis */
+                                    @page {
+                                        size: 58mm auto;
+                                        margin: 0;
+                                        margin-right: 2mm;
+                                    }
+
+                                    /* Memastikan body memiliki lebar yang sama dengan kertas */
+                                    body {
+                                        width: 58mm;
+                                        margin: 0;
+                                    }
+
+                                    /* Mengatur ulang margin pada setiap elemen untuk menghindari whitespace */
+                                    * {
+                                        margin: 0;
+                                        padding: 0;
+                                    }
                                 }
                             </style>
                         </head>
-                        <body>${printContents}</body>
+                        <body>
+                            ${printContents}
+                        </body>
                         </html>
                     `);
+
                     win.document.close();
                     win.focus();
-                    win.print();
-                    win.close();
+
+                    // Gunakan setTimeout untuk memberi waktu browser merender konten
+                    // sebelum memanggil fungsi cetak.
+                    setTimeout(function() {
+                        win.print();
+                        // window.close() seringkali tidak berfungsi pada beberapa browser
+                        // setelah print(). Biarkan pengguna yang menutupnya.
+                    }, 500); // Penundaan 500ms (0.5 detik)
                 };
 
                 // Add event listener for detail buttons
