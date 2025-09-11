@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 loadPage(items);
             });
+            //tes
             groupItem.appendChild(item);
         }
         menu_bar.appendChild(groupItem);
