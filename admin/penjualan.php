@@ -142,7 +142,7 @@
                 result.data.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product.id_product;
-                    option.textContent = product.nama_product + " - " + product.nama_satuan + " - " + formatCurrencyIDR(product.harga_beli_product);
+                    option.textContent = product.nama_product + " - " + product.nama_satuan + " - " + formatCurrencyIDR(product.harga_jual_product);
                     productSelect.appendChild(option);
 
                     product_list[product.id_product] = product;
@@ -413,9 +413,9 @@
                 </td>
                 <td>${product.nama_product}</td>
                 <td>${product.nama_satuan}</td>
-                <td><input type="number" ${edit_price ? '' : 'disabled'} class="harga_beli" value="${product.harga_beli_product}" min="0"></td>
+                <td><input type="number" ${edit_price ? '' : 'disabled'} class="harga_beli" value="${product.harga_jual_product}" min="0"></td>
                 <td><input type="number" class="quantity" value="1" min="1"></td>
-                <td class="total">${formatCurrencyIDR(product.harga_beli_product)}</td>
+                <td class="total">${formatCurrencyIDR(product.harga_jual_product)}</td>
             `;
             table.appendChild(tr);
             updateGrandTotal(); // Update grand total after adding a new product
