@@ -296,6 +296,7 @@
                     document.getElementById('harga_beli').value   = result.data[0].harga_beli_product;
                     document.getElementById('harga_jual').value   = result.data[0].harga_jual_product;
                     document.getElementById('stok').value         = result.data[0].stok_product;
+                    document.getElementById('deskripsi').value    = result.data[0].description;
 
                     $("#supplier_id").change();
                     $("#satuan_id").change();
