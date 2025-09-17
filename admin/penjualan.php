@@ -208,8 +208,8 @@
                                     Email: son27business@gmail.com
                                 </div>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <div style="font-size:14px;margin-bottom:1mm;text-align:left;">
-                                    Tanggal Transaksi: ${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString().padStart(11, "0").substring(0,8)}<br>
+                                <div style="font-size:13px;margin-bottom:1mm;text-align:left;">
+                                    Tanggal: ${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString().padStart(11, "0").substring(0,5)}<br>
                                     Kasir: ${trx.nama_user}
                                 </div>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
@@ -225,7 +225,7 @@
                                                 <td style="border:0;padding:0;width:60%;text-align:left;">
                                                     ${item.jumlah_penjualan} x ${formatCurrencyIDR(item.harga_penjualan)}
                                                 </td>
-                                                <td style="border:0;padding:0;width:40%;text-align:right;padding-right:1mm;">
+                                                <td style="border:0;padding:0;width:40%;text-align:right;padding-right:2mm;">
                                                     ${formatCurrencyIDR(item.jumlah_penjualan * item.harga_penjualan)}
                                                 </td>
                                             </tr>
@@ -233,13 +233,13 @@
                                     </tbody>
                                 </table>
                                 <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
-                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;">
-                                    Total Pembelian: ${formatCurrencyIDR(total_trx)}
+                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;padding-right:2mm;">
+                                    Total: ${formatCurrencyIDR(total_trx)}
                                 </div>
-                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;">
+                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;padding-right:2mm;">
                                     Pembayaran: ${formatCurrencyIDR(trx.total_pembayaran)}
                                 </div>
-                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:2mm;">
+                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:2mm;padding-right:2mm;">
                                     Kembalian: ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}
                                 </div>
                                 <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
@@ -445,6 +445,7 @@
         savePenjualanBtn.addEventListener('click', async () => {
             const rows = table.querySelectorAll('tr');
             const penjualanData = [];
+            let total_trx = 0;
 
             rows.forEach(row => {
                 const productId = row.getAttribute('data-id');
@@ -457,6 +458,7 @@
                         harga_beli: parseFloat(hargaBeliInput.value),
                         quantity: quantity
                     });
+                    total_trx += parseFloat(hargaBeliInput.value) * quantity;
                 }
             });
 
@@ -466,6 +468,11 @@
             }
 
             const total_bayar = parseFloat(document.getElementById('total_bayar').value) || 0;
+
+            if (total_bayar < total_trx) {
+                alert('Total bayar tidak boleh kurang dari total transaksi.');
+                return;
+            }
 
             const body = {
                 penjualan: penjualanData,

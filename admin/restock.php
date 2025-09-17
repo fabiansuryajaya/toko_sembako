@@ -72,6 +72,7 @@
                     <tr>
                         <th>ID Produk</th>
                         <th>Nama Produk</th>
+                        <th>Nama Satuan</th>
                         <th>Jumlah Pembelian</th>
                         <th>Harga Pembelian</th>
                     </tr>
@@ -159,6 +160,7 @@
                                     detailRow.innerHTML = `
                                         <td>${detail.id_produk}</td>
                                         <td>${detail.nama_product}</td>
+                                        <td>${detail.nama_satuan}</td>
                                         <td>${detail.jumlah_pembelian}</td>
                                         <td>${formatCurrencyIDR(detail.harga_pembelian)}</td>
                                     `;
