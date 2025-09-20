@@ -268,7 +268,7 @@
                                     Kasir: ${trx.nama_user}
                                 </div>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:center;margin-top:0px">
+                                <table style="width:100%;font-size:15px;margin-bottom:2mm;text-align:center;margin-top:0px">
                                     <tbody style="border:0;">
                                         ${detail.map(item => `
                                             <tr>
@@ -307,7 +307,7 @@
                                     Simpan nota ini sebagai bukti transaksi
                                 </div>
                                 <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
-                                <div style="text-align:center;font-size:16px;font-weight:bold;margin-top:2mm;">
+                                <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
                                     TERIMA KASIH ATAS KUNJUNGAN ANDA
                                 </div>
                                 <div style="height:8mm;"></div>
