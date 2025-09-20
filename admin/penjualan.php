@@ -112,6 +112,7 @@
 <link href="../assets/css/library/select2.min.css" rel="stylesheet" />
 <script src="../assets/js/library/select2.min.js"></script>
 
+<!-- update versi -->
 <script>
     // on document ready
     $(document).ready(function () {
@@ -253,10 +254,10 @@
                             //     <div style="height:8mm;"></div>
                             // `;
                             let html = `
-                                <div style="text-align:center;font-weight:bold;font-size:16px;letter-spacing:1px;margin-bottom:2mm;">
+                                <div style="text-align:center;font-weight:bold;font-size:15px;letter-spacing:1px;margin-bottom:2mm;">
                                     TK. SIDODADI KEDURUS
                                 </div>
-                                <div style="text-align:center;font-size:16px;margin-bottom:1mm;">
+                                <div style="text-align:center;font-size:15px;margin-bottom:1mm;">
                                     Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
                                     Telp/WA: 0851-1746-6153<br>
                                     Email: son27business@gmail.com
@@ -301,7 +302,7 @@
                                         <td style="border:0;font-weight:bold;padding-right:2mm;"></td>
                                     </tr>
                                 </table>
-                                <div style="font-size:16px;text-align:center;margin-bottom:1mm;">
+                                <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
                                     Barang yang dibeli tidak dapat dikembalikan<br>
                                     Simpan nota ini sebagai bukti transaksi
                                 </div>
