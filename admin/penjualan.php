@@ -268,7 +268,7 @@
                                     Kasir: ${trx.nama_user}
                                 </div>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <table style="width:100%;font-size:15px;margin-bottom:2mm;text-align:center;margin-top:0px">
+                                <table style="width:100%;font-size:15px;margin-bottom:2mm;text-align:center;margin-top:0px;margin-right:2px;">
                                     <tbody style="border:0;">
                                         ${detail.map(item => `
                                             <tr>
