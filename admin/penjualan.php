@@ -268,7 +268,7 @@
                                     Kasir: ${trx.nama_user}
                                 </div>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <table style="width:100%;font-size:15px;margin-bottom:2mm;text-align:center;margin-top:0px;margin-right:2px;">
+                                <table style="width:100%;font-size:15px;margin-bottom:2mm;text-align:center;margin-top:0px">
                                     <tbody style="border:0;">
                                         ${detail.map(item => `
                                             <tr>
@@ -280,7 +280,7 @@
                                                 <td style="border:0;padding:0;width:60%;text-align:left;">
                                                     ${item.jumlah_penjualan} x ${formatCurrencyIDR(item.harga_penjualan)}
                                                 </td>
-                                                <td style="border:0;padding:0;width:40%;text-align:right;padding-right:2mm;">
+                                                <td style="border:0;padding:0;width:40%;text-align:right;padding-right:3mm;">
                                                     ${formatCurrencyIDR(item.jumlah_penjualan * item.harga_penjualan)}
                                                 </td>
                                             </tr>
@@ -290,16 +290,16 @@
                                 <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
                                 <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:right;">
                                     <tr>
-                                        <td style="border:0;font-weight:bold;padding-right:2mm;">Total:</td>
-                                        <td style="border:0;font-weight:bold;padding-right:2mm;">${formatCurrencyIDR(total_trx)}</td>
+                                        <td style="border:0;font-weight:bold;padding-right:3mm;">Total:</td>
+                                        <td style="border:0;font-weight:bold;padding-right:3mm;">${formatCurrencyIDR(total_trx)}</td>
                                     </tr>
                                     <tr>
-                                        <td style="border:0;font-weight:bold;padding-right:2mm;">Pembayaran:</td>
-                                        <td style="border:0;font-weight:bold;padding-right:2mm;"></td>
+                                        <td style="border:0;font-weight:bold;padding-right:3mm;">Pembayaran:</td>
+                                        <td style="border:0;font-weight:bold;padding-right:3mm;"></td>
                                     </tr>
                                     <tr>
-                                        <td style="border:0;font-weight:bold;padding-right:2mm;">Kembalian:</td>
-                                        <td style="border:0;font-weight:bold;padding-right:2mm;"></td>
+                                        <td style="border:0;font-weight:bold;padding-right:3mm;">Kembalian:</td>
+                                        <td style="border:0;font-weight:bold;padding-right:3mm;"></td>
                                     </tr>
                                 </table>
                                 <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
