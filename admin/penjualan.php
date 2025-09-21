@@ -99,7 +99,7 @@
     <!-- Modal Struk -->
     <div id="StrukModal" class="modal" style="display:none;">
         <div class="modal-content" style="width:80mm;min-width:80mm;max-width:80mm;padding:8px;">
-            <div id="strukContent" style="font-size:14px;font-family:Calibri;"></div>
+            <div id="strukContent" style="font-size:14px;font-family:arial;"></div>
             <div style="text-align:right;margin-top:8px;">
                 <button type="button" id="printStrukBtn">Cetak</button>
                 <button type="button" id="closeStrukModalBtn">Tutup</button>
@@ -303,8 +303,7 @@
                                     </tr>
                                 </table>
                                 <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
-                                    Barang yang dibeli tidak dapat dikembalikan<br>
-                                    Simpan nota ini sebagai bukti transaksi
+                                    Barang yang dibeli tidak dapat dikembalikan
                                 </div>
                                 <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
                                 <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
