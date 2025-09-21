@@ -232,6 +232,7 @@ $(document).ready(function () {
                             @media print {
                                 /* Mengatur ukuran kertas menjadi 80mm dengan tinggi otomatis */
                                 @page {
+                                    font-family: monospace;
                                     size: 80mm auto;
                                     margin: 0;
                                     padding:0;
