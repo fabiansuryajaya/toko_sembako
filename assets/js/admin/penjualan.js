@@ -44,10 +44,19 @@ $(document).ready(function () {
 
     fetchProduct();
 
+    document.getElementById('filter_btn').addEventListener('click', fetchPenjualan);
+
     // get data penjualan
     async function fetchPenjualan() {
         try {
-            const result = await callAPI({ url: '../api/penjualan.php', method: 'GET' });
+            const params = {};
+            const start_date = document.getElementById('from_date').value;
+            const to_date = document.getElementById('to_date').value;
+            if (start_date) params.from_date = start_date;
+            if (to_date) params.to_date = to_date;
+            const queryParams = new URLSearchParams(params).toString();
+
+            const result = await callAPI({ url: '../api/penjualan.php?' + queryParams, method: 'GET' });
             const tbody = document.querySelector('table tbody');
             tbody.innerHTML = ''; // Clear existing rows
 
@@ -147,7 +156,7 @@ $(document).ready(function () {
                             </div>
                             <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
                             <div style="font-size:16px;margin-bottom:1mm;text-align:left;">
-                                Tanggal: ${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString().padStart(11, "0").substring(0,5)}<br>
+                                Tanggal: ${new Date().toLocaleDateString()}<br>
                                 Kasir: ${trx.nama_user}
                             </div>
                             <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
@@ -156,7 +165,7 @@ $(document).ready(function () {
                                     ${detail.map(item => `
                                         <tr>
                                             <td colspan="2" style="border:0;padding:0;padding-bottom:0.5mm;text-align:left;">
-                                                <span style="font-weight:bold;">${item.nama_product}</span>
+                                                <span style="font-weight:bold;">${item.nama_product} - ${item.nama_satuan}</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -279,8 +288,12 @@ $(document).ready(function () {
 
                     detailTableBody.innerHTML = ''; // Clear existing rows
                     detailModal.style.display = 'flex';
+                    const params = { id_penjualan: idPenjualan, action: 'detail' };
+                
+                    const queryParams = new URLSearchParams(params).toString();
 
-                    callAPI({ url: `../api/penjualan.php?id_penjualan=${idPenjualan}&action=detail`, method: 'GET' })
+                    // Fetch detail penjualan
+                    callAPI({ url: `../api/penjualan.php?${queryParams}`, method: 'GET' })
                         .then(result => {
                             const detailData = result.data.detail;
                             detailData.forEach(detail => {

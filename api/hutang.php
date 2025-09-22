@@ -10,7 +10,9 @@ switch ($method) {
         $query_data = $_GET;
         $action = isset($query_data['action']) ? $query_data['action'] : '';
         $id_hutang = isset($query_data['id_hutang']) ? (int)$query_data['id_hutang'] : 0;
-
+        $from_date = isset($query_data['from_date']) ? $conn->real_escape_string($query_data['from_date']) : '';
+        $to_date = isset($query_data['to_date']) ? $conn->real_escape_string($query_data['to_date']) : '';  
+       
         // data penjualan
         $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.total_pembayaran, p.total_ongkir, p.status, p.created_at, m.nama as nama_member, u.username as nama_user
                 FROM penjualan p
@@ -20,6 +22,13 @@ switch ($method) {
 
         if ($id_hutang > 0) {
             $sql .= " AND p.id_penjualan = $id_hutang";
+        }
+         if (!empty($from_date)) {
+            $sql .= " AND p.created_at >= '$from_date'";
+        }
+
+        if (!empty($to_date)) {
+            $sql .= " AND p.created_at <= '$to_date'";
         }
         $sql .= " ORDER BY p.id_penjualan DESC";
 
@@ -38,9 +47,10 @@ switch ($method) {
             $data = isset($data[0]) ? $data[0] : null;
             // Ambil detail penjualan berdasarkan ID penjualan
             if (isset($query_data['id_hutang'])) {
-                $sql = "SELECT dp.id_detail_penjualan as id_detail_hutang, dp.id_produk,pe.status, p.nama_product, dp.jumlah_penjualan as jumlah_hutang, dp.harga_penjualan as harga_hutang
+                $sql = "SELECT dp.id_detail_penjualan as id_detail_hutang, s.nama_satuan, dp.id_produk,pe.status, p.nama_product, dp.jumlah_penjualan as jumlah_hutang, dp.harga_penjualan as harga_hutang
                         FROM detail_penjualan dp
                         JOIN product p ON dp.id_produk = p.id_product
+                        JOIN satuan s ON p.id_satuan = s.id_satuan
                         JOIN penjualan pe ON dp.id_penjualan = pe.id_penjualan
                         WHERE dp.id_penjualan = $id_hutang";
                         

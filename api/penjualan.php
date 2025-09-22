@@ -10,7 +10,9 @@ switch ($method) {
         $query_data = $_GET;
         $action = isset($query_data['action']) ? $query_data['action'] : '';
         $id_penjualan = isset($query_data['id_penjualan']) ? (int)$query_data['id_penjualan'] : 0;
-
+        $from_date = isset($query_data['from_date']) ? $conn->real_escape_string($query_data['from_date']) : '';
+        $to_date = isset($query_data['to_date']) ? $conn->real_escape_string($query_data['to_date']) : '';  
+        
         // data penjualan
         $sql = "SELECT p.id_penjualan, p.jumlah_penjualan, p.total_pembayaran, p.status, p.created_at, u.username as nama_user
                 FROM penjualan p
@@ -19,6 +21,14 @@ switch ($method) {
 
         if ($id_penjualan > 0) {
             $sql .= " AND p.id_penjualan = $id_penjualan";
+        }
+
+        if (!empty($from_date)) {
+            $sql .= " AND p.created_at >= '$from_date'";
+        }
+
+        if (!empty($to_date)) {
+            $sql .= " AND p.created_at <= '$to_date'";
         }
 
         $result = $conn->query($sql);

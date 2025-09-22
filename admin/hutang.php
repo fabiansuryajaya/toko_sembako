@@ -201,11 +201,19 @@
             }
         }
         fetchMember();
+        document.getElementById('filter_btn').addEventListener('click', fetchHutang);
 
         // get data hutang
         async function fetchHutang() {
             try {
-                const result = await callAPI({ url: '../api/hutang.php', method: 'GET' });
+                const params = {};
+                const start_date = document.getElementById('from_date').value;
+                const to_date = document.getElementById('to_date').value;
+                if (start_date) params.from_date = start_date;
+                if (to_date) params.to_date = to_date;
+                const queryParams = new URLSearchParams(params).toString();
+
+                const result = await callAPI({ url: '../api/hutang.php?' + queryParams, method: 'GET' });
                 const tbody = document.querySelector('table tbody');
                 tbody.innerHTML = ''; // Clear existing rows
 
@@ -252,7 +260,7 @@
                                 </div>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
                                 <div style="font-size:13px;margin-bottom:1mm;text-align:left;">
-                                    Tanggal: ${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString().padStart(11, "0").substring(0,5)}<br>
+                                    Tanggal: ${new Date().toLocaleDateString()}<br>
                                     Kasir: ${trx.nama_user}
                                 </div>
                                 <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
@@ -261,7 +269,7 @@
                                         ${detail.map(item => `
                                             <tr>
                                                 <td colspan="2" style="border:0;padding:0;padding-bottom:0.5mm;text-align:left;">
-                                                    <span style="font-weight:bold;">${item.nama_product}</span>
+                                                    <span style="font-weight:bold;">${item.nama_product} - ${item.nama_satuan}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -276,18 +284,26 @@
                                     </tbody>
                                 </table>
                                 <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
-                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;padding-right:2mm;">
-                                    Total: ${formatCurrencyIDR(total_trx)}
-                                </div>
-                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;padding-right:2mm;">
-                                    Total Ongkir: ${formatCurrencyIDR(trx.total_ongkir)}tw
-                                </div>
-                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;padding-right:2mm;">
-                                    Pembayaran: ${formatCurrencyIDR(trx.total_pembayaran)}
-                                </div>
-                                <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:2mm;padding-right:2mm;">
-                                    Kembalian: ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}
-                                </div>
+
+                                
+                               <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:right;">
+                                    <tr>
+                                        <td style="border:0;font-weight:bold;padding-right:5mm;">Total:</td>
+                                        <td style="border:0;font-weight:bold;padding-right:5mm;">${formatCurrencyIDR(total_trx)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:0;font-weight:bold;padding-right:5mm;">Total Ongkir:</td>
+                                        <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:0;font-weight:bold;padding-right:5mm;">Pembayaran:</td>
+                                        <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:0;font-weight:bold;padding-right:5mm;">Kembalian:</td>
+                                        <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                                    </tr>
+                                </table>
                                 <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
                                     Barang yang dibeli tidak dapat dikembalikan<br>
                                     Simpan nota ini sebagai bukti transaksi
