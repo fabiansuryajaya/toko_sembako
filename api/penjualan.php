@@ -37,9 +37,10 @@ switch ($method) {
             // Ambil detail penjualan berdasarkan ID penjualan
             if (isset($query_data['id_penjualan'])) {
                 $id_penjualan = (int)$query_data['id_penjualan'];
-                $sql = "SELECT dp.id_detail_penjualan, dp.id_produk, p.nama_product, dp.jumlah_penjualan, dp.harga_penjualan
+                $sql = "SELECT dp.id_detail_penjualan, dp.id_produk, p.nama_product, s.nama_satuan, dp.jumlah_penjualan, dp.harga_penjualan
                         FROM detail_penjualan dp
                         JOIN product p ON dp.id_produk = p.id_product
+                        JOIN satuan s ON p.id_satuan = s.id_satuan
                         WHERE dp.id_penjualan = $id_penjualan";
             } else {
                 http_response_code(400);

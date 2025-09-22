@@ -54,7 +54,7 @@ switch ($method) {
         $harga_beli  = $conn->real_escape_string($data['harga_beli']);
         $harga_jual  = $conn->real_escape_string($data['harga_jual']);
         $stok        = $conn->real_escape_string($data['stok']);
-        $deskripsi        = $conn->real_escape_string($data['deskripsi']);
+        $deskripsi   = $conn->real_escape_string($data['deskripsi']);
 
         $sql = "INSERT INTO product (nama_product,id_supplier,id_satuan,harga_beli_product, harga_jual_product,stok_product, description) VALUES ('$nama', '$supplier_id', '$satuan_id', '$harga_beli', '$harga_jual', '$stok', '$deskripsi')";
         if ($conn->query($sql) === TRUE) {
