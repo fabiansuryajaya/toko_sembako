@@ -109,7 +109,7 @@ switch ($method) {
             }
 
             // Update stok product
-            $sql = "UPDATE product SET stok_product = stok_product - $jumlah, harga_beli_product = $harga WHERE id_product = $id_produk";
+            $sql = "UPDATE product SET stok_product = stok_product - $jumlah WHERE id_product = $id_produk";
             if ($conn->query($sql) === FALSE) {
                 http_response_code(500);
                 echo json_encode(['error' => 'Gagal update stok product']);
@@ -153,7 +153,7 @@ switch ($method) {
                 exit;
             }
             // Update stok product
-            $sql = "UPDATE product SET stok_product = stok_product - $jumlah, harga_beli_product = $harga WHERE id_product = $id_produk";
+            $sql = "UPDATE product SET stok_product = stok_product - $jumlah WHERE id_product = $id_produk";
             if ($conn->query($sql) === FALSE) {
                 http_response_code(500);
                 echo json_encode(['error' => 'Gagal update stok product']);
