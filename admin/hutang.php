@@ -269,12 +269,12 @@
                                         ${detail.map(item => `
                                             <tr>
                                                 <td colspan="2" style="border:0;padding:0;padding-bottom:0.5mm;text-align:left;">
-                                                    <span style="font-weight:bold;">${item.nama_product} - ${item.nama_satuan}</span>
+                                                    <span style="font-weight:bold;">${item.nama_product}</span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td style="border:0;padding:0;width:60%;text-align:left;">
-                                                    ${item.jumlah_hutang} x ${formatCurrencyIDR(item.harga_hutang)}
+                                                    ${item.jumlah_hutang} ${item.nama_satuan} x ${formatCurrencyIDR(item.harga_hutang)}
                                                 </td>
                                                 <td style="border:0;padding:0;width:40%;text-align:right;padding-right:2mm;">
                                                     ${formatCurrencyIDR(item.jumlah_hutang * item.harga_hutang)}
