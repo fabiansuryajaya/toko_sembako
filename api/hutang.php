@@ -52,7 +52,8 @@ switch ($method) {
                         JOIN product p ON dp.id_produk = p.id_product
                         JOIN satuan s ON p.id_satuan = s.id_satuan
                         JOIN penjualan pe ON dp.id_penjualan = pe.id_penjualan
-                        WHERE dp.id_penjualan = $id_hutang";
+                        WHERE dp.id_penjualan = $id_hutang
+                        ORDER BY p.nama_product asc";
                         
                 $result = $conn->query($sql);
                 if (!$result) {

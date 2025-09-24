@@ -465,10 +465,10 @@ $(document).ready(function () {
 
         const total_bayar = parseFloat(document.getElementById('total_bayar').value) || 0;
 
-        if (total_bayar < total_trx) {
-            alert('Total bayar tidak boleh kurang dari total transaksi.');
-            return;
-        }
+        // if (total_bayar < total_trx) {
+        //     alert('Total bayar tidak boleh kurang dari total transaksi.');
+        //     return;
+        // }
 
         const body = {
             penjualan: penjualanData,
