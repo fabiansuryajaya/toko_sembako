@@ -23,13 +23,8 @@ switch ($method) {
         if ($id_hutang > 0) {
             $sql .= " AND p.id_penjualan = $id_hutang";
         }
-         if (!empty($from_date)) {
-            $sql .= " AND p.created_at >= '$from_date'";
-        }
-
-        if (!empty($to_date)) {
-            $sql .= " AND p.created_at <= '$to_date'";
-        }
+        if (!empty($from_date)) $sql .= " AND DATE_FORMAT(p.created_at, '%Y-%m-%d') >= '$from_date'"; // YYYY-MM-DD
+        if (!empty($to_date))   $sql .= " AND DATE_FORMAT(p.created_at, '%Y-%m-%d') <= '$to_date'"; // YYYY-MM-DD
         $sql .= " ORDER BY p.id_penjualan DESC";
 
         $result = $conn->query($sql);
