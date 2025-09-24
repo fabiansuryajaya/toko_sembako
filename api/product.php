@@ -28,6 +28,7 @@ switch ($method) {
         if (count($where) > 0) {
             $sql .= " WHERE " . implode(" AND ", $where);
         }
+        $sql .= " ORDER BY p.nama_product ASC";
         $result = $conn->query($sql);
 
         $products = [];

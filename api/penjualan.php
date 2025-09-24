@@ -22,6 +22,7 @@ switch ($method) {
         if ($id_penjualan > 0)  $sql .= " AND p.id_penjualan = $id_penjualan";
         if (!empty($from_date)) $sql .= " AND DATE_FORMAT(p.created_at, '%Y-%m-%d') >= '$from_date'"; // YYYY-MM-DD
         if (!empty($to_date))   $sql .= " AND DATE_FORMAT(p.created_at, '%Y-%m-%d') <= '$to_date'"; // YYYY-MM-DD
+        $sql .= " ORDER BY p.created_at DESC";
 
         $result = $conn->query($sql);
         if (!$result) {
@@ -43,7 +44,8 @@ switch ($method) {
                         FROM detail_penjualan dp
                         JOIN product p ON dp.id_produk = p.id_product
                         JOIN satuan s ON p.id_satuan = s.id_satuan
-                        WHERE dp.id_penjualan = $id_penjualan";
+                        WHERE dp.id_penjualan = $id_penjualan
+                        ORDER BY p.nama_product asc";
             } else {
                 http_response_code(400);
                 echo json_encode(['error' => 'ID penjualan tidak diberikan']);
