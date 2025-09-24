@@ -56,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
             item.id = `sidebar-${items}`;
             item.setAttribute('data-page', items);
             item.textContent = group;
-            // loadPage(items);
             item.addEventListener('click', (e) => {
                 e.preventDefault();
+                if (items == null) return;
                 loadPage(items);
             });
             //tes
@@ -104,9 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             links.forEach(l => l.classList.remove('active'));
             link.classList.add('active'); 
-            screenContent.innerHTML = '';
             const page = link.getAttribute('data-page');
-            if (page == "logout") return;   
+            
+            if (page == "logout" || page == null) return;
+            screenContent.innerHTML = '';
             if (page) {
                 // Simpan halaman yang dimuat ke dalam localStorage
                 localStorage.setItem('lastPage', page);

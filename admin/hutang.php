@@ -203,6 +203,94 @@
         fetchMember();
         document.getElementById('filter_btn').addEventListener('click', fetchHutang);
 
+        document.addEventListener('click', async function(e) {
+            if (e.target.classList.contains('strukBtn')) {
+                const idPenjualan = e.target.getAttribute('data-id');
+                const strukModal = document.getElementById('StrukModal');
+                const strukContent = document.getElementById('strukContent');
+                strukContent.innerHTML = 'Memuat...';
+
+                // Ambil detail penjualan
+                try {
+                    const result = await callAPI({ url: `../api/hutang.php?id_hutang=${idPenjualan}&action=detail`, method: 'GET' });
+                    const trx = result.data;
+                    const detail = trx.detail || [];
+
+                    const total_trx = detail.reduce((a,b)=>a+b.jumlah_hutang*b.harga_hutang,0);
+
+                    let html = `
+                        <div style="text-align:center;font-weight:bold;font-size:16px;letter-spacing:1px;margin-bottom:2mm;">
+                            TK. SIDODADI KEDURUS
+                        </div>
+                        <div style="text-align:center;font-size:13px;margin-bottom:1mm;">
+                            Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
+                            Telp/WA: 0851-1746-6153<br>
+                            Email: son27business@gmail.com
+                        </div>
+                        <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                        <div style="font-size:13px;margin-bottom:1mm;text-align:left;">
+                            Tanggal: ${new Date().toLocaleDateString()}<br>
+                            Kasir: ${trx.nama_user}
+                        </div>
+                        <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                        <table style="width:100%;font-size:14px;margin-bottom:2mm;text-align:center;margin-top:0px">
+                            <tbody style="border:0;">
+                                ${detail.map(item => `
+                                    <tr>
+                                        <td colspan="2" style="border:0;padding:0;padding-bottom:0.5mm;text-align:left;">
+                                            <span style="font-weight:bold;">${item.nama_product}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:0;padding:0;width:60%;text-align:left;">
+                                            ${item.jumlah_hutang} ${item.nama_satuan} x ${formatCurrencyIDR(item.harga_hutang)}
+                                        </td>
+                                        <td style="border:0;padding:0;width:40%;text-align:right;padding-right:2mm;">
+                                            ${formatCurrencyIDR(item.jumlah_hutang * item.harga_hutang)}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
+
+                        
+                        <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:right;">
+                            <tr>
+                                <td style="border:0;font-weight:bold;padding-right:5mm;">Total:</td>
+                                <td style="border:0;font-weight:bold;padding-right:5mm;">${formatCurrencyIDR(total_trx)}</td>
+                            </tr>
+                            <tr>
+                                <td style="border:0;font-weight:bold;padding-right:5mm;">Total Ongkir:</td>
+                                <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border:0;font-weight:bold;padding-right:5mm;">Pembayaran:</td>
+                                <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border:0;font-weight:bold;padding-right:5mm;">Kembalian:</td>
+                                <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                            </tr>
+                        </table>
+                        <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
+                            Barang yang dibeli tidak dapat dikembalikan<br>
+                            Simpan nota ini sebagai bukti transaksi
+                        </div>
+                        <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
+                        <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
+                            TERIMA KASIH ATAS KUNJUNGAN ANDA
+                        </div>
+                        <div style="height:8mm;"></div>
+                    `;
+                    strukContent.innerHTML = html;
+                    strukModal.style.display = 'flex';
+                } catch (err) {
+                    strukContent.innerHTML = 'Gagal memuat struk';
+                }
+            }
+        });
+
         // get data hutang
         async function fetchHutang() {
             try {
@@ -234,94 +322,6 @@
                     tbody.appendChild(row);
                 });
                 
-                document.addEventListener('click', async function(e) {
-                    if (e.target.classList.contains('strukBtn')) {
-                        const idPenjualan = e.target.getAttribute('data-id');
-                        const strukModal = document.getElementById('StrukModal');
-                        const strukContent = document.getElementById('strukContent');
-                        strukContent.innerHTML = 'Memuat...';
-
-                        // Ambil detail penjualan
-                        try {
-                            const result = await callAPI({ url: `../api/hutang.php?id_hutang=${idPenjualan}&action=detail`, method: 'GET' });
-                            const trx = result.data;
-                            const detail = trx.detail || [];
-
-                            const total_trx = detail.reduce((a,b)=>a+b.jumlah_hutang*b.harga_hutang,0);
-
-                            let html = `
-                                <div style="text-align:center;font-weight:bold;font-size:16px;letter-spacing:1px;margin-bottom:2mm;">
-                                    TK. SIDODADI KEDURUS
-                                </div>
-                                <div style="text-align:center;font-size:13px;margin-bottom:1mm;">
-                                    Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
-                                    Telp/WA: 0851-1746-6153<br>
-                                    Email: son27business@gmail.com
-                                </div>
-                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <div style="font-size:13px;margin-bottom:1mm;text-align:left;">
-                                    Tanggal: ${new Date().toLocaleDateString()}<br>
-                                    Kasir: ${trx.nama_user}
-                                </div>
-                                <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                                <table style="width:100%;font-size:14px;margin-bottom:2mm;text-align:center;margin-top:0px">
-                                    <tbody style="border:0;">
-                                        ${detail.map(item => `
-                                            <tr>
-                                                <td colspan="2" style="border:0;padding:0;padding-bottom:0.5mm;text-align:left;">
-                                                    <span style="font-weight:bold;">${item.nama_product}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="border:0;padding:0;width:60%;text-align:left;">
-                                                    ${item.jumlah_hutang} ${item.nama_satuan} x ${formatCurrencyIDR(item.harga_hutang)}
-                                                </td>
-                                                <td style="border:0;padding:0;width:40%;text-align:right;padding-right:2mm;">
-                                                    ${formatCurrencyIDR(item.jumlah_hutang * item.harga_hutang)}
-                                                </td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                                <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
-
-                                
-                               <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:right;">
-                                    <tr>
-                                        <td style="border:0;font-weight:bold;padding-right:5mm;">Total:</td>
-                                        <td style="border:0;font-weight:bold;padding-right:5mm;">${formatCurrencyIDR(total_trx)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border:0;font-weight:bold;padding-right:5mm;">Total Ongkir:</td>
-                                        <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border:0;font-weight:bold;padding-right:5mm;">Pembayaran:</td>
-                                        <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border:0;font-weight:bold;padding-right:5mm;">Kembalian:</td>
-                                        <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
-                                    </tr>
-                                </table>
-                                <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
-                                    Barang yang dibeli tidak dapat dikembalikan<br>
-                                    Simpan nota ini sebagai bukti transaksi
-                                </div>
-                                <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
-                                <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
-                                    TERIMA KASIH ATAS KUNJUNGAN ANDA
-                                </div>
-                                <div style="height:8mm;"></div>
-                            `;
-                            strukContent.innerHTML = html;
-                            strukModal.style.display = 'flex';
-                        } catch (err) {
-                            strukContent.innerHTML = 'Gagal memuat struk';
-                        }
-                    }
-                });
-
                 // Tutup modal struk
                 document.getElementById('closeStrukModalBtn').onclick = function() {
                     document.getElementById('StrukModal').style.display = 'none';
