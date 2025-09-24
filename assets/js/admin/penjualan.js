@@ -46,6 +46,182 @@ $(document).ready(function () {
 
     document.getElementById('filter_btn').addEventListener('click', fetchPenjualan);
 
+    // Handle tombol Struk
+    document.addEventListener('click', async function(e) {
+        if (e.target.classList.contains('strukBtn')) {
+            const idPenjualan = e.target.getAttribute('data-id');
+            const strukModal = document.getElementById('StrukModal');
+            const strukContent = document.getElementById('strukContent');
+            strukContent.innerHTML = 'Memuat...';
+
+            // Ambil detail penjualan
+            try {
+                const result = await callAPI({ url: `../api/penjualan.php?id_penjualan=${idPenjualan}&action=detail`, method: 'GET' });
+                const trx = result.data;
+                const detail = trx.detail || [];
+
+                const total_trx = detail.reduce((a,b)=>a+b.jumlah_penjualan*b.harga_penjualan,0);
+
+                // let html = `
+                //     <div style="text-align:center;font-weight:bold;font-size:16px;letter-spacing:1px;margin-bottom:2mm;">
+                //         TK. SIDODADI KEDURUS
+                //     </div>
+                //     <div style="text-align:center;font-size:13px;margin-bottom:1mm;">
+                //         Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
+                //         Telp/WA: 0851-1746-6153<br>
+                //         Email: son27business@gmail.com
+                //     </div>
+                //     <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                //     <div style="font-size:13px;margin-bottom:1mm;text-align:left;">
+                //         Tanggal: ${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString().padStart(11, "0").substring(0,5)}<br>
+                //         Kasir: ${trx.nama_user}
+                //     </div>
+                //     <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                //     <table style="width:100%;font-size:14px;margin-bottom:2mm;text-align:center;margin-top:0px">
+                //         <tbody style="border:0;">
+                //             ${detail.map(item => `
+                //                 <tr>
+                //                     <td colspan="2" style="border:0;padding:0;padding-bottom:0.5mm;text-align:left;">
+                //                         <span style="font-weight:bold;">${item.nama_product}</span>
+                //                     </td>
+                //                 </tr>
+                //                 <tr>
+                //                     <td style="border:0;padding:0;width:60%;text-align:left;">
+                //                         ${item.jumlah_penjualan} x ${formatCurrencyIDR(item.harga_penjualan)}
+                //                     </td>
+                //                     <td style="border:0;padding:0;width:40%;text-align:right;padding-right:2mm;">
+                //                         ${formatCurrencyIDR(item.jumlah_penjualan * item.harga_penjualan)}
+                //                     </td>
+                //                 </tr>
+                //             `).join('')}
+                //         </tbody>
+                //     </table>
+                //     <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
+                //     <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;padding-right:2mm;">
+                //         Total: ${formatCurrencyIDR(total_trx)}
+                //     </div>
+                //     <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;padding-right:2mm;">
+                //         Pembayaran: ${formatCurrencyIDR(trx.total_pembayaran)}
+                //     </div>
+                //     <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:2mm;padding-right:2mm;">
+                //         Kembalian: ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}
+                //     </div>
+                //     <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
+                //         Barang yang dibeli tidak dapat dikembalikan<br>
+                //         Simpan nota ini sebagai bukti transaksi
+                //     </div>
+                //     <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
+                //     <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
+                //         TERIMA KASIH ATAS KUNJUNGAN ANDA
+                //     </div>
+                //     <div style="height:8mm;"></div>
+                // `;
+                let html = `
+                    <div style="text-align:center;font-weight:bold;font-size:15px;letter-spacing:1px;margin-bottom:2mm;">
+                        TK. SIDODADI KEDURUS
+                    </div>
+                    <div style="text-align:center;font-size:15px;margin-bottom:1mm;">
+                        Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
+                        Telp/WA: 0851-1746-6153<br>
+                        Email: son27business@gmail.com
+                    </div>
+                    <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                    <div style="font-size:16px;margin-bottom:1mm;text-align:left;">
+                        Tanggal: ${new Date().toLocaleDateString()}<br>
+                        Kasir: ${trx.nama_user}
+                    </div>
+                    <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
+                    <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:center;margin-top:0px">
+                        <tbody style="border:0;">
+                            ${detail.map(item => `
+                                <tr>
+                                    <td colspan="2" style="border:0;padding:0;padding-bottom:0.5mm;text-align:left;">
+                                        <span style="font-weight:bold;">${item.nama_product}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:0;padding:0;width:60%;text-align:left;">
+                                        ${item.jumlah_penjualan} ${item.nama_satuan} x ${formatCurrencyIDR(item.harga_penjualan)}
+                                    </td>
+                                    <td style="border:0;padding:0;width:40%;text-align:right;padding-right:5mm;">
+                                        ${formatCurrencyIDR(item.jumlah_penjualan * item.harga_penjualan)}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
+                    <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:right;">
+                        <tr>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">Total:</td>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">${formatCurrencyIDR(total_trx)}</td>
+                        </tr>
+                        <tr>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">Pembayaran:</td>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">Kembalian:</td>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                        </tr>
+                    </table>
+                    <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
+                        Barang yang dibeli tidak dapat dikembalikan
+                    </div>
+                    <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
+                    <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
+                        TERIMA KASIH ATAS KUNJUNGAN ANDA
+                    </div>
+                    <div style="height:8mm;"></div>
+                `;
+                strukContent.innerHTML = html;
+                strukModal.style.display = 'flex';
+            } catch (err) {
+                strukContent.innerHTML = 'Gagal memuat struk';
+            }
+        }else if (e.target.classList.contains('editBtn')) {
+            const idPenjualan = e.target.getAttribute('data-id');
+            document.getElementById('edit_penjualan_id').value = idPenjualan;
+            try {
+                // Fetch detail penjualan
+                const params = { id_penjualan: idPenjualan, action: 'detail' };
+                const queryParams = new URLSearchParams(params).toString();
+                callAPI({ url: `../api/penjualan.php?${queryParams}`, method: 'GET' })
+                    .then(result => {
+                        const detailData = result.data.detail;
+                        // show in trx table
+                        detailData.forEach(detail => {
+                            const detailRow = document.createElement('tr');
+                            // add to table
+                            detailRow.setAttribute('data-id', detail.id_produk);
+                            detailRow.innerHTML = `
+                                <td>
+                                    <button type="button" class="removeBtn" onclick="deleteRow(this)" style="background: none; border: none; color: red; cursor: pointer;">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                                <td>${detail.nama_product}</td>
+                                <td>${detail.nama_satuan}</td>
+                                <td><input type="number" ${edit_price ? '' : 'disabled'} class="harga_beli" value="${detail.harga_penjualan}" min="0"></td>
+                                <td><input type="number" class="quantity" value="${detail.jumlah_penjualan}" min="1"></td>
+                                <td class="total">${formatCurrencyIDR(detail.harga_penjualan * detail.jumlah_penjualan)}</td>
+                            `;
+                            table.appendChild(detailRow);
+                        });
+                        updateGrandTotal(); // Update grand total after adding a new product
+
+                        const modal = document.getElementById('PenjualanModal');
+                        modal.style.display = 'flex';
+                    })
+                    .catch(error => {
+                        console.error('Gagal memuat detail penjualan:', error);
+                    });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    });
+
     // get data penjualan
     async function fetchPenjualan() {
         try {
@@ -69,146 +245,11 @@ $(document).ready(function () {
                     <td>${item.nama_user}</td>
                     <td>
                         <button class="detailBtn" data-id="${item.id_penjualan}">Detail</button>
-                        <button class="strukBtn" data-id="${item.id_penjualan}">Struk</button>
+                        <button class="strukBtn"  data-id="${item.id_penjualan}">Struk</button>
+                        <button class="editBtn"   data-id="${item.id_penjualan}">Edit</button>
                     </td>
                 `;
                 tbody.appendChild(row);
-            });
-
-            // Handle tombol Struk
-            document.addEventListener('click', async function(e) {
-                if (e.target.classList.contains('strukBtn')) {
-                    const idPenjualan = e.target.getAttribute('data-id');
-                    const strukModal = document.getElementById('StrukModal');
-                    const strukContent = document.getElementById('strukContent');
-                    strukContent.innerHTML = 'Memuat...';
-
-                    // Ambil detail penjualan
-                    try {
-                        const result = await callAPI({ url: `../api/penjualan.php?id_penjualan=${idPenjualan}&action=detail`, method: 'GET' });
-                        const trx = result.data;
-                        const detail = trx.detail || [];
-
-                        const total_trx = detail.reduce((a,b)=>a+b.jumlah_penjualan*b.harga_penjualan,0);
-
-                        // let html = `
-                        //     <div style="text-align:center;font-weight:bold;font-size:16px;letter-spacing:1px;margin-bottom:2mm;">
-                        //         TK. SIDODADI KEDURUS
-                        //     </div>
-                        //     <div style="text-align:center;font-size:13px;margin-bottom:1mm;">
-                        //         Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
-                        //         Telp/WA: 0851-1746-6153<br>
-                        //         Email: son27business@gmail.com
-                        //     </div>
-                        //     <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                        //     <div style="font-size:13px;margin-bottom:1mm;text-align:left;">
-                        //         Tanggal: ${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString().padStart(11, "0").substring(0,5)}<br>
-                        //         Kasir: ${trx.nama_user}
-                        //     </div>
-                        //     <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                        //     <table style="width:100%;font-size:14px;margin-bottom:2mm;text-align:center;margin-top:0px">
-                        //         <tbody style="border:0;">
-                        //             ${detail.map(item => `
-                        //                 <tr>
-                        //                     <td colspan="2" style="border:0;padding:0;padding-bottom:0.5mm;text-align:left;">
-                        //                         <span style="font-weight:bold;">${item.nama_product}</span>
-                        //                     </td>
-                        //                 </tr>
-                        //                 <tr>
-                        //                     <td style="border:0;padding:0;width:60%;text-align:left;">
-                        //                         ${item.jumlah_penjualan} x ${formatCurrencyIDR(item.harga_penjualan)}
-                        //                     </td>
-                        //                     <td style="border:0;padding:0;width:40%;text-align:right;padding-right:2mm;">
-                        //                         ${formatCurrencyIDR(item.jumlah_penjualan * item.harga_penjualan)}
-                        //                     </td>
-                        //                 </tr>
-                        //             `).join('')}
-                        //         </tbody>
-                        //     </table>
-                        //     <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
-                        //     <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;padding-right:2mm;">
-                        //         Total: ${formatCurrencyIDR(total_trx)}
-                        //     </div>
-                        //     <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:1mm;padding-right:2mm;">
-                        //         Pembayaran: ${formatCurrencyIDR(trx.total_pembayaran)}
-                        //     </div>
-                        //     <div style="font-size:13px;font-weight:bold;text-align:right;margin-bottom:2mm;padding-right:2mm;">
-                        //         Kembalian: ${formatCurrencyIDR(trx.total_pembayaran - total_trx)}
-                        //     </div>
-                        //     <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
-                        //         Barang yang dibeli tidak dapat dikembalikan<br>
-                        //         Simpan nota ini sebagai bukti transaksi
-                        //     </div>
-                        //     <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
-                        //     <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
-                        //         TERIMA KASIH ATAS KUNJUNGAN ANDA
-                        //     </div>
-                        //     <div style="height:8mm;"></div>
-                        // `;
-                        let html = `
-                            <div style="text-align:center;font-weight:bold;font-size:15px;letter-spacing:1px;margin-bottom:2mm;">
-                                TK. SIDODADI KEDURUS
-                            </div>
-                            <div style="text-align:center;font-size:15px;margin-bottom:1mm;">
-                                Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
-                                Telp/WA: 0851-1746-6153<br>
-                                Email: son27business@gmail.com
-                            </div>
-                            <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                            <div style="font-size:16px;margin-bottom:1mm;text-align:left;">
-                                Tanggal: ${new Date().toLocaleDateString()}<br>
-                                Kasir: ${trx.nama_user}
-                            </div>
-                            <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                            <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:center;margin-top:0px">
-                                <tbody style="border:0;">
-                                    ${detail.map(item => `
-                                        <tr>
-                                            <td colspan="2" style="border:0;padding:0;padding-bottom:0.5mm;text-align:left;">
-                                                <span style="font-weight:bold;">${item.nama_product} - ${item.nama_satuan}</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border:0;padding:0;width:60%;text-align:left;">
-                                                ${item.jumlah_penjualan} x ${formatCurrencyIDR(item.harga_penjualan)}
-                                            </td>
-                                            <td style="border:0;padding:0;width:40%;text-align:right;padding-right:5mm;">
-                                                ${formatCurrencyIDR(item.jumlah_penjualan * item.harga_penjualan)}
-                                            </td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                            <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
-                            <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:right;">
-                                <tr>
-                                    <td style="border:0;font-weight:bold;padding-right:5mm;">Total:</td>
-                                    <td style="border:0;font-weight:bold;padding-right:5mm;">${formatCurrencyIDR(total_trx)}</td>
-                                </tr>
-                                <tr>
-                                    <td style="border:0;font-weight:bold;padding-right:5mm;">Pembayaran:</td>
-                                    <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
-                                </tr>
-                                <tr>
-                                    <td style="border:0;font-weight:bold;padding-right:5mm;">Kembalian:</td>
-                                    <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
-                                </tr>
-                            </table>
-                            <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
-                                Barang yang dibeli tidak dapat dikembalikan
-                            </div>
-                            <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
-                            <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
-                                TERIMA KASIH ATAS KUNJUNGAN ANDA
-                            </div>
-                            <div style="height:8mm;"></div>
-                        `;
-                        strukContent.innerHTML = html;
-                        strukModal.style.display = 'flex';
-                    } catch (err) {
-                        strukContent.innerHTML = 'Gagal memuat struk';
-                    }
-                }
             });
 
             // Tutup modal struk
@@ -431,13 +472,18 @@ $(document).ready(function () {
 
         const body = {
             penjualan: penjualanData,
-            total_bayar: total_bayar
+            total_bayar: total_bayar,
         }
+        const edit_penjualan_id = document.getElementById('edit_penjualan_id').value;
+        if (edit_penjualan_id != '') body.edit_penjualan_id = edit_penjualan_id;
+
+        let method = 'POST';
+        if (edit_penjualan_id != '') method = 'PUT';
 
         try {
             const result = await callAPI({
                 url: '../api/penjualan.php',
-                method: 'POST',
+                method,
                 body
             });
             if (result.status !== 0) {
@@ -459,6 +505,7 @@ $(document).ready(function () {
     createProductBtn.addEventListener('click', () => {
         const modal = document.getElementById('PenjualanModal');
         modal.style.display = 'flex';
+        document.getElementById('edit_penjualan_id').value = '';
     });
 
     // Update grand total and total kembalian

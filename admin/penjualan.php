@@ -32,6 +32,7 @@
     <!-- Popup modal -->
     <div id="PenjualanModal" class="modal" style="display: none;">
         <div class="modal-content" style="position: relative; padding-bottom: 64px;">
+            <input type="hidden" id="edit_penjualan_id" />
             <h2>Buat Barang</h2>
             <div style="margin-bottom: 16px; border-bottom: 1px solid #ccc; padding-bottom: 8px;">
                 <label for="product_id">Nama Barang:</label>
@@ -40,12 +41,12 @@
                 <button type="button" id="addProductBtn">Add</button>
                 <button type="button" id="editPriceBtn">Ganti Harga</button>
             </div>
+
             <table border="1" cellspacing="0" cellpadding="8" id="productTable">
                 <thead>
                     <tr>
                         <td style="width: 5%;">Action</td>
                         <td>Nama</td>
-                        <!-- <td>Supplier</td> -->
                         <td>Satuan</td>
                         <td>Harga Beli</td>
                         <td>Quantity</td>
