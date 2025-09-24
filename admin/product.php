@@ -62,6 +62,12 @@
                 <label for="deskripsi">Deskripsi:</label>
                 <textarea id="deskripsi" name="deskripsi" rows="4" required></textarea>
 
+                <!-- checkbox status -->
+                <div style="display: flex; align-items: center;">
+                    <label for="status">Status:</label>
+                    <input type="checkbox" id="cb_status" name="status">
+                </div>
+
                 <button type="button" id="closeModalBtn">Batal</button>
                 <button type="submit">Simpan</button>
                
@@ -220,6 +226,7 @@
                                         ${product.status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
                                     </span></span>
                                 </div>
+                                
                                 <div style="margin-bottom: 10px;">
                                     <span style="font-weight:bold; width:140px; display:inline-block; vertical-align:top;">Deskripsi</span>
                                     <span>: <div style="background:#f8f9fa; border-radius:5px; padding:8px; margin-top:2px; display:inline-block;">
@@ -261,7 +268,8 @@
                     harga_beli: document.getElementById('harga_beli').value,
                     harga_jual: document.getElementById('harga_jual').value,
                     stok: document.getElementById('stok').value,
-                    deskripsi: document.getElementById('deskripsi').value
+                    deskripsi: document.getElementById('deskripsi').value,
+                    status: document.getElementById('cb_status').checked ? 'Y' : 'N'
                 };
                 if (action === "edit" && editProductId) {
                     body.id = editProductId;
@@ -297,6 +305,11 @@
                     document.getElementById('harga_jual').value   = result.data[0].harga_jual_product;
                     document.getElementById('stok').value         = result.data[0].stok_product;
                     document.getElementById('deskripsi').value    = result.data[0].description;
+                    if (result.data[0].status === 'Y') {
+                        document.getElementById('cb_status').checked = true;
+                    } else {
+                        document.getElementById('cb_status').checked = false;
+                    }
 
                     $("#supplier_id").change();
                     $("#satuan_id").change();
