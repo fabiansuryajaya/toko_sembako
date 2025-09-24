@@ -69,7 +69,7 @@
                 <label for="total_kembalian" style="margin-bottom:0;">Total Kembalian:</label>
                 <input type="text" id="total_kembalian" name="total_kembalian" value="0" readonly style="width: 120px; padding: 4px; background: #f5f5f5;">
             </div>
-            <div style="position: absolute; right: 16px; bottom: 16px; text-align: right;">
+            <div style="right: 16px; bottom: 16px; text-align: right;">
                 <button type="button" id="closeModalBtn">Batal</button>
                 <button type="button" id="savePenjualanBtn">Simpan</button>
             </div>
@@ -100,7 +100,7 @@
     <!-- Modal Struk -->
     <div id="StrukModal" class="modal" style="display:none;">
         <div class="modal-content" style="width:80mm;min-width:80mm;max-width:80mm;padding:8px;">
-            <div id="strukContent" style="font-size:14px;font-family:arial;"></div>
+            <div id="strukContent" style="font-size:14px;font-family:arial;max-height:80vh;overflow-y:auto;"></div>
             <div style="text-align:right;margin-top:8px;">
                 <button type="button" id="printStrukBtn">Cetak</button>
                 <button type="button" id="closeStrukModalBtn">Tutup</button>
