@@ -89,11 +89,24 @@
 <script src="../assets/js/library/select2.min.js"></script>
 
 <script>
+    // #status on change
+    $('#status').on('change', function() {
+        // jika checked maka value = 'Y' else 'N'
+        if ($(this).is(':checked')) {
+            // save to localStorage
+            localStorage.setItem('product_status', 'Y');
+        } else {
+            localStorage.setItem('product_status', 'N');
+        }
+    });
+
     // on document ready
     $(document).ready(function() {
         let action = "create";
         let editProductId = null;
         const role = getRole();
+        const product_status = localStorage.getItem('product_status') || 'Y';
+        $('#status').prop('checked', product_status === 'Y');
 
         if (role !== 'admin') {
             $('#createProductBtn').hide();
