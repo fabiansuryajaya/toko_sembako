@@ -371,7 +371,7 @@
                                     detailRow.innerHTML = `
                                         <td>${detail.id_produk}</td>
                                         <td>${detail.nama_product}</td>
-                                        <td>${detail.jumlah_hutang}</td>
+                                        <td>${detail.jumlah_hutang} ${detail.nama_satuan}</td>
                                         <td>${formatCurrencyIDR(detail.harga_hutang)}</td>
                                     `;
                                     detailTableBody.appendChild(detailRow);
