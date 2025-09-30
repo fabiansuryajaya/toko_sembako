@@ -75,16 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const icon = this.querySelector('i.fa');
             if (submenu) {
                 // Tutup semua submenu & reset ikon
-                document.querySelectorAll('.menu-group .submenu').forEach(function(otherSubmenu) {
-                    if (otherSubmenu !== submenu) {
-                        otherSubmenu.style.display = 'none';
-                        const otherIcon = otherSubmenu.parentElement.querySelector('.menu-toggle i.fa');
-                        if (otherIcon) {
-                            otherIcon.classList.add('fa-chevron-right');
-                            otherIcon.classList.remove('fa-chevron-down');
-                        }
-                    }
-                });
+                // document.querySelectorAll('.menu-group .submenu').forEach(function(otherSubmenu) {
+                //     if (otherSubmenu !== submenu) {
+                //         otherSubmenu.style.display = 'none';
+                //         const otherIcon = otherSubmenu.parentElement.querySelector('.menu-toggle i.fa');
+                //         if (otherIcon) {
+                //             otherIcon.classList.add('fa-chevron-right');
+                //             otherIcon.classList.remove('fa-chevron-down');
+                //         }
+                //     }
+                // });
                 // Toggle submenu yang diklik
                 const isOpen = submenu.style.display !== 'none';
                 submenu.style.display = isOpen ? 'none' : 'block';

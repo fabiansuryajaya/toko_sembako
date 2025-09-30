@@ -116,6 +116,10 @@ $(document).ready(function () {
                 //     </div>
                 //     <div style="height:8mm;"></div>
                 // `;
+
+                const total_bayar     = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran)             : "";
+                const total_kembalian = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran - total_trx) : "";
+
                 let html = `
                     <div style="text-align:center;font-weight:bold;font-size:15px;letter-spacing:1px;margin-bottom:2mm;">
                         TK. SIDODADI KEDURUS
@@ -158,11 +162,11 @@ $(document).ready(function () {
                         </tr>
                         <tr>
                             <td style="border:0;font-weight:bold;padding-right:5mm;">Pembayaran:</td>
-                            <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">${total_bayar}</td>
                         </tr>
                         <tr>
                             <td style="border:0;font-weight:bold;padding-right:5mm;">Kembalian:</td>
-                            <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">${total_kembalian}</td>
                         </tr>
                     </table>
                     <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
