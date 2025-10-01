@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "Penjualan" : "penjualan",
             "Hutang" : "hutang"
         },
+        "Report" : "report",
         "Setting" : "setting",
         "Logout" : "logout"
     }
