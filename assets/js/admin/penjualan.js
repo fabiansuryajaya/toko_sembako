@@ -186,6 +186,8 @@ $(document).ready(function () {
         }else if (e.target.classList.contains('editBtn')) {
             const idPenjualan = e.target.getAttribute('data-id');
             document.getElementById('edit_penjualan_id').value = idPenjualan;
+
+            table.innerHTML = '';
             try {
                 // Fetch detail penjualan
                 const params = { id_penjualan: idPenjualan, action: 'detail' };
