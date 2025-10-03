@@ -8,7 +8,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case 'GET':
         $query_data = $_GET;
-        $product_id = isset($query_data['product_id']) ? (int)$query_data['product_id'] : 0;
+        $product_id = isset($query_data['product_id']) ? explode($query_data['product_id'], ',') : [];
         $from_date  = isset($query_data['from_date'])  ? $conn->real_escape_string($query_data['from_date']) : ''; // YYYY-MM-DD
         $to_date    = isset($query_data['to_date'])    ? $conn->real_escape_string($query_data['to_date'])   : ''; // YYYY-MM-DD
         
@@ -19,9 +19,9 @@ switch ($method) {
                 JOIN product pr ON dp.id_produk = pr.id_product
                 JOIN satuan s ON pr.id_satuan = s.id_satuan
                 WHERE p.status = 'Y'";
-        if ($product_id > 0)    $sql .= " AND dp.id_produk = $product_id";
-        if (!empty($from_date)) $sql .= " AND DATE_FORMAT(p.created_at, '%Y-%m-%d') >= '$from_date'"; // YYYY-MM-DD
-        if (!empty($to_date))   $sql .= " AND DATE_FORMAT(p.created_at, '%Y-%m-%d') <= '$to_date'"; // YYYY-MM-DD
+        if (!empty($product_id)) $sql .= " AND dp.id_produk IN (" . implode(',', $product_id) . ")";
+        if (!empty($from_date))  $sql .= " AND DATE_FORMAT(p.created_at, '%Y-%m-%d') >= '$from_date'"; // YYYY-MM-DD
+        if (!empty($to_date))    $sql .= " AND DATE_FORMAT(p.created_at, '%Y-%m-%d') <= '$to_date'"; // YYYY-MM-DD
         $sql .= " GROUP BY pr.nama_product, dp.harga_penjualan ORDER BY pr.nama_product ASC";
 
         $result = $conn->query($sql);

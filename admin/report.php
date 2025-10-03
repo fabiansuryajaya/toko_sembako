@@ -11,7 +11,7 @@
 
             <!-- product -->
             <label for="product_id">Nama Barang:</label>
-            <select id="product_id" name="product_id" style="width: 200px;">
+            <select id="product_id" name="product_id" style="width: 200px;" multiple>
                 <option value="">Semua</option>
             </select>
         </div>
@@ -74,9 +74,7 @@
                 // Initialize Select2 for product select
                 $("#product_id").select2({
                     placeholder: "Pilih Barang",
-                    allowClear: true,
-                    multiple: true,
-                    closeOnSelect: false
+                    allowClear: true
                 });
             } catch (error) {
                 console.error('Gagal memuat barang:', error);
@@ -91,7 +89,9 @@
                 if (start_date.value) params.append('from_date', start_date.value);
                 if (to_date.value)    params.append('to_date', to_date.value);
                 if (document.getElementById('product_id').value) 
-                    params.append('product_id', document.getElementById('product_id').value);
+                    params.append('product_id', $("#product_id").val().join(','));
+
+
 
                 let grand_total = 0;
                 const result = await callAPI({ url: '../api/report.php?' + params.toString(), method: 'GET' });
