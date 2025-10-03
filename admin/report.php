@@ -89,10 +89,8 @@
                 if (start_date.value) params.append('from_date', start_date.value);
                 if (to_date.value)    params.append('to_date', to_date.value);
                 if (document.getElementById('product_id').value) 
-                    params.append('product_id', $("#product_id").val().join(','));
-
-
-
+                    params.append('product_id', $("#product_id").val());
+                
                 let grand_total = 0;
                 const result = await callAPI({ url: '../api/report.php?' + params.toString(), method: 'GET' });
                 reportTable.innerHTML = '';
