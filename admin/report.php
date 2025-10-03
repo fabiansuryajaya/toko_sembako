@@ -74,7 +74,9 @@
                 // Initialize Select2 for product select
                 $("#product_id").select2({
                     placeholder: "Pilih Barang",
-                    allowClear: true
+                    allowClear: true,
+                    multiple: true,
+                    closeOnSelect: false
                 });
             } catch (error) {
                 console.error('Gagal memuat barang:', error);
