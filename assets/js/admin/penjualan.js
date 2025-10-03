@@ -510,6 +510,10 @@ $(document).ready(function () {
         const modal = document.getElementById('PenjualanModal');
         modal.style.display = 'flex';
         document.getElementById('edit_penjualan_id').value = '';
+        document.getElementById('total_bayar').value = '';
+        document.getElementById('grand_total').value = '';
+        document.getElementById('total_kembalian').value = '';
+        table.innerHTML = '';
     });
 
     // Update grand total and total kembalian
