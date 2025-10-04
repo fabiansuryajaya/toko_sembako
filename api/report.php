@@ -6,11 +6,13 @@ header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
-    case 'GET':
-        $query_data = $_GET;
-        $product_id = isset($query_data['product_id']) ? explode($query_data['product_id'], ',') : [];
-        $from_date  = isset($query_data['from_date'])  ? $conn->real_escape_string($query_data['from_date']) : ''; // YYYY-MM-DD
-        $to_date    = isset($query_data['to_date'])    ? $conn->real_escape_string($query_data['to_date'])   : ''; // YYYY-MM-DD
+    case 'POST':
+        // Tambah product baru
+        $data = json_decode(file_get_contents('php://input'), true);
+    
+        $product_id = isset($data['product_id']) ? explode( ',',$data['product_id']) : [];
+        $from_date  = isset($data['from_date'])  ? $conn->real_escape_string($data['from_date']) : ''; // YYYY-MM-DD
+        $to_date    = isset($data['to_date'])    ? $conn->real_escape_string($data['to_date'])   : ''; // YYYY-MM-DD
         
         // data penjualan
         $sql = "SELECT pr.nama_product, sum(dp.jumlah_penjualan) as total_jumlah, sum(dp.harga_penjualan * dp.jumlah_penjualan) as total_pembayaran, s.nama_satuan, dp.harga_penjualan
@@ -37,8 +39,7 @@ switch ($method) {
 
         echo json_encode($data);
         break;
-
-    case 'POST':
+    case 'GET':
     case 'PUT':
     default:
         http_response_code(405);

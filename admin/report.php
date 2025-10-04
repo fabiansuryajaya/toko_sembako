@@ -85,14 +85,17 @@
         const reportTable = document.querySelector('.product-page tbody');
         async function fetchReport() {
             try {
-                const params = new URLSearchParams();
-                if (start_date.value) params.append('from_date', start_date.value);
-                if (to_date.value)    params.append('to_date', to_date.value);
-                if (document.getElementById('product_id').value) 
-                    params.append('product_id', $("#product_id").val());
+                const body = {
+                    from_date: start_date.value,
+                    to_date: to_date.value
+                }
+                if (document.getElementById('product_id').value)
+                    body.product_id = $("#product_id").val().join(",");
+
+
                 
                 let grand_total = 0;
-                const result = await callAPI({ url: '../api/report.php?' + params.toString(), method: 'GET' });
+                const result = await callAPI({ url: '../api/report.php', method: 'POST', body });
                 reportTable.innerHTML = '';
                 result.data.forEach(report => {
                     const tr = document.createElement('tr');
