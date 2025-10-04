@@ -280,7 +280,6 @@ $(document).ready(function () {
                         <style>
                             /* Gaya untuk mode tampilan */
                             body {
-                                font-family: monospace;
                                 font-size: 16px;
                             }
 
@@ -288,7 +287,6 @@ $(document).ready(function () {
                             @media print {
                                 /* Mengatur ukuran kertas menjadi 80mm dengan tinggi otomatis */
                                 @page {
-                                    font-family: monospace;
                                     size: 80mm auto;
                                     margin: 0;
                                     padding:0;

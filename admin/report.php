@@ -92,8 +92,6 @@
                 if (document.getElementById('product_id').value)
                     body.product_id = $("#product_id").val().join(",");
 
-
-                
                 let grand_total = 0;
                 const result = await callAPI({ url: '../api/report.php', method: 'POST', body });
                 reportTable.innerHTML = '';

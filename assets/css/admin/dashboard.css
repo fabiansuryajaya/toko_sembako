@@ -258,3 +258,10 @@ select {
 .submenu li a {
     padding-left: 12px;
 }
+
+@media print {
+    * {
+        margin: 0;
+        padding: 0;
+    }
+}
