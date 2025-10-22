@@ -214,6 +214,7 @@ $(document).ready(function () {
                             `;
                             table.appendChild(detailRow);
                         });
+                        document.getElementById('total_bayar').value = (result.data.total_pembayaran);
                         updateGrandTotal(); // Update grand total after adding a new product
 
                         const modal = document.getElementById('PenjualanModal');
@@ -290,6 +291,7 @@ $(document).ready(function () {
                                     size: 80mm auto;
                                     margin: 0;
                                     padding:0;
+                                    font-family:calibri;
                                 }
 
                                 /* Memastikan body memiliki lebar yang sama dengan kertas */

@@ -110,7 +110,7 @@
     <!-- Modal Struk -->
     <div id="StrukModal" class="modal" style="display:none;">
         <div class="modal-content" style="width:58mm;min-width:58mm;max-width:58mm;padding:8px;">
-            <div id="strukContent" style="font-size:11px;font-family:Calibri;"></div>
+            <div id="strukContent" style="font-size:11px;font-family:calibri;"></div>
             <div style="text-align:right;margin-top:8px;">
                 <button type="button" id="printStrukBtn">Cetak</button>
                 <button type="button" id="closeStrukModalBtn">Tutup</button>
@@ -338,7 +338,7 @@
                             <title>Struk Penjualan</title>
                             <style>
                                 @media print {
-                                    @page { size: 58mm ${height_content}px ; margin: 0; }
+                                    @page { size: 58mm ${height_content}px ; margin: 0; font-family:calibri; }
                                     body { max-width:58mm; margin:0; }
                                 }
                             </style>

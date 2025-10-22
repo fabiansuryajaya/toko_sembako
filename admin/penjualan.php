@@ -100,7 +100,7 @@
     <!-- Modal Struk -->
     <div id="StrukModal" class="modal" style="display:none;">
         <div class="modal-content" style="width:80mm;min-width:80mm;max-width:80mm;padding:8px;">
-            <div id="strukContent" style="font-size:14px;font-family:arial;max-height:80vh;overflow-y:auto;"></div>
+            <div id="strukContent" style="font-size:14px;font-family:calibri;max-height:80vh;overflow-y:auto;"></div>
             <div style="text-align:right;margin-top:8px;">
                 <button type="button" id="printStrukBtn">Cetak</button>
                 <button type="button" id="closeStrukModalBtn">Tutup</button>
