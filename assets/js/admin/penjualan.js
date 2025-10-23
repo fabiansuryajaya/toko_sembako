@@ -174,7 +174,7 @@ $(document).ready(function () {
                     </div>
                     <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
                     <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
-                        TERIMA KASIH ATAS KUNJUNGAN ANDA
+                        TERIMA KASIH ATAS PESANANNYA! DITUNGGU ORDER BERIKUTNYA
                     </div>
                     <div style="height:8mm;"></div>
                 `;
@@ -366,6 +366,28 @@ $(document).ready(function () {
 
     fetchPenjualan();
 
+    async function fetchUsersPegawai() {
+        try {
+            const result = await callAPI({ url: '../api/user.php', method: 'GET' });
+            const userSelect = document.getElementById('user_id');
+            userSelect.innerHTML = '<option value="">Pilih User</option>';
+            result.data.data.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = user.username;
+                userSelect.appendChild(option);
+            });
+            // Aktifkan Select2 setelah isi data
+            $("#user_id").select2({
+                placeholder: "Pilih User",
+                allowClear: true
+            });
+        } catch (error) {
+            console.error('Gagal memuat user:', error);
+        }
+    }
+    fetchUsersPegawai();
+
     // closeDetailModalBtn
     const closeDetailModalBtn = document.getElementById('closeDetailModalBtn');
     closeDetailModalBtn.addEventListener('click', () => {
@@ -479,6 +501,7 @@ $(document).ready(function () {
         const body = {
             penjualan: penjualanData,
             total_bayar: total_bayar,
+            kasir_id: $('#user_id').val()
         }
         const edit_penjualan_id = document.getElementById('edit_penjualan_id').value;
         if (edit_penjualan_id != '') body.edit_penjualan_id = edit_penjualan_id;

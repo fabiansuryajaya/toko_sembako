@@ -109,7 +109,7 @@
 
     <!-- Modal Struk -->
     <div id="StrukModal" class="modal" style="display:none;">
-        <div class="modal-content" style="width:58mm;min-width:58mm;max-width:58mm;padding:8px;">
+        <div class="modal-content" style="width:80mm;min-width:80mm;max-width:80mm;padding:8px;">
             <div id="strukContent" style="font-size:11px;font-family:calibri;"></div>
             <div style="text-align:right;margin-top:8px;">
                 <button type="button" id="printStrukBtn">Cetak</button>
@@ -253,8 +253,6 @@
                             </tbody>
                         </table>
                         <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
-
-                        
                         <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:right;">
                             <tr>
                                 <td style="border:0;font-weight:bold;padding-right:5mm;">Total:</td>
@@ -279,7 +277,7 @@
                         </div>
                         <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
                         <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
-                            TERIMA KASIH ATAS KUNJUNGAN ANDA
+                            TERIMA KASIH ATAS PESANANNYA! DITUNGGU ORDER BERIKUTNYA
                         </div>
                         <div style="height:8mm;"></div>
                     `;
@@ -330,23 +328,27 @@
                 // Cetak struk
                 document.getElementById('printStrukBtn').onclick = function() {
                     const printContents = document.getElementById('strukContent').innerHTML;
-                    const height_content = document.getElementById('strukContent').offsetHeight;
-                    const win = window.open('', '', 'width=300,height=400');
+                    const win = window.open('', '', 'width=400,height=600');
                     win.document.write(`
                         <html>
                         <head>
-                            <title>Struk Penjualan</title>
+                            <title>Struk Hutang</title>
                             <style>
                                 @media print {
-                                    @page { size: 58mm ${height_content}px ; margin: 0; font-family:calibri; }
-                                    body { max-width:58mm; margin:0; }
+                                    @page { size: 80mm auto; margin: 0; font-family:calibri; }
+                                    body { max-width:80mm; margin:0; }
                                 }
+                                body { font-family:calibri; font-size:11px; }
                             </style>
                         </head>
                         <body>${printContents}</body>
                         </html>
                     `);
+                    win.document.close();
                     win.focus();
+                    setTimeout(function() {
+                        win.print();
+                    }, 500);
                 };
 
                 // Add event listener for detail buttons

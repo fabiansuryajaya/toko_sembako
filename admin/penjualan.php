@@ -35,6 +35,10 @@
             <input type="hidden" id="edit_penjualan_id" />
             <h2>Buat Barang</h2>
             <div style="margin-bottom: 16px; border-bottom: 1px solid #ccc; padding-bottom: 8px;">
+                <!-- pilih user -->
+                <label for="user_id">User:</label>
+                <select id="user_id" name="user_id" required style="width: 100%;"></select>
+
                 <label for="product_id">Nama Barang:</label>
                 <select id="product_id" name="product_id" required style="width: 100%;"></select>
 

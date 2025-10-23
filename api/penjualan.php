@@ -81,7 +81,7 @@ switch ($method) {
         }
 
         // insert penjualan
-        $id_user = 1; // Ganti dengan ID user yang sesuai
+        $id_user = $data['kasir_id'] != "" ? $data['kasir_id'] : 1;
         $jumlah_penjualan = array_reduce($stock, function($carry, $item) {
             return $carry + ((int)$item['harga_beli'] * (int)$item['quantity']);
         }, 0);
