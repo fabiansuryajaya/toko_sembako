@@ -115,7 +115,7 @@ $(document).ready(function () {
 
                 const total_ongkir    = (trx.total_ongkir     != 0) ? formatCurrencyIDR(trx.total_ongkir)                 : "";
                 const total_bayar     = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran)             : "";
-                const total_kembalian = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran - total_trx) : "";
+                const total_kembalian = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran - trx.total_ongkir - total_trx) : "";
 
                 let html = `
                     <div style="text-align:center;font-weight:bold;font-size:15px;letter-spacing:1px;margin-bottom:2mm;">
@@ -239,7 +239,7 @@ $(document).ready(function () {
                                 /* Mengatur ukuran kertas menjadi 80mm dengan tinggi otomatis */
                                 @page {
                                     size: 80mm auto;
-                                    margin: 0mm 2mm;
+                                    margin-right: 2mm;
                                     padding:0;
                                     font-family:calibri;
                                 }
@@ -247,13 +247,13 @@ $(document).ready(function () {
                                 /* Memastikan body memiliki lebar yang sama dengan kertas */
                                 body {
                                     width: 80mm;
-                                    margin: 0mm 2mm;
+                                    margin-right: 2mm;
                                     font-family:calibri;
                                 }
 
                                 /* Mengatur ulang margin pada setiap elemen untuk menghindari whitespace */
                                 * {
-                                    margin: 0mm 2mm;
+                                    margin-right: 2mm;
                                     padding: 0;
                                     font-family:calibri;
                                 }
