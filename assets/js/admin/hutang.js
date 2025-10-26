@@ -1,11 +1,10 @@
-// on document ready
-const role = getRole();
-
-if (role !== 'admin') {
-    $('#cancelLunasModalBtn').hide();
-}
-
 $(document).ready(function () {
+    // on document ready
+    const role = getRole();
+
+    if (role !== 'admin') {
+        $('#cancelLunasModalBtn').hide();
+    }
     // init
     const start_date = document.getElementById('from_date');
     const to_date    = document.getElementById('to_date');
