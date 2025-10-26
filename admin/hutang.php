@@ -33,6 +33,7 @@
     <!-- Popup modal -->
     <div id="HutangModal" class="modal" style="display: none;">
         <div class="modal-content" style="position: relative; padding-bottom: 64px;">
+            <input type="hidden" id="edit_penjualan_id" />
             <h2>Buat Hutang</h2>
             <div style="margin-bottom: 16px; border-bottom: 1px solid #ccc; padding-bottom: 8px;">
                 <label for="product_id">Nama Barang:</label>
@@ -230,7 +231,8 @@
                         <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
                         <div style="font-size:13px;margin-bottom:1mm;text-align:left;">
                             Tanggal: ${new Date().toLocaleDateString()}<br>
-                            Kasir: ${trx.nama_user}
+                            Kasir: ${trx.nama_user}<br>
+                            Member: ${trx.nama_member}
                         </div>
                         <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
                         <table style="width:100%;font-size:14px;margin-bottom:2mm;text-align:center;margin-top:0px">
@@ -315,6 +317,7 @@
                         <td>
                             <button class="detailBtn" data-id="${item.id_hutang}">Detail</button>
                             <button class="strukBtn" data-id="${item.id_hutang}">Struk</button>
+                            <button class="editBtn" data-id="${item.id_hutang}">Edit</button>
                             ${btnLunas}</td>
                     `;
                     tbody.appendChild(row);
@@ -420,6 +423,57 @@
                                 .catch(error => {
                                     console.error('Gagal menandai hutang sebagai lunas:', error);
                                 });
+                        }
+                    });
+                });
+
+                // editBtn
+                document.querySelectorAll('.editBtn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const idHutang = this.getAttribute('data-id');
+                        document.getElementById('edit_penjualan_id').value = idHutang;
+
+                        table.innerHTML = '';
+                        try {
+                            // Fetch detail hutang
+                            const params = { id_hutang: idHutang, action: 'detail' };
+                            const queryParams = new URLSearchParams(params).toString();
+                            callAPI({ url: `../api/hutang.php?${queryParams}`, method: 'GET' })
+                                .then(result => {
+                                    const detailData = result.data.detail;
+                                    // show in trx table
+                                    detailData.forEach(detail => {
+                                        const detailRow = document.createElement('tr');
+                                        // add to table
+                                        detailRow.setAttribute('data-id', detail.id_produk);
+                                        detailRow.innerHTML = `
+                                            <td>
+                                                <button type="button" class="removeBtn" onclick="deleteRow(this)" style="background: none; border: none; color: red; cursor: pointer;">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                            <td>${detail.nama_product}</td>
+                                            <td>${detail.nama_satuan}</td>
+                                            <td><input type="number" ${edit_price ? '' : 'disabled'} class="harga_beli" value="${detail.harga_hutang}" min="0"></td>
+                                            <td><input type="number" class="quantity" value="${detail.jumlah_hutang}" min="1"></td>
+                                            <td class="total">${formatCurrencyIDR(detail.harga_hutang * detail.jumlah_hutang)}</td>
+                                        `;
+                                        table.appendChild(detailRow);
+                                    });
+                                    document.getElementById('total_bayar').value  = (result.data.total_pembayaran);
+                                    document.getElementById('harga_ongkir').value = (result.data.total_ongkir);
+                                    document.getElementById('member_id').value    = (result.data.id_member);
+                                    document.getElementById('member_id').dispatchEvent(new Event('change')); // Trigger change event for Select2
+                                    updateGrandTotal(); // Update grand total after adding a new product
+
+                                    const modal = document.getElementById('HutangModal');
+                                    modal.style.display = 'flex';
+                                })
+                                .catch(error => {
+                                    console.error('Gagal memuat detail hutang:', error);
+                                });
+                        } catch (err) {
+                            console.error(err);
                         }
                     });
                 });
@@ -567,10 +621,18 @@
                 total_ongkir: total_ongkir_value
             }
 
+            let method = 'POST';
+            const edit_penjualan_id = document.getElementById('edit_penjualan_id').value;
+            if (edit_penjualan_id) {
+                body.id_hutang = edit_penjualan_id;
+                body.action = 'edit';
+                method = 'PUT';
+            }
+
             try {
                 const result = await callAPI({
                     url: '../api/hutang.php',
-                    method: 'POST',
+                    method: method,
                     body
                 });
                 if (result.status !== 0) {

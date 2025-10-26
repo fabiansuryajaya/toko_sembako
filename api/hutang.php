@@ -4,7 +4,6 @@ require_once("../connection.php");
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
-
 switch ($method) {
     case 'GET':
         $query_data = $_GET;
@@ -14,7 +13,7 @@ switch ($method) {
         $to_date = isset($query_data['to_date']) ? $conn->real_escape_string($query_data['to_date']) : '';  
        
         // data penjualan
-        $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.total_pembayaran, p.total_ongkir, p.status, p.created_at, m.nama as nama_member, u.username as nama_user
+        $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.total_pembayaran, p.total_ongkir, p.status, p.created_at, m.nama as nama_member, p.id_member, u.username as nama_user
                 FROM penjualan p
                 JOIN user u ON p.created_by = u.id_user
                 JOIN member m ON p.id_member = m.id_member
@@ -132,6 +131,86 @@ switch ($method) {
         echo json_encode(['success' => true]);
         break;
     case 'PUT':
+        // Tambah product baru
+        $data = json_decode(file_get_contents('php://input'), true);
+        if ($data['action'] == 'edit') {
+            $stock = $data['hutang'];
+
+            if (!is_array($stock) || empty($stock)) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Data penjualan tidak valid']);
+                exit;
+            }
+
+            // insert penjualan
+            $id_user = 1; // Ganti dengan ID user yang sesuai
+            if (isset($data['id_member'])) {
+                $id_member = (int)$data['id_member'];
+            } else {
+                http_response_code(400);
+                echo json_encode(['error' => 'ID member tidak diberikan']);
+                exit;
+            }
+
+            $harga_penjualan = array_reduce($stock, function($carry, $item) {
+                return $carry + ((int)$item['quantity'] * (float)$item['harga_beli']);
+            }, 0);
+            $total_bayar  = isset($data['total_bayar'])  ? (float)$data['total_bayar'] : 0;
+            $total_ongkir  = isset($data['total_ongkir'])  ? (float)$data['total_ongkir'] : 0;
+
+            $id_hutang = isset($data['id_hutang']) ? (int)$data['id_hutang'] : 0;
+            if ($id_hutang <= 0) {
+                http_response_code(400);
+                echo json_encode(['error' => 'ID hutang tidak valid']);
+                exit;
+            }
+
+            // Hapus detail penjualan lama
+            $sql = "DELETE FROM detail_penjualan WHERE id_penjualan = $id_hutang";
+            if ($conn->query($sql) === FALSE) {
+                http_response_code(500);
+                echo json_encode(['error' => 'Gagal menghapus detail penjualan lama']);
+                exit;
+            }
+
+            for ($i=0; $i < count($stock); $i++) { 
+                $item = $stock[$i];
+                $id_produk = (int)$item['product_id'];
+                $jumlah = (int)$item['quantity'];
+                $harga = (float)$item['harga_beli'];
+
+                $sql = "INSERT INTO detail_penjualan (id_penjualan, id_produk, jumlah_penjualan, harga_penjualan) VALUES ($id_hutang, $id_produk, $jumlah, $harga)";
+                if ($conn->query($sql) === FALSE) {
+                    http_response_code(500);
+                    echo json_encode(['error' => 'Gagal menambah detail penjualan']);
+                    exit;
+                }
+
+                // Update stok product
+                $sql = "UPDATE product SET stok_product = stok_product - $jumlah WHERE id_product = $id_produk";
+                if ($conn->query($sql) === FALSE) {
+                    http_response_code(500);
+                    echo json_encode(['error' => 'Gagal update stok product']);
+                    exit;
+                }
+            }
+            // Update total penjualan
+            $jumlah_penjualan = array_reduce($stock, function($carry, $item) {
+                return $carry + ((int)$item['harga_beli'] * (int)$item['quantity']);
+            }, 0);
+            $total_bayar  = isset($data['total_bayar'])  ? (float)$data['total_bayar'] : 0;
+            $sql = "UPDATE penjualan SET jumlah_penjualan = $jumlah_penjualan, total_pembayaran = $total_bayar WHERE id_penjualan = $id_hutang";
+            if ($conn->query($sql) === FALSE) {
+                http_response_code(500);
+                echo json_encode(['error' => 'Gagal mengupdate penjualan']);
+                exit;
+            }
+
+            echo json_encode(['success' => true]);
+            break;
+        }
+
+
         // Update status hutang menjadi lunas
         $query_data = $_GET;
         if (!isset($query_data['id_hutang'])) {
