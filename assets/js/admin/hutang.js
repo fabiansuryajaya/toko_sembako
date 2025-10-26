@@ -92,22 +92,22 @@ $(document).ready(function () {
                 const total_trx = detail.reduce((a,b)=>a+b.jumlah_hutang*b.harga_hutang,0);
 
                 let html = `
-                    <div style="text-align:center;font-weight:bold;font-size:16px;letter-spacing:1px;margin-bottom:2mm;">
+                    <div style="text-align:center;font-weight:bold;font-size:15px;letter-spacing:1px;margin-bottom:2mm;">
                         TK. SIDODADI KEDURUS
                     </div>
-                    <div style="text-align:center;font-size:13px;margin-bottom:1mm;">
+                    <div style="text-align:center;font-size:15px;margin-bottom:1mm;">
                         Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
                         Telp/WA: 0851-1746-6153<br>
                         Email: son27business@gmail.com
                     </div>
                     <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                    <div style="font-size:13px;margin-bottom:1mm;text-align:left;">
+                    <div style="font-size:16px;margin-bottom:1mm;text-align:left;">
                         Tanggal: ${new Date().toLocaleDateString()}<br>
                         Kasir: ${trx.nama_user}<br>
                         Member: ${trx.nama_member}
                     </div>
                     <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
-                    <table style="width:100%;font-size:14px;margin-bottom:2mm;text-align:center;margin-top:0px">
+                    <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:center;margin-top:0px">
                         <tbody style="border:0;">
                             ${detail.map(item => `
                                 <tr>
