@@ -113,6 +113,10 @@ $(document).ready(function () {
 
                 const total_trx = detail.reduce((a,b)=>a+b.jumlah_hutang*b.harga_hutang,0);
 
+                const total_ongkir    = (trx.total_ongkir     != 0) ? formatCurrencyIDR(trx.total_ongkir)                 : "";
+                const total_bayar     = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran)             : "";
+                const total_kembalian = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran - total_trx) : "";
+
                 let html = `
                     <div style="text-align:center;font-weight:bold;font-size:15px;letter-spacing:1px;margin-bottom:2mm;">
                         TK. SIDODADI KEDURUS
@@ -156,15 +160,15 @@ $(document).ready(function () {
                         </tr>
                         <tr>
                             <td style="border:0;font-weight:bold;padding-right:5mm;">Total Ongkir:</td>
-                            <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">${total_ongkir}</td>
                         </tr>
                         <tr>
                             <td style="border:0;font-weight:bold;padding-right:5mm;">Pembayaran:</td>
-                            <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">${total_bayar}</td>
                         </tr>
                         <tr>
                             <td style="border:0;font-weight:bold;padding-right:5mm;">Kembalian:</td>
-                            <td style="border:0;font-weight:bold;padding-right:5mm;"></td>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">${total_kembalian}</td>
                         </tr>
                     </table>
                     <div style="font-size:14px;text-align:center;margin-bottom:1mm;">
@@ -235,7 +239,7 @@ $(document).ready(function () {
                                 /* Mengatur ukuran kertas menjadi 80mm dengan tinggi otomatis */
                                 @page {
                                     size: 80mm auto;
-                                    margin: 0;
+                                    margin: 0mm 2mm;
                                     padding:0;
                                     font-family:calibri;
                                 }
@@ -243,13 +247,13 @@ $(document).ready(function () {
                                 /* Memastikan body memiliki lebar yang sama dengan kertas */
                                 body {
                                     width: 80mm;
-                                    margin: 0;
+                                    margin: 0mm 2mm;
                                     font-family:calibri;
                                 }
 
                                 /* Mengatur ulang margin pada setiap elemen untuk menghindari whitespace */
                                 * {
-                                    margin: 0;
+                                    margin: 0mm 2mm;
                                     padding: 0;
                                     font-family:calibri;
                                 }
