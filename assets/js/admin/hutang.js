@@ -116,6 +116,7 @@ $(document).ready(function () {
                 const total_ongkir    = (trx.total_ongkir     != 0) ? formatCurrencyIDR(trx.total_ongkir)                 : "";
                 const total_bayar     = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran)             : "";
                 const total_kembalian = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran - trx.total_ongkir - total_trx) : "";
+                const total_tagihan   = (trx.total_pembayaran != 0) ? formatCurrencyIDR((1 * total_trx) + (1 * trx.total_ongkir)) : "";
 
                 let html = `
                     <div style="text-align:center;font-weight:bold;font-size:15px;letter-spacing:1px;margin-bottom:2mm;">
@@ -161,6 +162,10 @@ $(document).ready(function () {
                         <tr>
                             <td style="border:0;font-weight:bold;padding-right:5mm;">Total Ongkir:</td>
                             <td style="border:0;font-weight:bold;padding-right:5mm;">${total_ongkir}</td>
+                        </tr>
+                        <tr>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">Grand Total:</td>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">${total_tagihan}</td>
                         </tr>
                         <tr>
                             <td style="border:0;font-weight:bold;padding-right:5mm;">Pembayaran:</td>
