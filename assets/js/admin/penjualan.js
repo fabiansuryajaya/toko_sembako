@@ -289,7 +289,7 @@ $(document).ready(function () {
                                 /* Mengatur ukuran kertas menjadi 80mm dengan tinggi otomatis */
                                 @page {
                                     size: 80mm auto;
-                                    margin-right: 2mm;
+                                    margin: 0mm;
                                     padding:0;
                                     font-family:calibri;
                                 }
@@ -297,13 +297,13 @@ $(document).ready(function () {
                                 /* Memastikan body memiliki lebar yang sama dengan kertas */
                                 body {
                                     width: 80mm;
-                                    margin-right: 2mm;
+                                    margin: 0mm;
                                     font-family:calibri;
                                 }
 
                                 /* Mengatur ulang margin pada setiap elemen untuk menghindari whitespace */
                                 * {
-                                    margin-right: 2mm;
+                                    margin: 0mm;
                                     padding: 0;
                                     font-family:calibri;
                                 }
