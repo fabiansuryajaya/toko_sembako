@@ -160,7 +160,7 @@ $(document).ready(function () {
                             <td style="border:0;font-weight:bold;padding-right:5mm;">${formatCurrencyIDR(total_trx)}</td>
                         </tr>
                         <tr>
-                            <td style="border:0;font-weight:bold;padding-right:5mm;">Total Ongkir:</td>
+                            <td style="border:0;font-weight:bold;padding-right:5mm;">Ongkir:</td>
                             <td style="border:0;font-weight:bold;padding-right:5mm;">${total_ongkir}</td>
                         </tr>
                         <tr>
