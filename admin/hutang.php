@@ -337,24 +337,26 @@
                         <head>
                             <title>Struk Hutang</title>
                             <style>
-                                /* Mengatur ukuran kertas menjadi 80mm dengan tinggi otomatis */
-                                @page {
-                                    size: 80mm auto;
-                                    margin: 0;
-                                    padding:0;
-                                    font-family:calibri;
-                                }
+                                @media print {
+                                    /* Mengatur ukuran kertas menjadi 80mm dengan tinggi otomatis */
+                                    @page {
+                                        size: 80mm auto;
+                                        margin: 0;
+                                        padding:0;
+                                        font-family:calibri;
+                                    }
 
-                                /* Memastikan body memiliki lebar yang sama dengan kertas */
-                                body {
-                                    width: 80mm;
-                                    margin: 0;
-                                }
+                                    /* Memastikan body memiliki lebar yang sama dengan kertas */
+                                    body {
+                                        width: 80mm;
+                                        margin: 0;
+                                    }
 
-                                /* Mengatur ulang margin pada setiap elemen untuk menghindari whitespace */
-                                * {
-                                    margin: 0;
-                                    padding: 0;
+                                    /* Mengatur ulang margin pada setiap elemen untuk menghindari whitespace */
+                                    * {
+                                        margin: 0;
+                                        padding: 0;
+                                    }
                                 }
                             </style>
                         </head>
