@@ -298,12 +298,14 @@ $(document).ready(function () {
                                 body {
                                     width: 80mm;
                                     margin: 0;
+                                    font-family:calibri;
                                 }
 
                                 /* Mengatur ulang margin pada setiap elemen untuk menghindari whitespace */
                                 * {
                                     margin: 0;
                                     padding: 0;
+                                    font-family:calibri;
                                 }
                             }
                         </style>

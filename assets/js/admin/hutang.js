@@ -78,7 +78,7 @@ $(document).ready(function () {
     document.getElementById('filter_btn').addEventListener('click', fetchHutang);
 
     document.addEventListener('click', async function(e) {
-        if (e.target.classList.contains('strukBtn')) {
+        if (e.target.classList.contains('strukHutangBtn')) {
             const idPenjualan = e.target.getAttribute('data-id');
             const strukModal = document.getElementById('StrukModal');
             const strukContent = document.getElementById('strukContent');
@@ -188,9 +188,9 @@ $(document).ready(function () {
                     <td>${formatCurrencyIDR(item.jumlah_hutang)}</td>
                     <td>${item.status == "Y" ? "Lunas" : "Belum Lunas"}</td>
                     <td>
-                        <button class="detailBtn" data-id="${item.id_hutang}">Detail</button>
-                        <button class="strukBtn" data-id="${item.id_hutang}">Struk</button>
-                        <button class="editBtn" data-id="${item.id_hutang}">Edit</button>
+                        <button class="detailHutangBtn" data-id="${item.id_hutang}">Detail</button>
+                        <button class="strukHutangBtn" data-id="${item.id_hutang}">Struk</button>
+                        <button class="editHutangBtn" data-id="${item.id_hutang}">Edit</button>
                         ${btnLunas}</td>
                 `;
                 tbody.appendChild(row);
@@ -202,7 +202,7 @@ $(document).ready(function () {
             };
 
             // Cetak struk
-            document.getElementById('printStrukBtn').onclick = function() {
+            document.getElementById('printStrukHutangBtn').onclick = function() {
                 const printContents = document.getElementById('strukContent').innerHTML;
                 const win = window.open('', '', 'width=400,height=600');
                 win.document.write(`
@@ -223,12 +223,14 @@ $(document).ready(function () {
                                 body {
                                     width: 80mm;
                                     margin: 0;
+                                    font-family:calibri;
                                 }
 
                                 /* Mengatur ulang margin pada setiap elemen untuk menghindari whitespace */
                                 * {
                                     margin: 0;
                                     padding: 0;
+                                    font-family:calibri;
                                 }
                             }
                         </style>
@@ -244,7 +246,7 @@ $(document).ready(function () {
             };
 
             // Add event listener for detail buttons
-            document.querySelectorAll('.detailBtn').forEach(button => {
+            document.querySelectorAll('.detailHutangBtn').forEach(button => {
                 button.addEventListener('click', function () {
                     const idHutang = this.getAttribute('data-id');
                     const detailModal = document.getElementById('DetailModal');
@@ -302,8 +304,8 @@ $(document).ready(function () {
                 });
             });
 
-            // editBtn
-            document.querySelectorAll('.editBtn').forEach(button => {
+            // editHutangBtn
+            document.querySelectorAll('.editHutangBtn').forEach(button => {
                 button.addEventListener('click', function () {
                     const idHutang = this.getAttribute('data-id');
                     document.getElementById('edit_penjualan_id').value = idHutang;
