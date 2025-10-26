@@ -110,7 +110,7 @@
     <!-- Modal Struk -->
     <div id="StrukModal" class="modal" style="display:none;">
         <div class="modal-content" style="width:80mm;min-width:80mm;max-width:80mm;padding:8px;">
-            <div id="strukContent" style="font-size:11px;font-family:calibri;"></div>
+            <div id="strukContent" style="font-size:14px;font-family:calibri;max-height:80vh;overflow-y:auto;"></div>
             <div style="text-align:right;margin-top:8px;">
                 <button type="button" id="printStrukBtn">Cetak</button>
                 <button type="button" id="closeStrukModalBtn">Tutup</button>
@@ -334,11 +334,25 @@
                         <head>
                             <title>Struk Hutang</title>
                             <style>
-                                @media print {
-                                    @page { size: 80mm auto; margin: 0; font-family:calibri; }
-                                    body { max-width:80mm; margin:0; }
+                                /* Mengatur ukuran kertas menjadi 80mm dengan tinggi otomatis */
+                                @page {
+                                    size: 80mm auto;
+                                    margin: 0;
+                                    padding:0;
+                                    font-family:calibri;
                                 }
-                                body { font-family:calibri; font-size:11px; }
+
+                                /* Memastikan body memiliki lebar yang sama dengan kertas */
+                                body {
+                                    width: 80mm;
+                                    margin: 0;
+                                }
+
+                                /* Mengatur ulang margin pada setiap elemen untuk menghindari whitespace */
+                                * {
+                                    margin: 0;
+                                    padding: 0;
+                                }
                             </style>
                         </head>
                         <body>${printContents}</body>

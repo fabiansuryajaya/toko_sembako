@@ -174,7 +174,7 @@ $(document).ready(function () {
                     </div>
                     <hr style="border:0;border-top:2px dashed #333;margin:2mm 0;">
                     <div style="text-align:center;font-size:14px;font-weight:bold;margin-top:2mm;">
-                        TERIMA KASIH ATAS PESANANNYA! DITUNGGU ORDER BERIKUTNYA
+                        TERIMA KASIH ATAS KUNJUNGAN ANDA
                     </div>
                     <div style="height:8mm;"></div>
                 `;
