@@ -118,4 +118,4 @@
 <script src="../assets/js/library/select2.min.js"></script>
 
 <!-- update versi -->
-<script src="../assets/js/admin/penjualan.js?v=20252109"></script>
+<script src="../assets/js/admin/penjualan.js?v=20251026"></script>
