@@ -83,7 +83,7 @@ switch ($method) {
         }
 
         // insert penjualan
-        $id_user = 1; // Ganti dengan ID user yang sesuai
+        $id_user = (int)$data['kasir_id'];
         if (isset($data['id_member'])) {
             $id_member = (int)$data['id_member'];
         } else {
@@ -143,7 +143,7 @@ switch ($method) {
             }
 
             // insert penjualan
-            $id_user = 1; // Ganti dengan ID user yang sesuai
+            $id_user = (int)$data['kasir_id'];
             if (isset($data['id_member'])) {
                 $id_member = (int)$data['id_member'];
             } else {
@@ -199,7 +199,7 @@ switch ($method) {
                 return $carry + ((int)$item['harga_beli'] * (int)$item['quantity']);
             }, 0);
             $total_bayar  = isset($data['total_bayar'])  ? (float)$data['total_bayar'] : 0;
-            $sql = "UPDATE penjualan SET jumlah_penjualan = $jumlah_penjualan, total_pembayaran = $total_bayar WHERE id_penjualan = $id_hutang";
+            $sql = "UPDATE penjualan SET jumlah_penjualan = $jumlah_penjualan, total_pembayaran = $total_bayar, created_by = $id_user, id_member = $id_member WHERE id_penjualan = $id_hutang";
             if ($conn->query($sql) === FALSE) {
                 http_response_code(500);
                 echo json_encode(['error' => 'Gagal mengupdate penjualan']);

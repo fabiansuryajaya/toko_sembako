@@ -47,6 +47,28 @@ $(document).ready(function () {
 
     fetchProduct();
 
+    async function fetchUsersPegawai() {
+        try {
+            const result = await callAPI({ url: '../api/user.php', method: 'GET' });
+            const userSelect = document.getElementById('user_id');
+            userSelect.innerHTML = '<option value="">Pilih User</option>';
+            result.data.data.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = user.username;
+                userSelect.appendChild(option);
+            });
+            // Aktifkan Select2 setelah isi data
+            $("#user_id").select2({
+                placeholder: "Pilih User",
+                allowClear: true
+            });
+        } catch (error) {
+            console.error('Gagal memuat user:', error);
+        }
+    }
+    fetchUsersPegawai();
+
     // fetch member
     const member_list = {};
     async function fetchMember() {
@@ -494,7 +516,8 @@ $(document).ready(function () {
             hutang: hutangData,
             id_member: memberId,
             total_bayar: total_bayar_value,
-            total_ongkir: total_ongkir_value
+            total_ongkir: total_ongkir_value,
+            kasir_id: $('#user_id').val()
         }
 
         let method = 'POST';
