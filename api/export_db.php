@@ -7,12 +7,11 @@ while ($row = mysqli_fetch_row($result)) {
     $tables[] = $row[0];
 }
 
-$sqlScript = "";
+// delete database
+$sqlScript = "DROP DATABASE IF EXISTS " . $db . "; CREATE DATABASE " . $db . "; USE " . $db . ";";
 foreach ($tables as $table) {
     $result = mysqli_query($conn, "SELECT * FROM $table");
     $numFields = mysqli_num_fields($result);
-
-    $sqlScript .= "DROP TABLE IF EXISTS $table;";
 
     $row2 = mysqli_fetch_row(mysqli_query($conn, "SHOW CREATE TABLE $table"));
     $sqlScript .= "\n" . $row2[1] . ";\n";
