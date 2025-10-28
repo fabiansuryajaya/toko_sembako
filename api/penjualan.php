@@ -165,7 +165,8 @@ switch ($method) {
             return $carry + ((int)$item['harga_beli'] * (int)$item['quantity']);
         }, 0);
         $total_bayar  = isset($data['total_bayar'])  ? (float)$data['total_bayar'] : 0;
-        $sql = "UPDATE penjualan SET jumlah_penjualan = $jumlah_penjualan, total_pembayaran = $total_bayar WHERE id_penjualan = $edit_penjualan_id";
+        $id_user = $data['kasir_id'] != "" ? $data['kasir_id'] : 1;
+        $sql = "UPDATE penjualan SET jumlah_penjualan = $jumlah_penjualan, total_pembayaran = $total_bayar, created_by = $id_user WHERE id_penjualan = $edit_penjualan_id";
         if ($conn->query($sql) === FALSE) {
             http_response_code(500);
             echo json_encode(['error' => 'Gagal mengupdate penjualan']);
