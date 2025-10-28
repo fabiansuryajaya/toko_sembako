@@ -39,12 +39,13 @@
                 <label for="user_id">User:</label>
                 <select id="user_id" name="user_id" required style="width: 100%;"></select>
 
-                <label for="product_id">Nama Barang:</label>
-                <select id="product_id" name="product_id" required style="width: 100%;"></select>
-
+               
                 <!-- nama member -->
                 <label for="member_id">Nama Member:</label>
                 <select id="member_id" name="member_id" required style="width: 100%;"></select>
+                <label for="product_id">Nama Barang:</label>
+                <select id="product_id" name="product_id" required style="width: 100%;"></select>
+
 
                 <button type="button" id="addProductBtn">Add</button>
                 <button type="button" id="editPriceBtn">Ganti Harga</button>
