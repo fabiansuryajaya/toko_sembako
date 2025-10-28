@@ -18,7 +18,7 @@ foreach ($tables as $table) {
     $sqlScript .= "\n" . $row2[1] . ";\n";
 
     while ($row = mysqli_fetch_row($result)) {
-        $sqlScript .= "INSERT INTO $table VALUES (" . implode(", ", array_map('addslashes', $row)) . ");\n";
+        $sqlScript .= "INSERT INTO $table VALUES ('" . implode("', '", array_map('addslashes', $row)) . "');\n";
     }
 }
 if (!empty($sqlScript)) {
