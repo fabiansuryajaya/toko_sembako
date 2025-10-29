@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "Hutang" : "hutang"
         },
         "Report" : "report",
-        "Export DB" : "export_db",
+        "Database" : "database",
         "Setting" : "setting",
         "Logout" : "logout"
     }
@@ -139,11 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then(response => {
                 window.location.href = '../index.php';
             });
-            return;
-        }
-        if (page == "export_db") {
-            // open new tab
-            window.open('../api/export_db.php', '_blank');
             return;
         }
         fetch(page + '.php')

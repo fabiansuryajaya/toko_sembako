@@ -119,6 +119,7 @@ $(document).ready(function () {
 
                 const total_bayar     = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran)             : "";
                 const total_kembalian = (trx.total_pembayaran != 0) ? formatCurrencyIDR(trx.total_pembayaran - total_trx) : "";
+                const nama_pembeli = trx.nama_pembeli ? `<br>Pembeli: ${trx.nama_pembeli}<br>` : '';
 
                 let html = `
                     <div style="text-align:center;font-weight:bold;font-size:15px;letter-spacing:1px;margin-bottom:2mm;">
@@ -133,6 +134,7 @@ $(document).ready(function () {
                     <div style="font-size:16px;margin-bottom:1mm;text-align:left;">
                         Tanggal: ${new Date().toLocaleDateString()}<br>
                         Kasir: ${trx.nama_user}
+                        ${nama_pembeli}
                     </div>
                     <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
                     <table style="width:100%;font-size:16px;margin-bottom:2mm;text-align:center;margin-top:0px">
@@ -503,7 +505,8 @@ $(document).ready(function () {
         const body = {
             penjualan: penjualanData,
             total_bayar: total_bayar,
-            kasir_id: $('#user_id').val()
+            kasir_id: $('#user_id').val(),
+            nama_pembeli: document.getElementById('customer_name').value
         }
         const edit_penjualan_id = document.getElementById('edit_penjualan_id').value;
         if (edit_penjualan_id != '') body.edit_penjualan_id = edit_penjualan_id;

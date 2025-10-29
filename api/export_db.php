@@ -7,16 +7,36 @@ while ($row = mysqli_fetch_row($result)) {
     $tables[] = $row[0];
 }
 
+// select product
+$product_id = [];
+$query = "SELECT * FROM product where nama_product like '%beras%'";
+$product_result = mysqli_query($conn, $query);
+while ($row = mysqli_fetch_row($product_result)) {
+    $product_id[$row[0]] = 1;
+}
+
 // delete database
-$sqlScript = "DROP DATABASE IF EXISTS " . $db . "; CREATE DATABASE " . $db . "; USE " . $db . ";";
+$sqlScript = "";
 foreach ($tables as $table) {
-    $result = mysqli_query($conn, "SELECT * FROM $table");
-    $numFields = mysqli_num_fields($result);
-
     $row2 = mysqli_fetch_row(mysqli_query($conn, "SHOW CREATE TABLE $table"));
-    $sqlScript .= "\n" . $row2[1] . ";\n";
+    $create_table = $row2[1];
+    $create_table = str_replace("CREATE TABLE", "CREATE TABLE IF NOT EXISTS", $create_table);
 
+    if ($table == "product"){
+        $sqlScript .= "\n" . $create_table . ";\n";
+        while ($row = mysqli_fetch_row($result)) {
+            $sqlScript .= "INSERT INTO $table VALUES ('" . implode("', '", array_map('addslashes', $row)) . "') ON DUPLICATE KEY UPDATE id_product = LAST_INSERT_ID(id_product);\n";
+        }
+        continue;
+    }
+    $sqlScript .= "DROP TABLE IF EXISTS $table;\n";
+    $sqlScript .= "\n" . $create_table . ";\n";
+
+    $result = mysqli_query($conn, "SELECT * FROM $table");
     while ($row = mysqli_fetch_row($result)) {
+        if ($table == "detail_penjualan") {
+            if (!isset($product_id[$row[2]])) continue;
+        }
         $sqlScript .= "INSERT INTO $table VALUES ('" . implode("', '", array_map('addslashes', $row)) . "');\n";
     }
 }

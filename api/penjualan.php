@@ -14,7 +14,7 @@ switch ($method) {
         $to_date   = isset($query_data['to_date'])   ? $conn->real_escape_string($query_data['to_date'])   : ''; // YYYY-MM-DD
         
         // data penjualan
-        $sql = "SELECT p.id_penjualan, p.jumlah_penjualan, p.total_pembayaran, p.status, p.created_at, u.username as nama_user
+        $sql = "SELECT p.id_penjualan, p.jumlah_penjualan, p.total_pembayaran, p.status, p.created_at, p.nama_pembeli, u.username as nama_user
                 FROM penjualan p
                 JOIN user u ON p.created_by = u.id_user
                 WHERE p.status = 'Y'";
@@ -87,7 +87,9 @@ switch ($method) {
         }, 0);
         $total_bayar  = isset($data['total_bayar'])  ? (float)$data['total_bayar'] : 0;
 
-        $sql = "INSERT INTO penjualan (id_user, jumlah_penjualan, total_pembayaran, status, created_by, created_at) VALUES ($id_user, $jumlah_penjualan, $total_bayar, 'Y', $id_user, NOW())";
+        $nama_pembeli = isset($data['nama_pembeli']) ? $conn->real_escape_string($data['nama_pembeli']) : '';
+
+        $sql = "INSERT INTO penjualan (id_user, jumlah_penjualan, total_pembayaran, status, created_by, created_at, nama_pembeli) VALUES ($id_user, $jumlah_penjualan, $total_bayar, 'Y', $id_user, NOW(), '$nama_pembeli')";
         if ($conn->query($sql) === FALSE) {
             http_response_code(500);
             echo json_encode(['error' => 'Gagal menambah penjualan']);
@@ -101,7 +103,12 @@ switch ($method) {
             $jumlah = (int)$item['quantity'];
             $harga = (float)$item['harga_beli'];
 
-            $sql = "INSERT INTO detail_penjualan (id_penjualan, id_produk, jumlah_penjualan, harga_penjualan) VALUES ($id_penjualan, $id_produk, $jumlah, $harga)";
+            $query = "SELECT harga_beli_product FROM product WHERE id_product = $id_produk";
+            $result = $conn->query($query);
+            $row = $result->fetch_assoc();
+            $harga_beli_product = isset($row['harga_beli_product']) ? (float)$row['harga_beli_product'] : 0;
+
+            $sql = "INSERT INTO detail_penjualan (id_penjualan, id_produk, jumlah_penjualan, harga_penjualan, harga_pembelian) VALUES ($id_penjualan, $id_produk, $jumlah, $harga, $harga_beli_product)";
             if ($conn->query($sql) === FALSE) {
                 http_response_code(500);
                 echo json_encode(['error' => 'Gagal menambah detail penjualan']);

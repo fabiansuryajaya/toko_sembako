@@ -39,6 +39,10 @@
                 <label for="user_id">User:</label>
                 <select id="user_id" name="user_id" required style="width: 100%;"></select>
 
+                <!-- nama pembeli -->
+                <label for="customer_name">Nama Pembeli:</label>
+                <input type="text" id="customer_name" name="customer_name" required style="width: 100%;">
+
                 <label for="product_id">Nama Barang:</label>
                 <select id="product_id" name="product_id" required style="width: 100%;"></select>
 
