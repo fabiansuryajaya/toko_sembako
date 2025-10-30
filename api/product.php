@@ -70,21 +70,32 @@ switch ($method) {
         // Update product
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (!isset($data['id'], $data['nama'])) {
+        if (!isset($data['id'])) {
             http_response_code(400);
             echo json_encode(['error' => 'Data tidak lengkap']);
             exit;
         }
 
         $id = (int)$data['id'];
-        $nama        = $conn->real_escape_string($data['nama']);
-        $supplier_id = $conn->real_escape_string($data['supplier_id']);
-        $satuan_id   = $conn->real_escape_string($data['satuan_id']);
-        $harga_beli  = $conn->real_escape_string($data['harga_beli']);
-        $harga_jual  = $conn->real_escape_string($data['harga_jual']);
-        $stok        = $conn->real_escape_string($data['stok']);
-        $deskripsi   = $conn->real_escape_string($data['deskripsi']);
-        $status      = isset($data['status']) && $data['status'] === 'Y' ? 'Y' : 'N';
+
+        // Ambil data lama
+        $result = $conn->query("SELECT * FROM product WHERE id_product=$id");
+        if (!$result || $result->num_rows == 0) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Product tidak ditemukan']);
+            exit;
+        }
+        $old = $result->fetch_assoc();
+
+        // Update hanya jika ada data baru, jika tidak pakai data lama
+        $nama        = isset($data['nama'])        ? $conn->real_escape_string($data['nama'])        : $old['nama_product'];
+        $supplier_id = isset($data['supplier_id']) ? $conn->real_escape_string($data['supplier_id']) : $old['id_supplier'];
+        $satuan_id   = isset($data['satuan_id'])   ? $conn->real_escape_string($data['satuan_id'])   : $old['id_satuan'];
+        $harga_beli  = isset($data['harga_beli'])  ? $conn->real_escape_string($data['harga_beli'])  : $old['harga_beli_product'];
+        $harga_jual  = isset($data['harga_jual'])  ? $conn->real_escape_string($data['harga_jual'])  : $old['harga_jual_product'];
+        $stok        = isset($data['stok'])        ? $conn->real_escape_string($data['stok'])        : $old['stok_product'];
+        $deskripsi   = isset($data['deskripsi'])   ? $conn->real_escape_string($data['deskripsi'])   : $old['description'];
+        $status      = isset($data['status'])      ? ($data['status'] === 'Y' ? 'Y' : 'N')          : $old['status'];
 
         $sql = "UPDATE product SET nama_product='$nama', id_supplier='$supplier_id', id_satuan='$satuan_id', harga_beli_product='$harga_beli', harga_jual_product='$harga_jual', stok_product='$stok', description='$deskripsi', status='$status' WHERE id_product=$id";
         if ($conn->query($sql) === TRUE) {

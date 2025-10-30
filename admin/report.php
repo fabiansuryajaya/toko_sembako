@@ -26,10 +26,14 @@
         <thead>
             <tr>
                 <th>Nama Produk</th>
-                <th>Jumlah Penjualan</th>
                 <th>Satuan Produk</th>
+                <th>Supplier Produk</th>
+                <th>Jumlah</th>
+                <th>Modal Produk</th>
+                <th>Total Modal</th>
                 <th>Harga Produk</th>
-                <th>Subtotal</th>
+                <th>Total Penjualan</th>
+                <th>Keuntungan</th>
             </tr>
         </thead>
         <tbody>
@@ -99,12 +103,16 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${report.nama_product}</td>
-                        <td>${report.total_jumlah}</td>
                         <td>${report.nama_satuan}</td>
+                        <td>${report.nama_supplier}</td>
+                        <td>${report.total_jumlah}</td>
+                        <td>${formatCurrencyIDR(report.harga_pembelian)}</td>
+                        <td>${formatCurrencyIDR(report.harga_pembelian * report.total_jumlah)}</td>
                         <td>${formatCurrencyIDR(report.harga_penjualan)}</td>
-                        <td>${formatCurrencyIDR(report.total_pembayaran)}</td>
+                        <td>${formatCurrencyIDR(report.harga_penjualan * report.total_jumlah)}</td>
+                        <td>${formatCurrencyIDR((report.harga_penjualan - report.harga_pembelian) * report.total_jumlah)}</td>
                     `;
-                    grand_total += parseFloat(report.total_pembayaran);
+                    grand_total += parseFloat((report.harga_penjualan - report.harga_pembelian) * report.total_jumlah);
                     reportTable.appendChild(tr);
                 });
 

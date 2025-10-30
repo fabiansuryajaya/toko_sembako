@@ -10,7 +10,10 @@
             <input type="checkbox" id="status" name="status" value="Y">
             <label for="status">Aktif</label>
         </div>
-        <button id="filter_btn">Filter</button>
+        <div class="filter">
+            <button id="save_btn">Save 0</button>
+            <button id="filter_btn">Filter</button>
+        </div>
     </div>
 
     <table border="1" cellspacing="0" cellpadding="8">
@@ -100,6 +103,25 @@
         }
     });
 
+    function updateProduct(id, field, value) {
+        const eInput = document.getElementById(`input_${field}_${id}`);
+        // Pastikan products sudah didefinisikan di global scope
+        if (window.products && window.products[id]) {
+            const is_price_change = window.products[id][field + '_product'] != value;
+            if (is_price_change) {
+                if (window.products_change[id] === undefined) window.products_change[id] = {};
+                window.products_change[id][field] = value;
+                eInput.classList.add('value_changed');
+            } else {
+                delete window.products_change[id][field];
+                eInput.classList.remove('value_changed');
+            }
+        }
+
+        const changeCount = Object.keys(window.products_change).length;
+        document.getElementById('save_btn').innerText = `Save ${changeCount}`;
+    }
+
     // on document ready
     $(document).ready(function() {
         let action = "create";
@@ -154,6 +176,8 @@
 
         const productTable = document.querySelector('.product-page tbody');
 
+        window.products = {};
+        window.products_change = {};
         async function getData() {
             try {
                 const status = document.getElementById('status').checked ? 'Y' : 'N';
@@ -164,13 +188,15 @@
                     const tr = document.createElement('tr');
                     let status = product.status === 'Y' ? 'Aktif' : 'Tidak Aktif';
 
+                    products[product.id_product] = product;
+
                     tr.innerHTML = `
                         <td class="body_id">${product.id_product}</td>
                         <td class="body_nama_barang">${product.nama_product}</td>
                         <td class="body_nama_supplier">${product.nama_supplier}</td>
                         <td class="body_nama_satuan">${product.nama_satuan}</td>
-                        <td class="body_harga_beli">${formatCurrencyIDR(product.harga_beli_product)}</td>
-                        <td class="body_harga_jual">${formatCurrencyIDR(product.harga_jual_product)}</td>
+                        <td class="body_harga_beli"><input type="number" class="input_harga_beli" id="input_harga_beli_${product.id_product}" value="${product.harga_beli_product}"></td>
+                        <td class="body_harga_jual"><input type="number" class="input_harga_jual" id="input_harga_jual_${product.id_product}" value="${product.harga_jual_product}"></td>
                         <td class="body_stok">${formatNumber(product.stok_product)}</td>
                         <td class="body_status">${status}</td>
                         <td class="body_aksi">
@@ -181,12 +207,39 @@
                     `;
                     productTable.appendChild(tr);
                 });
+                document.querySelectorAll('.input_harga_beli, .input_harga_jual').forEach(function(input) {
+                    input.addEventListener('change', function() {
+                        const id = this.id.split('_').pop();
+                        const field = this.classList.contains('input_harga_beli') ? 'harga_beli' : 'harga_jual';
+                        updateProduct(id, field, this.value);
+                    });
+                });
                 hide_columns();
                 addTableEventListeners();
             } catch (error) {
                 console.error('Gagal memuat product:', error);
             }
         }
+
+        // save_btn onclick
+        document.getElementById('save_btn').addEventListener('click', async () => {
+            const changes = window.products_change;
+            const updatePromises = Object.keys(changes).map(async (id) => {
+                const body = { id, ...changes[id] };
+                return await callAPI({ url: '../api/product.php', method: 'PUT', body });
+            });
+            await Promise.all(updatePromises);
+
+            window.products_change = {};
+            document.getElementById('save_btn').innerText = 'Save 0';
+
+            // remove all class value_changed
+            document.querySelectorAll('.value_changed').forEach(eInput => {
+                eInput.classList.remove('value_changed');
+            });
+
+            await getData();
+        });
 
         function addTableEventListeners() {
             document.querySelectorAll('.edit-btn').forEach(btn => {

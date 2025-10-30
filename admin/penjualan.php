@@ -93,6 +93,7 @@
                     <tr>
                         <th>ID Produk</th>
                         <th>Nama Produk</th>
+                        <th>Nama Supplier</th>
                         <th>Jumlah Penjualan</th>
                         <th>Harga Penjualan</th>
                     </tr>

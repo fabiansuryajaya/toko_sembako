@@ -15,16 +15,17 @@ switch ($method) {
         $to_date    = isset($data['to_date'])    ? $conn->real_escape_string($data['to_date'])   : ''; // YYYY-MM-DD
         
         // data penjualan
-        $sql = "SELECT pr.nama_product, sum(dp.jumlah_penjualan) as total_jumlah, sum(dp.harga_penjualan * dp.jumlah_penjualan) as total_pembayaran, s.nama_satuan, dp.harga_penjualan
+        $sql = "SELECT pr.nama_product, sum(dp.jumlah_penjualan) as total_jumlah, sum(dp.harga_penjualan * dp.jumlah_penjualan) as total_pembayaran, s.nama_satuan, dp.harga_penjualan, dp.harga_pembelian, su.nama_supplier
                 FROM penjualan p
                 JOIN detail_penjualan dp ON p.id_penjualan = dp.id_penjualan
                 JOIN product pr ON dp.id_produk = pr.id_product
                 JOIN satuan s ON pr.id_satuan = s.id_satuan
+                JOIN supplier su ON pr.id_supplier = su.id_supplier
                 WHERE p.status = 'Y'";
         if (!empty($product_id)) $sql .= " AND dp.id_produk IN (" . implode(',', $product_id) . ")";
         if (!empty($from_date))  $sql .= " AND DATE_FORMAT(p.created_at, '%Y-%m-%d') >= '$from_date'"; // YYYY-MM-DD
         if (!empty($to_date))    $sql .= " AND DATE_FORMAT(p.created_at, '%Y-%m-%d') <= '$to_date'"; // YYYY-MM-DD
-        $sql .= " GROUP BY pr.nama_product, dp.harga_penjualan ORDER BY pr.nama_product ASC";
+        $sql .= " GROUP BY pr.nama_product, dp.harga_penjualan, dp.harga_pembelian ORDER BY pr.nama_product ASC";
 
         $result = $conn->query($sql);
         if (!$result) {

@@ -352,6 +352,7 @@ $(document).ready(function () {
                                 detailRow.innerHTML = `
                                     <td>${detail.id_produk}</td>
                                     <td>${detail.nama_product}</td>
+                                    <td>${detail.nama_supplier}</td>
                                     <td>${detail.jumlah_penjualan} ${detail.nama_satuan}</td>
                                     <td>${formatCurrencyIDR(detail.harga_penjualan)}</td>
                                 `;

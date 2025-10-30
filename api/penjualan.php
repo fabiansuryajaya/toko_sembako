@@ -40,10 +40,11 @@ switch ($method) {
             // Ambil detail penjualan berdasarkan ID penjualan
             if (isset($query_data['id_penjualan'])) {
                 $id_penjualan = (int)$query_data['id_penjualan'];
-                $sql = "SELECT dp.id_detail_penjualan, dp.id_produk, p.nama_product, s.nama_satuan, dp.jumlah_penjualan, dp.harga_penjualan
+                $sql = "SELECT dp.id_detail_penjualan, dp.id_produk, p.nama_product, s.nama_satuan, dp.jumlah_penjualan, dp.harga_penjualan, su.nama_supplier
                         FROM detail_penjualan dp
                         JOIN product p ON dp.id_produk = p.id_product
                         JOIN satuan s ON p.id_satuan = s.id_satuan
+                        JOIN supplier su ON p.id_supplier = su.id_supplier
                         WHERE dp.id_penjualan = $id_penjualan
                         ORDER BY p.nama_product asc";
             } else {
