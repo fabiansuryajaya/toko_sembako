@@ -83,7 +83,7 @@
                 <input type="text" id="total_kembalian" name="total_kembalian" value="0" readonly style="width: 120px; padding: 4px; background: #f5f5f5;">
             </div>
 
-            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px;"></div>
+            <div style="right: 16px; bottom: 16px; text-align: right;">
                 <button type="button" id="closeModalBtn">Batal</button>
                 <button type="button" id="saveHutangBtn">Simpan</button>
             </div>

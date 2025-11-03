@@ -38,7 +38,8 @@ if (isset($data['login'])) {
     $return['status']  = '200';
     $return['message'] = 'Login Berhasil';
     $return['data']    = array(
-        "role" => $user['role']
+        "role" => $user['role'],
+        "username" => $user['username']
     );
 
     echo json_encode($return);

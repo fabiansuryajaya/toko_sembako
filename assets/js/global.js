@@ -45,3 +45,8 @@ function getRole() {
   const role = localStorage.getItem('user_role');
   return role ? role : null;
 }
+
+function getUsername() {
+  const username = localStorage.getItem('username');
+  return username ? username : null;
+}

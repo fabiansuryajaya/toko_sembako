@@ -1,9 +1,7 @@
 $(document).ready(function () {
     
     const role = getRole();
-        if (role !== 'admin') {
-        $('#editPriceBtn').hide();
-    }
+    if (role !== 'admin') $('#editPriceBtn').hide();
 
     // init
     const start_date = document.getElementById('from_date');
@@ -325,8 +323,6 @@ $(document).ready(function () {
                 // sebelum memanggil fungsi cetak.
                 setTimeout(function() {
                     win.print();
-                    // window.close() seringkali tidak berfungsi pada beberapa browser
-                    // setelah print(). Biarkan pengguna yang menutupnya.
                 }, 500); // Penundaan 500ms (0.5 detik)
             };
 
@@ -387,6 +383,12 @@ $(document).ready(function () {
                 placeholder: "Pilih User",
                 allowClear: true
             });
+
+            const username = getUsername();
+            if (role !== 'admin' && username) {
+                $('#user_id').val(result.data.data.find(u => u.username === username).id).trigger('change');
+                $('#user_id').prop('disabled', true);
+            }
         } catch (error) {
             console.error('Gagal memuat user:', error);
         }

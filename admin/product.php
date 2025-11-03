@@ -140,8 +140,12 @@
                 document.getElementById('header_nama_supplier').style.display = 'none';
                 document.getElementById('header_harga_beli').style.display = 'none';
 
-                const body_aksi = document.querySelectorAll('.body_aksi');
-                body_aksi.forEach(td => {
+                const edit_btn = document.querySelectorAll('.edit-btn');
+                edit_btn.forEach(td => {
+                    td.style.display = 'none';
+                });
+                const delete_btn = document.querySelectorAll('.delete-btn');
+                delete_btn.forEach(td => {
                     td.style.display = 'none';
                 });
                 const body_nama_supplier = document.querySelectorAll('.body_nama_supplier');
@@ -190,13 +194,16 @@
 
                     products[product.id_product] = product;
 
+                    const input_harga_beli = role === 'admin' ? `<input type="number" class="input_harga_beli" id="input_harga_beli_${product.id_product}" value="${product.harga_beli_product}">` : formatCurrencyIDR(product.harga_beli_product);
+                    const input_harga_jual = role === 'admin' ? `<input type="number" class="input_harga_jual" id="input_harga_jual_${product.id_product}" value="${product.harga_jual_product}">` : formatCurrencyIDR(product.harga_jual_product);
+
                     tr.innerHTML = `
                         <td class="body_id">${product.id_product}</td>
                         <td class="body_nama_barang">${product.nama_product}</td>
                         <td class="body_nama_supplier">${product.nama_supplier}</td>
                         <td class="body_nama_satuan">${product.nama_satuan}</td>
-                        <td class="body_harga_beli"><input type="number" class="input_harga_beli" id="input_harga_beli_${product.id_product}" value="${product.harga_beli_product}"></td>
-                        <td class="body_harga_jual"><input type="number" class="input_harga_jual" id="input_harga_jual_${product.id_product}" value="${product.harga_jual_product}"></td>
+                        <td class="body_harga_beli">${input_harga_beli}</td>
+                        <td class="body_harga_jual">${input_harga_jual}</td>
                         <td class="body_stok">${formatNumber(product.stok_product)}</td>
                         <td class="body_status">${status}</td>
                         <td class="body_aksi">
@@ -266,18 +273,21 @@
                                     <span style="font-weight:bold; width:140px; display:inline-block;">Nama Barang</span>
                                     <span>: ${product.nama_product}</span>
                                 </div>
+                                ${role === 'admin' ? `
                                 <div style="margin-bottom: 10px;">
                                     <span style="font-weight:bold; width:140px; display:inline-block;">Supplier</span>
                                     <span>: ${product.nama_supplier}</span>
                                 </div>
+                                ` : ''}
                                 <div style="margin-bottom: 10px;">
                                     <span style="font-weight:bold; width:140px; display:inline-block;">Satuan</span>
                                     <span>: ${product.nama_satuan}</span>
                                 </div>
+                                ${role === 'admin' ? `
                                 <div style="margin-bottom: 10px;">
                                     <span style="font-weight:bold; width:140px; display:inline-block;">Modal</span>
                                     <span>: <span >${formatCurrencyIDR(product.harga_beli_product)}</span></span>
-                                </div>
+                                </div>` : ''}
                                 <div style="margin-bottom: 10px;">
                                     <span style="font-weight:bold; width:140px; display:inline-block;">Harga Jual</span>
                                     <span>: <span>${formatCurrencyIDR(product.harga_jual_product)}</span></span>

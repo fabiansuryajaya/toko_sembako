@@ -51,6 +51,7 @@
                 setTimeout(() => {
                     // save user role in localStorage
                     localStorage.setItem('user_role', role);
+                    localStorage.setItem('username', data.data.username);
                     window.location.href = './admin/dashboard.php';
                 }, 1500);
             } else {

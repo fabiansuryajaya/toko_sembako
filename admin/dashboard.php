@@ -39,7 +39,7 @@
 
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../assets/js/global.js"></script>
+    <script src="../assets/js/global.js?q=20251103"></script>
     <script src="../assets/js/admin/dashboard.js"></script>
 </body>
 

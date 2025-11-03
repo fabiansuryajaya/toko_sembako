@@ -3,6 +3,7 @@ $(document).ready(function () {
     const role = getRole();
 
     if (role !== 'admin') {
+        $('#editPriceBtn').hide();
         $('#cancelLunasModalBtn').hide();
     }
     // init
@@ -63,6 +64,12 @@ $(document).ready(function () {
                 placeholder: "Pilih User",
                 allowClear: true
             });
+
+            const username = getUsername();
+            if (role !== 'admin' && username) {
+                $('#user_id').val(result.data.data.find(u => u.username === username).id).trigger('change');
+                $('#user_id').prop('disabled', true);
+            }
         } catch (error) {
             console.error('Gagal memuat user:', error);
         }
