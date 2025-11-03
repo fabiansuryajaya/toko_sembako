@@ -17,6 +17,7 @@
         </div>
         <!-- export excel -->
         <div style="margin-left: auto;">
+            <button id="delete_btn">Delete</button>
             <button id="export_excel_btn">Export to Excel</button>
             <button id="filter_btn">Filter</button>
         </div>
@@ -129,6 +130,20 @@
         }
 
         document.getElementById('filter_btn').addEventListener('click', fetchReport);
+
+        // Delete selected rows
+        document.getElementById('delete_btn').addEventListener('click', async function() {
+            try {
+                // confirm delete
+                if (!confirm('Apakah Anda yakin ingin menghapus semua data laporan?')) {
+                    return;
+                }
+                const result = await callAPI({ url: '../api/report.php', method: 'DELETE' });
+                await fetchReport();
+            } catch (error) {
+                console.error('Gagal memuat barang:', error);
+            }
+        });
 
         // Export to Excel
         document.getElementById('export_excel_btn').addEventListener('click', function() {

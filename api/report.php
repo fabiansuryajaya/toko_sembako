@@ -42,6 +42,22 @@ switch ($method) {
         break;
     case 'GET':
     case 'PUT':
+    case 'DELETE':
+        $sql = 'DELETE FROM penjualan';
+        $result = $conn->query($sql);
+        if (!$result) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Gagal menghapus data']);
+            exit;
+        }
+        $sql = 'DELETE FROM detail_penjualan';
+        $result = $conn->query($sql);
+        if (!$result) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Gagal menghapus data']);
+            exit;
+        }
+        break;
     default:
         http_response_code(405);
         echo json_encode(['error' => 'Metode tidak diizinkan']);
