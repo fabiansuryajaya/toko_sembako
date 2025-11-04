@@ -174,7 +174,9 @@ switch ($method) {
         }, 0);
         $total_bayar  = isset($data['total_bayar'])  ? (float)$data['total_bayar'] : 0;
         $id_user = $data['kasir_id'] != "" ? $data['kasir_id'] : 1;
-        $sql = "UPDATE penjualan SET jumlah_penjualan = $jumlah_penjualan, total_pembayaran = $total_bayar, created_by = $id_user WHERE id_penjualan = $edit_penjualan_id";
+        $nama_pembeli = isset($data['nama_pembeli']) ? $conn->real_escape_string($data['nama_pembeli']) : '';
+
+        $sql = "UPDATE penjualan SET jumlah_penjualan = $jumlah_penjualan, total_pembayaran = $total_bayar, created_by = $id_user, nama_pembeli = '$nama_pembeli' WHERE id_penjualan = $edit_penjualan_id";
         if ($conn->query($sql) === FALSE) {
             http_response_code(500);
             echo json_encode(['error' => 'Gagal mengupdate penjualan']);

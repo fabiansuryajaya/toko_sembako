@@ -448,7 +448,8 @@ $(document).ready(function () {
             <td><input type="number" class="quantity" value="1" min="1"></td>
             <td class="total">${formatCurrencyIDR(product.harga_jual_product)}</td>
         `;
-        table.appendChild(tr);
+        // append to first child
+        table.insertBefore(tr, table.firstChild);
         updateGrandTotal(); // Update grand total after adding a new product
         document.getElementById('product_id').value = ''; // Clear the select input after
         document.getElementById('product_id').dispatchEvent(new Event('change')); // Trigger change event for Select2
