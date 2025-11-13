@@ -39,7 +39,6 @@
                 <label for="user_id">User:</label>
                 <select id="user_id" name="user_id" required style="width: 100%;"></select>
 
-               
                 <!-- nama member -->
                 <label for="member_id">Nama Member:</label>
                 <select id="member_id" name="member_id" required style="width: 100%;"></select>

@@ -121,12 +121,11 @@ $(document).ready(function () {
 
                 let html = `
                     <div style="text-align:center;font-weight:bold;font-size:15px;letter-spacing:1px;margin-bottom:2mm;">
-                        TK. SIDODADI KEDURUS
+                        TK. SIDODADI SURABAYA
                     </div>
                     <div style="text-align:center;font-size:15px;margin-bottom:1mm;">
                         Jl. Raya Mastrip No.31, Kedurus, Surabaya.<br>
                         Telp/WA: 0851-1746-6153<br>
-                        Email: son27business@gmail.com
                     </div>
                     <hr style="border:0;border-top:1px dashed #333;margin:2mm 0;">
                     <div style="font-size:16px;margin-bottom:1mm;text-align:left;">
@@ -544,6 +543,10 @@ $(document).ready(function () {
         const modal = document.getElementById('PenjualanModal');
         modal.style.display = 'flex';
         document.getElementById('edit_penjualan_id').value = '';
+        document.getElementById('user_id').value = '';
+        document.getElementById('user_id').dispatchEvent(new Event('change'));
+
+        document.getElementById('customer_name').value = '';
         document.getElementById('total_bayar').value = '';
         document.getElementById('grand_total').value = '';
         document.getElementById('total_kembalian').value = '';
