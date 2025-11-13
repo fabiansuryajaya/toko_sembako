@@ -13,7 +13,7 @@ switch ($method) {
         $to_date = isset($query_data['to_date']) ? $conn->real_escape_string($query_data['to_date']) : '';  
        
         // data penjualan
-        $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.total_pembayaran, p.total_ongkir, p.status, p.created_at, m.nama as nama_member, p.id_member, u.username as nama_user
+        $sql = "SELECT p.id_penjualan as id_hutang, p.jumlah_penjualan as jumlah_hutang, p.total_pembayaran, p.total_ongkir, p.status, p.created_at, m.nama as nama_member, p.id_member, u.username as nama_user, u.id_user
                 FROM penjualan p
                 JOIN user u ON p.created_by = u.id_user
                 JOIN member m ON p.id_member = m.id_member

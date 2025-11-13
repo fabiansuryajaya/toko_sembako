@@ -12,9 +12,9 @@ switch ($method) {
         $id_penjualan = isset($query_data['id_penjualan']) ? (int)$query_data['id_penjualan'] : 0;
         $from_date = isset($query_data['from_date']) ? $conn->real_escape_string($query_data['from_date']) : ''; // YYYY-MM-DD
         $to_date   = isset($query_data['to_date'])   ? $conn->real_escape_string($query_data['to_date'])   : ''; // YYYY-MM-DD
-        
+
         // data penjualan
-        $sql = "SELECT p.id_penjualan, p.jumlah_penjualan, p.total_pembayaran, p.status, p.created_at, p.nama_pembeli, u.username as nama_user
+        $sql = "SELECT p.id_penjualan, p.jumlah_penjualan, p.total_pembayaran, p.status, p.created_at, p.nama_pembeli, u.username as nama_user, u.id_user
                 FROM penjualan p
                 JOIN user u ON p.created_by = u.id_user
                 WHERE p.status = 'Y'";

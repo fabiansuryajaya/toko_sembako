@@ -231,7 +231,7 @@ $(document).ready(function () {
                 `;
                 tbody.appendChild(row);
             });
-            
+
             // Tutup modal struk
             document.getElementById('closeStrukModalBtn').onclick = function() {
                 document.getElementById('StrukModal').style.display = 'none';
@@ -332,7 +332,7 @@ $(document).ready(function () {
                             .then(result => {
                                 alert(result.message);
                                 fetchHutang(); // Refresh the hutang data
-                            })
+                            })``
                             .catch(error => {
                                 console.error('Gagal menandai hutang sebagai lunas:', error);
                             });
@@ -373,10 +373,13 @@ $(document).ready(function () {
                                     `;
                                     table.appendChild(detailRow);
                                 });
+
                                 document.getElementById('total_bayar').value  = (result.data.total_pembayaran);
                                 document.getElementById('harga_ongkir').value = (result.data.total_ongkir);
                                 document.getElementById('member_id').value    = (result.data.id_member);
                                 document.getElementById('member_id').dispatchEvent(new Event('change')); // Trigger change event for Select2
+                                document.getElementById('user_id').value      = (result.data.id_user);
+                                document.getElementById('user_id').dispatchEvent(new Event('change')); // Trigger change event for Select2
                                 updateGrandTotal(); // Update grand total after adding a new product
 
                                 const modal = document.getElementById('HutangModal');
@@ -577,6 +580,8 @@ $(document).ready(function () {
 
         document.getElementById('total_bayar').value = '';
         document.getElementById('harga_ongkir').value = '';
+        table.innerHTML = '';
+        updateGrandTotal(); // Update grand total after adding a new product
     });
 
     // Update grand total and total kembalian

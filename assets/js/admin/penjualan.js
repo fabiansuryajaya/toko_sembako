@@ -213,6 +213,9 @@ $(document).ready(function () {
                             `;
                             table.appendChild(detailRow);
                         });
+                        document.getElementById('user_id').value = (result.data.id_user);
+                        document.getElementById('user_id').dispatchEvent(new Event('change')); // Trigger change event for Select2
+                        document.getElementById('customer_name').value = (result.data.nama_pembeli);
                         document.getElementById('total_bayar').value = (result.data.total_pembayaran);
                         updateGrandTotal(); // Update grand total after adding a new product
 
@@ -551,6 +554,7 @@ $(document).ready(function () {
         document.getElementById('grand_total').value = '';
         document.getElementById('total_kembalian').value = '';
         table.innerHTML = '';
+        updateGrandTotal(); // Update grand total after adding a new product
     });
 
     // Update grand total and total kembalian
